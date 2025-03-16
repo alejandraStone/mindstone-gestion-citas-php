@@ -1,1 +1,1 @@
-ECHO est  activado.
+ECHO page citas.php
