@@ -27,19 +27,31 @@ class User{
         $query = "INSERT INTO users (name, lastName, email, phone, password) VALUES (:name, :lastName, :email, :phone, :password) ";
         $result = $this->conexion->prepare($query);
 
-         //hasheo la contraseña
+         //hasheo la contraseña antes de insertarla en la BD
          $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-         $result->execute([
+         if ($result->execute([
             'name' => $name,
             'lastName' => $lastName,
             'email' => $email,
             'phone' => $phone,
             'password' => $hashedPassword,
-         ]);
-           // Retorna el resultado de la ejecución
-            return $result;
+        ])) {
+            return true; // Se insertó correctamente
+        } else {
+            return false; // Hubo un error
+        }
+    }
+
+    //método para iniciar sesión una vez validados los datos del usuario
+    public function login($email){
+        $query = "SELECT * FROM users WHERE email = :email";
+        $result = $this->conexion->prepare($query);
+        $result->execute(['email' => $email]);
+    
+       return $result->fetch(PDO::FETCH_ASSOC); // Obtener usuario de la base de datos, me devuelve array asoc  
     }
 }
+    
 
 ?>
