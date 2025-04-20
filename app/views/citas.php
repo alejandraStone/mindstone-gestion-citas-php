@@ -25,47 +25,47 @@ if(!isAuthenticated()){
 <h1>Reserva una nueva clase</h1>
 <form action="ReservarCitasController.php" method="POST">
     
-    <label for="fecha">Fecha:</label>
-    <input type="date" id="fecha" name="fecha">
+    <label for="date">date:</label>
+    <input type="date" id="date" name="date">
 
-    <label for="hora">Hora: </label>
-    <input type="time" id="hora" name="hora">
+    <label for="hour">hour: </label>
+    <input type="time" id="hour" name="hour">
     
-    <label for="tipo">Tipo de pilates</label><br>
-    <input type="radio" id="fullBody" name="tipo_pilates" value="fullBody">
+    <label for="tipo">Choose pilates type</label><br>
+    <input type="radio" id="fullBody" name="pilates_type" value="fullBody">
     <label for="fullBody">MindStone Full Body</label><br>
 
-    <input type="radio" id="reformer" name="tipo_pilates" value="reformer">
+    <input type="radio" id="reformer" name="pilates_type" value="reformer">
     <label for="reformer">MindStone Reformer</label><br>
 
-    <input type="radio" id="mat" name="tipo_pilates" value="mat">
+    <input type="radio" id="mat" name="pilates_type" value="mat">
     <label for="mat">MindStone Mat</label><br>
 
-    <label for="monitor">Selecciona un monitor:</label>
-    <select name="monitor" id="monitor">
-        <option value="">-- Cargando monitores... --</option>
+    <label for="coach">Choose a coach:</label>
+    <select name="coach" id="coach">
+        <option value="">-- Loading coaches... --</option>
     </select>
 
     <script>
         document.addEventListener("DOMContentLoaded", function(){
-            fetch("../models/getMonitores.php")
-            .then(Response => Response.json())
+            fetch("../models/getCoach.php")
+            .then(response => response.json())
             .then(data => {
-                let select = document.getElementById("monitor");
-                select.innerHTML = '<option value= "">--Selecciona un monitor--</option>';
-                data.forEach(monitor => {
+                let select = document.getElementById("coach");
+                select.innerHTML = '<option value= "">--Choose a coach--</option>';
+                data.forEach(coach => {
                     let option = document.createElement("option");
-                    option.value = monitor.id;
-                    option.textContent = monitor.nombre;
+                    option.value = coach.id;
+                    option.textContent = coach.name;
                     select.appendChild(option);
                 });
             })
-            .catch(error => console.error("Error al cargar monitores:", error));
+            .catch(error => console.error("Error loading coach:", error));
         });
     </script>
     
 
-    <button type="submit">Reservar</button>
+    <button type="submit">Book</button>
 </form>
     
 
