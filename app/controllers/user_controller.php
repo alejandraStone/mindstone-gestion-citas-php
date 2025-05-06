@@ -1,13 +1,13 @@
 <?php
 //UserController procesa los datos, valida e inserta el usuario en la base de datos
-require_once '../models/User.php'; //importo el modelo, el que hace las consultas a la DDBB
+require_once '../models/user.php'; //importo el modelo, el que hace las consultas a la DDBB
 require_once __DIR__ . '/../config/database.php'; // Asegurar que la conexión esté disponible
-require_once '../session/sessionManager.php';
+require_once '../session/session_manager.php';
 
 session_start();
 
 $error = "";
-//compruebo que el formulario fue enviado y recogo los datos
+//compruebo que el formulario fue enviado y recojo los datos
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['signup'])) {
     $name = trim($_POST['name']); //elimino los espacios en blanco
     $lastName = trim($_POST['lastName']);
@@ -39,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['signup'])) {
                 $userData = $user->login($email);
 
                 if ($userData) {
-                    $_SESSION['user_id'] = $userData['id'];
-                    $_SESSION['name'] = $userData['name'];
-                    header("Location: ../views/citas.php");
+                    //llamo a la función de sessionMmaneger y obtengo los datos del usuario cuando inicia sesión
+                    loginUserSession($userData);
+                    header("Location: ../views/book.php");
                     exit;
                 } else {
                     echo $error = "Error al iniciar sesión después del registro.";

@@ -1,1 +1,26 @@
-ECHO est† activado.
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Configuraciones sensibles
+config/database.php
+
+# Archivos temporales
+*.log
+*.tmp
+
+# Cach√©s
+/cache/
+/tmp/
+
+# Backups o versiones antiguas
+*.bak
+*.old
+*.zip
+
+# Sistema de control de versiones de editores
+*.swp
+*.swo
+
+# Dependencias externas (si llegas a usar Composer en el futuro)
+vendor/

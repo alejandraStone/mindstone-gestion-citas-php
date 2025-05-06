@@ -1,6 +1,6 @@
 <?php 
 
-require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(path: __DIR__) . '/config/database.php';
 
 class Coach{
     private $conexion;

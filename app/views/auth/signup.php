@@ -6,7 +6,7 @@
     <title>Sign-up</title>
 </head>
 <body>
-    <form method="post" action="/mindStone/app/controllers/UserController.php" id="formSignup">
+    <form method="post" action="/mindStone/app/controllers/user_controller.php" id="formSignup">
         <label for="name">Name</label>
         <input type="text" name="name" id="name" required>
         <label for="lastName">Last name</label>

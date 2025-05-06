@@ -1,7 +1,7 @@
 <?php 
-require_once '../models/User.php';//importo el modelo, el que hace las consultas a la DDBB
+require_once '../models/user.php';//importo el modelo, el que hace las consultas a la DDBB
 require_once __DIR__ . '/../config/database.php'; // Asegurar que la conexión esté disponible
-require_once '../session/sessionManager.php'; //incluir para manejar sesiones
+require_once '../session/session_manager.php'; //incluir para manejar sesiones
 
 session_start();
 
@@ -23,10 +23,10 @@ $password = trim($_POST["password"]);
    $userData = $user->login($email); //recupero los datos del usuario
 
    if ($userData && password_verify($password, $userData['password'])) {//función de php
-      $_SESSION['user_id'] = $userData['id'];
-      $_SESSION['name'] = $userData['name'];
-
-      header("Location: ../views/citas.php");
+   //llamo a la función de sessionMmaneger y obtengo los datos del usuario cuando inicia sesión
+   loginUserSession($userData);
+      //si todo está ok lo envío para que reserve una clase
+      header("Location: ../views/book.php");
       exit;
    }else{
       echo $error = "Error usuario o contraseña no válidos.";

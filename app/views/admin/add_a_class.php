@@ -36,7 +36,7 @@
         <button type="submit">Save class</button>
     </form>
 
-        <!-- Llamamos a las funciones de JS-->
+        <!-- Llamamos a las funciones de JS (coaches y días)-->
         <script src="/mindStone/public/js/add_class.js"></script>
 
 </body>
