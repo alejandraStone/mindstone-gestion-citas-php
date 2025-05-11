@@ -1,6 +1,7 @@
 <?php 
-session_start();
-
+if (session_status() === PHP_SESSION_NONE) {//si la sesión no está activa devuelve session none
+    session_start();
+}
 //verificar si el usuario está autenticado
 function isAuthenticated(){
     return isset($_SESSION['user_email']);
