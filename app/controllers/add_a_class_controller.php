@@ -1,41 +1,53 @@
-<?php 
-require_once "../models/add_a_class_model.php";
-require_once '../config/database.php';
+<?php
+require_once __DIR__ . '/../config/config.php'; // Define ROOT_PATH y BASE_URL
+require_once ROOT_PATH . '/app/config/database.php'; // Carga $conexion
+require_once ROOT_PATH . '/app/models/add_a_class_model.php'; // Modelo add_a_class
+
+header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-    $pilates_type = $_POST["pilates_type"] ?? null;
+    // Sanitización básica de entrada
+    $pilates_type = trim($_POST["pilates_type"] ?? '');
     $days = $_POST["days"] ?? [];
-    $capacity = $_POST["capacity"] ?? null;
-    $coach = $_POST["coach"] ?? null;
+    $capacity = intval($_POST["capacity"] ?? 0);
+    $coach = intval($_POST["coach"] ?? 0);
 
-    if (empty($pilates_type) || empty($days) || empty($capacity) || empty($coach)) {
-        echo "Todos los campos son obligatorios.";
+    if (empty($pilates_type) || empty($days) || $capacity <= 0 || $coach <= 0) {
+        echo json_encode(["success" => false, "message" => "All fields are required."]);
         exit;
     }
 
-    // Recolectar las clases activadas con sus respectivos horarios
+    // Preparar array de horarios válidos
     $classEntries = [];
 
     foreach ($days as $dayName => $dayData) {
-        if (isset($dayData['enabled']) && isset($dayData['times'])) {
+        if (isset($dayData['enabled']) && isset($dayData['times']) && is_array($dayData['times'])) {
             foreach ($dayData['times'] as $hour) {
-                $classEntries[] = [
-                    'day' => $dayName,
-                    'hour' => $hour
-                ];
+                $hour = trim($hour);
+                if (!empty($hour)) {
+                    $classEntries[] = [
+                        'day' => $dayName,
+                        'hour' => $hour
+                    ];
+                }
             }
         }
     }
 
     if (empty($classEntries)) {
-        echo "Debes seleccionar al menos un horario para los días marcados.";
+        echo json_encode(["success" => false, "message" => "You must select at least one valid schedule."]);
         exit;
     }
 
-    // Guardar clases
+    // Guardar clases usando el modelo
     $lesson = new Lesson($conexion);
-    $lesson->addLessons($pilates_type, $coach, $capacity, $classEntries);
+    $result = $lesson->addLessons($pilates_type, $coach, $capacity, $classEntries);
 
-    echo "Clases guardadas correctamente.";
+    if ($result) {
+        echo json_encode(["success" => true, "message" => "Classes saved successfully."]);
+    } else {
+        echo json_encode(["success" => false, "message" => "This class already exists for the selected day and time."]);
+    }
+} else {
+    echo json_encode(["success" => false, "message" => "Invalid request method."]);
 }
-?>

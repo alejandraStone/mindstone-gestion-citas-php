@@ -1,0 +1,39 @@
+/* public/css/styles.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Componentes personalizados */
+@layer components {
+  @font-face {
+    font-family: "Manrope";
+    src: url("./fonts/Manrope-VariableFont_wght.ttf");
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "PlayFair";
+    src: url("./fonts/PlayfairDisplay-VariableFont_wght.ttf");
+    font-weight: normal;
+    font-style: normal;
+  }
+  /*Hover para el menú*/
+  .menu-link {
+    @apply relative text-brand-950 transition-colors duration-300 hover:text-brand-700;
+  }
+}
+  /*CSS puro porque Tailwind no reconoce el after*/
+  .menu-link::after {
+    content: "";/*Aquí se "dibuja" el subrayado*/
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0%;
+    height: 2px;
+    background-color: #8f5a3f; /* brand-700 */
+    transition: width 0.3s ease-in-out;
+  }
+  .menu-link:hover::after {
+    width: 100%;
+  }

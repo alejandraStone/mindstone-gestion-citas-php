@@ -4,30 +4,33 @@ if (session_status() === PHP_SESSION_NONE) {//si la sesión no está activa devu
 }
 //verificar si el usuario está autenticado
 function isAuthenticated(){
-    return isset($_SESSION['user_email']);
+    return isset($_SESSION['user']);
 }
 
 //obtener datos del usuario autenticado
 function getUser(){
     if(isAuthenticated()){
-        return[
-            'id' => $_SESSION['user_id'],
-            'email' => $_SESSION['user_email'],
-            'name' => $_SESSION['name'] ?? 'Guest', //para evitar errores
-        ];
+    return $_SESSION['user'] ?? null;
+
     }
     return null;
 }
 
+//inicia sesión con los datos del usuario
 function loginUserSession($userData){
-    $_SESSION['user_id'] = $userData['id'];
-    $_SESSION['user_email'] = $userData['email'];
-    $_SESSION['name'] = $userData['name'];
+    $_SESSION['user'] = [
+    'id'    => $userData['id'],
+    'email' => $userData['email'],
+    'name'  => $userData['name'],
+    'role'  => $userData['role'] ?? 'user'//user por defecto
+     ];
 }
 
 function logoutUserSession(){
     session_unset();
     session_destroy();
+    header("Location: " . BASE_URL . "app/views/auth/login.php");
+    exit;
 }
 
 

@@ -1,4 +1,6 @@
-<?php 
+<?php
+require_once __DIR__ . '/config.php'; // Carga BASE_URL y ROOT_PATH
+
 //Aquí configuro la conexíon con la DDBB con PDO
 $dsn = "mysql:host=localhost;dbname=mindstone;charset=utf8";
 $username = "root";

@@ -23,8 +23,8 @@ class User{
         return $result->fetchColumn() > 0;//devuelve si encuentra filas
     }
     
-    public function createUser($name, $lastName, $email, $phone, $password ){
-        $query = "INSERT INTO users (name, lastName, email, phone, password) VALUES (:name, :lastName, :email, :phone, :password) ";
+    public function createUser($name, $lastName, $email, $phone, $password, $role = 'user'){
+        $query = "INSERT INTO users (name, lastName, email, phone, password, role) VALUES (:name, :lastName, :email, :phone, :password, :role) ";
         $result = $this->conexion->prepare($query);
 
          //hasheo la contraseña antes de insertarla en la BD
@@ -36,6 +36,7 @@ class User{
             'email' => $email,
             'phone' => $phone,
             'password' => $hashedPassword,
+            'role' => $role
         ])) {
             return true; // Se insertó correctamente
         } else {

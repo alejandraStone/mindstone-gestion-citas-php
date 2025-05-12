@@ -1,34 +1,32 @@
-<?php 
-require_once "../models/add_coach_model.php";
-require_once '../config/database.php';
+<?php
+require_once __DIR__ . '/../config/config.php'; // Define ROOT_PATH y BASE_URL
+require_once ROOT_PATH . '/app/config/database.php'; // Carga $conexion
+require_once ROOT_PATH . '/app/models/add_coach_model.php'; // Modelo add_a_class
 
-$error = "";
-$success = "";
+header('Content-Type: application/json');
 
-if($_SERVER['REQUEST_METHOD'] === "POST"){
-    $name = trim($_POST["name"]);
-    $email = trim($_POST["email"]);
-    $phone = trim($_POST["phone"]);
-    $start_time = $_POST["start_time"];
-    $finish_time = $_POST["finish_time"];
-    $specialities = $_POST['speciality'] ?? [];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Recoger datos del formulario
+    $name = $_POST['name'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $phone = $_POST['phone'] ?? '';
+    $start_time = $_POST['start_time'] ?? '';
+    $finish_time = $_POST['finish_time'] ?? '';
+    $speciality = isset($_POST['speciality']) ? implode(', ', $_POST['speciality']) : '';
 
-    if (empty($name) || empty($email) || empty($phone) || empty($start_time) || empty($finish_time) || empty($specialities)) {
-        $error = "All fields are required.";
-        header("Location: /mindStone/public/views/add_coach_view.php?error=" . urlencode($error));
+    // Validaciones básicas (aquí puedes agregar más según sea necesario)
+    if (empty($name) || empty($email) || empty($phone)) {
+        echo json_encode(['success' => false, 'message' => 'Please fill in all required fields.']);
         exit;
     }
-    
-    $coach = new Coach($conexion);
-    $result = $coach->addCoach($name, $email, $phone, $start_time, $finish_time, $specialities);
 
-    if ($result === true) {
-        $success = "Coach successfully added.";
-        header("Location: /mindStone/public/views/add_coach_view.php?success=" . urlencode($success));
+    // Crear una instancia del modelo Coach
+    $coach = new Coach($conexion);
+
+    // Intentar agregar el coach
+    if ($coach->addCoach($name, $email, $phone, $start_time, $finish_time, $speciality)) {
+        echo json_encode(['success' => true, 'message' => 'Coach added successfully.']);
     } else {
-        // Si $result devuelve un mensaje de error del modelo, lo mostramos
-        header("Location: /mindStone/public/views/add_coach_view.php?error=" . urlencode($result));
+        echo json_encode(['success' => false, 'message' => 'An error occurred while adding the coach.']);
     }
-    exit;
 }
-?>

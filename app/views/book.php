@@ -1,4 +1,5 @@
 <?php 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/mindStone/app/views/layout/header.php';
 require_once '../session/session_manager.php';//isAuthenticated() y getUser()
 
 //muestro las clases disponibles y un formulario para que el usuario reserve su clase
@@ -23,7 +24,7 @@ if(!isAuthenticated()){
         <!-- Aquí aparecerán las clases disponibles para el día seleccionado -->
     </div>
   <!-- Llamamos a las funciones de JS (book_lessons)-->
-  <script src="/mindStone/public/js/book_lessons.js"></script>
+  <script src="/mindStone/public/js/modules/book_lessons.js"></script>
 <style>
     .confirmation-message {
     position: fixed;
@@ -40,6 +41,6 @@ if(!isAuthenticated()){
 </style>
 <?php
 }
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/mindStone/app/views/layout/footer.php';
 ?>
 

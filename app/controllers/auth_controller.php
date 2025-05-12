@@ -3,8 +3,6 @@ require_once '../models/user.php';//importo el modelo, el que hace las consultas
 require_once __DIR__ . '/../config/database.php'; // Asegurar que la conexión esté disponible
 require_once '../session/session_manager.php'; //incluir para manejar sesiones
 
-session_start();
-
 
 $error = "";
 //compruebo que el formulario fue enviado y recogo los datos
@@ -25,13 +23,18 @@ $password = trim($_POST["password"]);
    if ($userData && password_verify($password, $userData['password'])) {//función de php
    //llamo a la función de sessionMmaneger y obtengo los datos del usuario cuando inicia sesión
    loginUserSession($userData);
-      //si todo está ok lo envío para que reserve una clase
-      header("Location: ../views/book.php");
-      exit;
-   }else{
-      echo $error = "Error usuario o contraseña no válidos.";
-   }
-}
-}
-
+     // Redirijo según el rol del usuario
+            if ($_SESSION['user']['role'] === 'admin') {
+                // Si es admin, lo mando al dashboard
+                header("Location: ../views/admin/dashboard.php");
+            } else {
+                // Si es usuario normal, lo mando a la página de reservas
+                header("Location: ../views/book.php");
+            }
+            exit;
+        } else {
+            echo $error = "Error usuario o contraseña no válidos.";
+        }
+    }
+}   
 ?>

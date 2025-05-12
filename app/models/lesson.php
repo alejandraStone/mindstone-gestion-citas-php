@@ -1,6 +1,6 @@
 <?php 
-require_once dirname(__DIR__) . '/config/database.php';
-
+require_once __DIR__ . '/../config/config.php';       // Esto define ROOT_PATH
+require_once ROOT_PATH . '/app/config/database.php';  // Esto la conexión
 class Lesson {
     private $conexion;
     public function __construct($conexion){
