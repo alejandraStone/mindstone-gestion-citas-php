@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 require_once '../config/database.php';
 require_once '../models/user.php';
@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
     //registrar al nuevo admin
+    $conexion = getPDO();
     $user = new User($conexion);
     $result = $user->createUser($name, $lastName, $email, $phone, $password, 'admin'); // método con rol explícito
 
@@ -28,5 +29,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: /admin/dashboard.php?error=No+se+pudo+crear+el+admin');
     }
 }
-
-?>

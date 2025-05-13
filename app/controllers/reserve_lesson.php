@@ -20,6 +20,7 @@ if (isset($input['lesson_id'])) {
     $userId = $_SESSION['user_id'];
 
     // Verificamos la clase y la capacidad disponible
+    $conexion = getPDO();
     $lesson = new Lesson($conexion);
     $class = $lesson->getLessonById($lessonId);
 

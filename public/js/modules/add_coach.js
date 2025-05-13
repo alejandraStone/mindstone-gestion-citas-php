@@ -12,10 +12,11 @@ document.getElementById('add-coach-form').addEventListener('submit', function(ev
         // Muestra el mensaje de éxito o error según la respuesta del servidor
         const messageElement = document.getElementById('form-message');
         if (data.success) {
-            messageElement.textContent = 'Coach added successfully!';
+            messageElement.textContent = data.message;
             messageElement.style.color = 'green';
+            document.getElementById('add-coach-form').reset();//limpia el form
         } else {
-            messageElement.textContent = 'An error occurred. Please try again.';
+            messageElement.textContent = data.message || 'An error occurred. Please try again.';
             messageElement.style.color = 'red';
         }
     })

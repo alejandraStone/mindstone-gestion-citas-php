@@ -12,21 +12,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $phone = $_POST['phone'] ?? '';
     $start_time = $_POST['start_time'] ?? '';
     $finish_time = $_POST['finish_time'] ?? '';
-    $speciality = isset($_POST['speciality']) ? implode(', ', $_POST['speciality']) : '';
+    $specialities = $_POST['speciality'] ?? [];
 
-    // Validaciones básicas (aquí puedes agregar más según sea necesario)
+    // Validaciones básicas
     if (empty($name) || empty($email) || empty($phone)) {
         echo json_encode(['success' => false, 'message' => 'Please fill in all required fields.']);
         exit;
     }
 
     // Crear una instancia del modelo Coach
+    $conexion = getPDO();
     $coach = new Coach($conexion);
 
     // Intentar agregar el coach
-    if ($coach->addCoach($name, $email, $phone, $start_time, $finish_time, $speciality)) {
+    $result = $coach->addCoach($name, $email, $phone, $start_time, $finish_time, $specialities);
+
+    if ($result === true) {
         echo json_encode(['success' => true, 'message' => 'Coach added successfully.']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'An error occurred while adding the coach.']);
+        echo json_encode(['success' => false, 'message' => $result]);
     }
+} else {
+    echo json_encode(["success" => false, "message" => "Invalid request method."]);
 }

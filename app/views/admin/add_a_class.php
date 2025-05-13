@@ -1,8 +1,8 @@
-<?php 
-require_once realpath(__DIR__ . '/../../config/config.php'); // primera vez para definir ROOT_PATH
+<?php
+require_once realpath(__DIR__ . '/../../config/config.php');
 require_once ROOT_PATH . '/app/config/config.php';
 
- ?>
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,11 +22,23 @@ require_once ROOT_PATH . '/app/config/config.php';
             <h2 class="text-2xl font-titulo text-brand-800 mb-6 text-center">Add a Pilates Class</h2>
 
             <label class="block mb-2 text-brand-800 font-semibold">Choose pilates type:</label>
-            <div class="mb-4 space-y-1">
-                <label class="block"><input type="radio" name="pilates_type" value="fullBody" class="mr-2">MindStone Full Body</label>
-                <label class="block"><input type="radio" name="pilates_type" value="reformer" class="mr-2">MindStone Reformer</label>
-                <label class="block"><input type="radio" name="pilates_type" value="mat" class="mr-2">MindStone Mat</label>
-            </div>
+
+
+<?php if (!empty($specialities)): ?>
+    <div class="mb-4 space-y-1">
+        <?php foreach ($specialities as $speciality): ?>
+            <label class="block">
+                <input type="radio" name="pilates_type" value="<?= $speciality['id'] ?>" class="mr-2">
+                MindStone <?= htmlspecialchars($speciality['name']) ?>
+            </label>
+        <?php endforeach; ?>
+    </div>
+<?php else: ?>
+    <p>No specialities available.</p>
+<?php endif; ?>
+
+
+
 
             <label class="block mb-2 text-brand-800 font-semibold">Class schedule (per day):</label>
             <div id="days-schedules" class="space-y-4 mb-4">

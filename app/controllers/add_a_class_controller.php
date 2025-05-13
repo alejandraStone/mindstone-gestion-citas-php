@@ -1,12 +1,17 @@
 <?php
 require_once __DIR__ . '/../config/config.php'; // Define ROOT_PATH y BASE_URL
-require_once ROOT_PATH . '/app/config/database.php'; // Carga $conexion
-require_once ROOT_PATH . '/app/models/add_a_class_model.php'; // Modelo add_a_class
+require_once ROOT_PATH . '/app/config/database.php'; // Carga conexión PDO
+require_once ROOT_PATH . '/app/models/speciality_model.php'; // Cargar el modelo de especialidades
 
-header('Content-Type: application/json');
+// Obtener las especialidades desde el modelo
+$specialities = Speciality::getAll(); // Aquí obtenemos todas las especialidades
 
+// Procesamiento del formulario
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-    // Sanitización básica de entrada
+    require_once ROOT_PATH . '/app/models/add_a_class_model.php'; // Modelo de clases
+    header('Content-Type: application/json');
+
+    // Sanitización básica
     $pilates_type = trim($_POST["pilates_type"] ?? '');
     $days = $_POST["days"] ?? [];
     $capacity = intval($_POST["capacity"] ?? 0);
@@ -17,18 +22,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         exit;
     }
 
-    // Preparar array de horarios válidos
+    // Horarios
     $classEntries = [];
-
     foreach ($days as $dayName => $dayData) {
-        if (isset($dayData['enabled']) && isset($dayData['times']) && is_array($dayData['times'])) {
+        if (isset($dayData['enabled']) && is_array($dayData['times'])) {
             foreach ($dayData['times'] as $hour) {
                 $hour = trim($hour);
                 if (!empty($hour)) {
-                    $classEntries[] = [
-                        'day' => $dayName,
-                        'hour' => $hour
-                    ];
+                    $classEntries[] = ['day' => $dayName, 'hour' => $hour];
                 }
             }
         }
@@ -39,15 +40,17 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         exit;
     }
 
-    // Guardar clases usando el modelo
+    // Guardar clases
+    $conexion = getPDO();
     $lesson = new Lesson($conexion);
     $result = $lesson->addLessons($pilates_type, $coach, $capacity, $classEntries);
 
-    if ($result) {
-        echo json_encode(["success" => true, "message" => "Classes saved successfully."]);
-    } else {
-        echo json_encode(["success" => false, "message" => "This class already exists for the selected day and time."]);
-    }
-} else {
-    echo json_encode(["success" => false, "message" => "Invalid request method."]);
+    echo json_encode([
+        "success" => $result,
+        "message" => $result ? "Classes saved successfully." : "This class already exists for the selected day and time."
+    ]);
+    exit;
 }
+
+require ROOT_PATH . '/app/views/admin/add_a_class.php'; // Cargar vista
+?>

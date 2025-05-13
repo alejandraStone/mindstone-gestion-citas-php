@@ -27,7 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['signup'])) {
     } else {
         var_dump($conexion); //verifico si se pasó la conexión
 
-        //creo un objeto User y le paso la conexión 
+        //creo un objeto User y le paso la conexión
+        $conexion = getPDO(); 
         $user = new User($conexion);
 
         //verifico si el email existe
