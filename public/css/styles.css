@@ -7,33 +7,60 @@
 @layer components {
   @font-face {
     font-family: "Manrope";
-    src: url("./fonts/Manrope-VariableFont_wght.ttf");
+    src: url("../fonts/Manrope/Manrope-VariableFont_wght.ttf");
     font-weight: normal;
     font-style: normal;
   }
   @font-face {
     font-family: "PlayFair";
-    src: url("./fonts/PlayfairDisplay-VariableFont_wght.ttf");
+    src: url("../fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf");
     font-weight: normal;
     font-style: normal;
   }
-  /*Hover para el menú*/
+  /*Hover para el menú de inicio*/
   .menu-link {
     @apply relative text-brand-950 transition-colors duration-300 hover:text-brand-700;
   }
+  /*card de los servicios de index*/
+  .card-services {
+    @apply flex flex-col items-center opacity-0 translate-y-10 transition-all duration-700 ease-out will-change-transform;
+  }
+  /*cards de dashboard*/
+  .cards-dashboard {
+    @apply bg-white rounded-2xl shadow-lg p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 flex items-center gap-6 min-h-[170px];
+  }
+  .icono-dashboard {
+    @apply flex items-center justify-center bg-brand-500/90 rounded-full w-16 h-16 shadow-sm transition-transform duration-300 group-hover:scale-110;
+  }
+  .titulo-card-dashboard {
+    @apply text-base text-brand-800 font-semibold mb-1;
+  }
+  /*Estilos para add class*/
+  .day-times-container {
+    @apply flex flex-col items-center border border-brand-100 rounded-xl bg-white shadow-sm p-3 min-h-[150px];
+  }
+  .day-times-container label {
+    @apply mb-2 text-brand-800 font-semibold;
+  }
+  .day-times-container .time-inputs input[type="time"] {
+    @apply w-full bg-white border border-brand-200 rounded-lg px-3 py-2 shadow-sm focus:ring-2 focus:ring-brand-500 transition;
+  }
+  .day-times-container button[type="button"] {
+    @apply bg-brand-500 hover:bg-brand-600 text-white py-1 px-3 rounded text-xs mt-2;
+  }
 }
-  /*CSS puro porque Tailwind no reconoce el after*/
-  .menu-link::after {
-    content: "";/*Aquí se "dibuja" el subrayado*/
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0%;
-    height: 2px;
-    background-color: #8f5a3f; /* brand-700 */
-    transition: width 0.3s ease-in-out;
-  }
-  .menu-link:hover::after {
-    width: 100%;
-  }
+/*CSS puro porque Tailwind no reconoce el after*/
+.menu-link::after {
+  content: ""; /*Aquí se "dibuja" el subrayado*/
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0%;
+  height: 2px;
+  background-color: #8f5a3f; /* brand-700 */
+  transition: width 0.3s ease-in-out;
+}
+.menu-link:hover::after {
+  width: 100%;
+}

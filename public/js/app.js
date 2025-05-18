@@ -1,8 +1,34 @@
 //Funciones globales
 document.addEventListener("DOMContentLoaded", function () {
+  /*---FUNCIONES PARA EL FRONTEND*/
+
+  /*Inicio*/
+  /*animación al cargar la card de inicio*/
+  initCardAnimations();
   initHamburguerMenu();
-  initLogin();
+  /*---FUNCIONES PARA EL BACKEND*/
+  //initLogin();
 });
+
+
+function initCardAnimations() {
+  const elements = document.querySelectorAll(".card-services");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove("opacity-0", "translate-y-10");
+          entry.target.classList.add("opacity-100", "translate-y-0");
+        }
+      });
+    },
+    {
+      threshold: 0.1,
+    }
+  );
+  elements.forEach((el) => observer.observe(el));
+}
 
 //Función que muestra el menú móvil desplegable al hacer clic
 function initHamburguerMenu() {
@@ -12,7 +38,7 @@ function initHamburguerMenu() {
   const iconClose = document.getElementById("icon-close");
 
   let isOpen = false;
-  
+
   menuButton.addEventListener("click", () => {
     isOpen = !isOpen;
 
@@ -34,13 +60,12 @@ function initHamburguerMenu() {
     }
   });
 }
-
-//función cuando le doy clic al botón login
+/*función cuando le doy clic al botón login
 function initLogin(){
     const loginButton = document.getElementById("menu-login");
-
     loginButton.addEventListener("click", () => {
       window.location.href = "/mindStone/app/views/auth/login.php";
     });
 
 }
+*/

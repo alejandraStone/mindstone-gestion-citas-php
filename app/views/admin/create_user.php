@@ -1,0 +1,5 @@
+<?php 
+
+echo "AQUI SE VAN A CREAR LOS USUARIOS
+
+"?>

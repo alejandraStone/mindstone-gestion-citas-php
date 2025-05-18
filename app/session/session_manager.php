@@ -1,4 +1,7 @@
 <?php 
+require_once realpath(__DIR__ . '/../config/config.php');
+
+
 if (session_status() === PHP_SESSION_NONE) {//si la sesión no está activa devuelve session none
     session_start();
 }
@@ -29,7 +32,7 @@ function loginUserSession($userData){
 function logoutUserSession(){
     session_unset();
     session_destroy();
-    header("Location: " . BASE_URL . "app/views/auth/login.php");
+    header("Location: " . BASE_URL . "public/inicio.php");
     exit;
 }
 

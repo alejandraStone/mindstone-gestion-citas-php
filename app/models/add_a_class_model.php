@@ -9,16 +9,16 @@ class Lesson {
         $this->conexion = $conexion;
     }
 
-   public function addLessons($pilates_type, $coach, $capacity, $classEntries) {
-    $query = "SELECT COUNT(*) FROM pilates_lessons WHERE pilates_type = :pilates_type
-              AND coach = :coach AND day = :day AND hour = :hour AND capacity = :capacity";
-    $stmt = $this->conexion->prepare($query);
-
+public function addLessons($pilates_type, $coach, $capacity, $classEntries) {
     try {
         $this->conexion->beginTransaction();
 
+        // Se verifica si existe ya una clase ese mismo día, a la misma hora...
+        $query = "SELECT COUNT(*) FROM pilates_lessons WHERE pilates_type = :pilates_type
+                  AND coach = :coach AND day = :day AND hour = :hour AND capacity = :capacity";
+        $stmt = $this->conexion->prepare($query);
+
         foreach ($classEntries as $entry) {
-            // Verificar si la clase ya existe
             $stmt->execute([
                 'pilates_type' => $pilates_type,
                 'coach' => $coach,
@@ -28,16 +28,19 @@ class Lesson {
             ]);
             $count = $stmt->fetchColumn();
             if ($count > 0) {
-                error_log("Class already exist: " . json_encode($entry));
-                // Si la clase ya existe, no se inserta
                 $this->conexion->rollBack();
-                return false; // Clase duplicada
+                return [
+                        'success' => false,
+                        'message' => 'There is already a class with that type, coach, day and time.'
+                    ]; // Hay duplicado, aborta todo
             }
+        }
 
-            // Insertar la clase si no existe
-            $queryInsert = "INSERT INTO pilates_lessons (pilates_type, coach, day, hour, capacity)
-                            VALUES (:pilates_type, :coach, :day, :hour, :capacity)";
-            $stmtInsert = $this->conexion->prepare($queryInsert);
+        // Si ninguna existe, inserta todo
+        $queryInsert = "INSERT INTO pilates_lessons (pilates_type, coach, day, hour, capacity)
+                        VALUES (:pilates_type, :coach, :day, :hour, :capacity)";
+        $stmtInsert = $this->conexion->prepare($queryInsert);
+        foreach ($classEntries as $entry) {
             $success = $stmtInsert->execute([
                 'pilates_type' => $pilates_type,
                 'coach' => $coach,
@@ -45,20 +48,37 @@ class Lesson {
                 'hour' => $entry['hour'],
                 'capacity' => $capacity
             ]);
-
             if (!$success) {
                 $this->conexion->rollBack();
-                return false;
+                 return [
+                        'success' => false,
+                        'message' => 'Unexpected error when adding the class.'
+                    ];
             }
         }
 
         $this->conexion->commit();
-        return true;
+        return [
+                'success' => true,
+                'message' => 'Classes added correctly.'
+            ];
 
     } catch (PDOException $e) {
-        $this->conexion->rollBack();
-        error_log("Error adding lessons: " . $e->getMessage());
-        return false;
+        if ($this->conexion->inTransaction()) {
+            $this->conexion->rollBack();
+        }
+        // Si el error es por duplicado (por el índice UNIQUE agregado en la bbdd)
+            if ($e->getCode() === '23000') {
+                return [
+                    'success' => false,
+                    'message' => 'There is already a class with that type, coach, day and time.'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'Unexpected error when adding the class.'
+                ];
+        }
     }
 }
 }

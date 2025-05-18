@@ -42,7 +42,7 @@ select.innerHTML += '<option disabled>No coaches for ${selectedType}</option>';
 
   days.forEach((day) => {
     const dayDiv = document.createElement("div");
-    dayDiv.className = "mb-4 day-times-container";
+    dayDiv.className = "day-times-container";
     dayDiv.innerHTML = `
       <label class="flex items-center gap-2 text-brand-800 font-semibold">
         <input type="checkbox" name="days[${day}][enabled]" value="1" class="accent-brand-600">

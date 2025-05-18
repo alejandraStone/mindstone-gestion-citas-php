@@ -1,9 +1,6 @@
 <?php
-require_once __DIR__ . '/../../session/session_manager.php';
-require_once __DIR__ . '/../../config/config.php';
-require_once __DIR__ . '/../../../config/config.php';
-
-
+require_once realpath(__DIR__ . '/../../config/config.php');
+require_once ROOT_PATH . '/app/session/session_manager.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +8,7 @@ require_once __DIR__ . '/../../../config/config.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Header</title>
+    <title>MindStone</title>
     <link rel="stylesheet" href="/mindStone/public/css/output.css">
     <script src="/mindStone/public/js/app.js"></script>
 </head>
@@ -25,8 +22,8 @@ require_once __DIR__ . '/../../../config/config.php';
             <img src="/mindStone/public/img/logo_mindStone_p.png" alt="logo" class="w-20 h-auto">
         </div>
 
-        <!-- Botón hamburguesa (solo visible en móviles) -->
-        <button class="md:hidden" id="hamburger">
+        <!-- Botón hamburguesa (solo visible en móviles y tablet) -->
+        <button class="lg:hidden" id="hamburger">
             <svg id="icon-open" xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -53,7 +50,7 @@ require_once __DIR__ . '/../../../config/config.php';
         <div id="mobileMenu" class="md:hidden hidden w-full flex flex-col items-center space-y-6 absolute top-[120px] left-0 right-0
          bg-brand-50 p-10 transition-all duration-300 ease-in-out transform -translate-y-5 opacity-0
          ">
-            <a href="#" class="menu-link">Home</a>
+            <a href="<?= BASE_URL ?>public/inicio.php">Home</a>
             <a href="#" class="menu-link">Services</a>
             <a href="#" class="menu-link">Contact</a>
             <a href="#" class="menu-link">About us</a>
@@ -69,7 +66,7 @@ require_once __DIR__ . '/../../../config/config.php';
 
         <!-- Menú para pantallas grandes -->
         <nav class="hidden md:flex space-x-6" id="menu">
-            <a href="#" class="menu-link">Home</a>
+            <a href="<?= BASE_URL ?>public/inicio.php" class="menu-link">Home</a>
             <a href="#" class="menu-link">Services</a>
             <a href="#" class="menu-link">Contact</a>
             <a href="#" class="menu-link">About us</a>
@@ -84,11 +81,11 @@ require_once __DIR__ . '/../../../config/config.php';
         </nav>
 
         <?php if (!isset($_SESSION['user'])): ?>
-        <a href="<?= BASE_URL ?>app/views/auth/login.php" class="bg-brand-400 px-4 py-1 text-sm sm:px-6 sm:py-2 sm:text-base rounded-full">
+        <a href="<?= BASE_URL ?>app/views/auth/login.php" class="bg-brand-400 px-2 py-1 text-sm sm:text-base rounded-full">
         Log in
         </a>
         <?php else: ?>
-        <a href="<?= BASE_URL ?>app/session/logout.php" class="bg-red-400 px-4 py-1 text-sm sm:px-6 sm:py-2 sm:text-base rounded-full">
+        <a href="<?= BASE_URL ?>app/session/logout.php" class="bg-red-400 px-2 py-1 text-sm sm:px-6 sm:py-2 sm:text-base rounded-full">
         Log out
         </a>
         <?php endif; ?>

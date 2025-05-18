@@ -31,12 +31,12 @@ module.exports = {
           900: "#5f3e2f",
           950: "#321e18",
         },
+         oliveShade: "#6F6945",
+         lightOlive: "#CECDB9",
       },
       fontFamily: {
         normal: ["Manrope", "sans-serif"],
-      },
-      fontFamily: {
-        titulo: ["PlayFair", "sans-serif"],
+        titulo: ["PlayFair", "sans-serif"]
       },
     },
   },

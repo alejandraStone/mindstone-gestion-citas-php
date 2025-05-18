@@ -45,11 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $lesson = new Lesson($conexion);
     $result = $lesson->addLessons($pilates_type, $coach, $capacity, $classEntries);
 
-    echo json_encode([
-        "success" => $result,
-        "message" => $result ? "Classes saved successfully." : "This class already exists for the selected day and time."
-    ]);
+    echo json_encode($result);
     exit;
+
 }
 
 require ROOT_PATH . '/app/views/admin/add_a_class.php'; // Cargar vista
