@@ -8,12 +8,15 @@ $specialities = Speciality::getAll(); // Aquí obtenemos todas las especialidade
 
 // Procesamiento del formulario
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
+     ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
     require_once ROOT_PATH . '/app/models/add_a_class_model.php'; // Modelo de clases
     header('Content-Type: application/json');
 
     // Sanitización básica
     $pilates_type = trim($_POST["pilates_type"] ?? '');
-    $days = $_POST["days"] ?? [];
+    $days = isset($_POST["days"]) ? json_decode($_POST["days"], true) : [];
     $capacity = intval($_POST["capacity"] ?? 0);
     $coach = intval($_POST["coach"] ?? 0);
 

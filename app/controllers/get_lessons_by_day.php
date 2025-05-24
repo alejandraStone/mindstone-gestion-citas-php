@@ -9,7 +9,7 @@ if (isset($_GET['day'])) {
     $day = $_GET['day'];
 
     $conexion = getPDO();
-    $lesson = new Lesson($conexion); // USA la conexión
+    $lesson = new Lesson($conexion); // Usa la conexión
     $classes = $lesson->getLessonsByDay($day);
 
     echo json_encode($classes);

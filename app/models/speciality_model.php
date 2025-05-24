@@ -9,7 +9,7 @@ class Speciality
     {
         try {
             $pdo = getPDO(); // Función que devuelve el objeto PDO
-            $stmt = $pdo->query("SELECT id, name FROM specialities ORDER BY name ASC");
+            $stmt = $pdo->query("SELECT id, name FROM pilates_specialities ORDER BY name ASC");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return [];

@@ -7,8 +7,8 @@
 @layer components {
   @font-face {
     font-family: "Manrope";
-    src: url("../fonts/Manrope/Manrope-VariableFont_wght.ttf");
-    font-weight: normal;
+    src: url("../fonts/Manrope/Manrope-VariableFont_wght.ttf") format("truetype");
+    font-weight: 100 800;;
     font-style: normal;
   }
   @font-face {
@@ -17,9 +17,57 @@
     font-weight: normal;
     font-style: normal;
   }
+  /* RESET GLOBAL */
+* {
+  @apply m-0 p-0 box-border;
+}
+  /* Ancho global para las secciones */
+.container {
+  @apply w-full max-w-5xl mx-auto px-4;
+}
   /*Hover para el menú de inicio*/
   .menu-link {
     @apply relative text-brand-950 transition-colors duration-300 hover:text-brand-700;
+  }
+  /*Estilo para el menú desplegable*/
+  .menu-link-desplegable {
+    @apply  text-center text-base font-normal py-3 px-6 rounded-full text-brand-700 hover:bg-brand-700 hover:text-white;
+  }
+
+  /*Tamaño del título grande*/
+  .titulo-grande {
+  @apply text-3xl md:text-4xl lg:text-6xl font-medium font-titulo leading-tight;
+}
+/*Tamaño de titulos de secciones*/
+  .tamaño-titulo-seccion {
+    @apply text-[32px] md:text-[40px] lg:text-[48px] mb-8 font-titulo text-brand-900 text-center lg:text-left leading-tight;
+  }
+  /*Titulo sección gradiente*/
+  .titulo-gradiente{
+    @apply text-[32px] md:text-[40px] lg:text-[48px] mb-10 font-titulo text-center lg:text-left leading-tight flex items-center gap-6 bg-gradient-to-r from-brand-900 via-brand-400 to-oliveShade bg-clip-text text-transparent
+  }
+  .titulo-punto {
+  @apply text-brand-800 text-[32px] md:text-[40px] lg:text-[48px] font-bold;
+  }
+  /*Tamaño de los subtítulos*/
+  .tamaño-subtitulo {
+    @apply text-xl font-bold font-normal text-brand-900;
+  }
+    /*Tamaño de los textos generales*/
+  .tamaño-texto-general {
+    @apply text-base text-brand-800 leading-relaxed mt-1 mb-4 font-normal;
+  }
+  /*estilo para botones*/
+  .btn-cards{
+    @apply bg-brand-200 text-brand-900 hover:bg-brand-600 hover:text-white mt-auto py-1.5 px-3 text-sm rounded-full sm:py-2 sm:px-4 transition duration-300 ease-in-out;
+  }
+  .btn-primary {
+    @apply bg-brand-100 text-brand-950 font-medium py-1.5 px-3 text-sm rounded-lg
+         sm:py-2 sm:px-4 sm:text-base sm:rounded-xl
+         hover:bg-brand-600 hover:text-white transition duration-300 ease-in-out;
+  }
+  .btn-peticion {
+    @apply bg-brand-700 hover:bg-brand-600 text-white font-medium text-sm lg:text-base py-2 px-4 lg:px-6 rounded-full transition disabled:opacity-50;
   }
   /*card de los servicios de index*/
   .card-services {
@@ -64,3 +112,71 @@
 .menu-link:hover::after {
   width: 100%;
 }
+.form-label {
+  font-weight: 600;
+  color: #20202b;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.form-input,
+.form-select {
+  width: 100%;
+  height: 42px;
+  padding: 0 1rem;
+  border: 1px solid #dedee6;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #222;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  box-shadow: none;
+  outline: none;
+}
+.form-input:focus,
+.form-select:focus {
+  border-color: #7c3aed;
+}
+/*Estilos para la sección  misión*/
+.mission-arc {
+  border-top-left-radius: 80% 8vw;
+  border-top-right-radius: 80% 8vw;
+}
+/* Estilos para el FAQ */
+.faq-arrow {
+  display: inline-block;
+  transition: transform 0.3s;
+}
+.rotate-180 {
+  transform: rotate(180deg);
+}
+/* Estilos para el slideahow */
+.gallery-swiper {
+  height: 70vh;
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.gallery-swiper .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.swiper-pagination-bullet{
+  background: white;
+  opacity: 0.6;
+}
+
+.swiper-pagination-bullet{
+  opacity: 1;
+}
+.swiper-button-prev, .swiper-button-next{
+  color: white;
+  opacity: 0.6;
+}
+@media (max-width: 768px) {
+  .gallery-swiper {
+    height: 60vh;
+  }
+}
+

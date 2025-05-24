@@ -1,9 +1,6 @@
 <?php 
-/*El Modelo es el encargado de interactuar con la base de datos. 
-En este caso, se encargará de registrar al usuario en la DDBB
-*/
-require_once dirname(__DIR__) . '/config/database.php';//llamo al archivo donde realizo la conexión a la DDBB con PDO
-
+require_once __DIR__ . '/../config/config.php';
+require_once ROOT_PATH . '/app/config/database.php';
 
 class User{
     private $conexion;
@@ -12,47 +9,121 @@ class User{
         $this->conexion = $conexion;
     }
 
-    //Método para verificar si el email existe
+    // Verificar si el email existe (true/false)
     public function emailExist($email){
-        //Consulta para verificar si el email existe
-        $query = "SELECT * FROM users WHERE email = :email";
-        //llamo a la conexión
+        $query = "SELECT COUNT(*) FROM users WHERE email = :email";
         $result = $this->conexion->prepare($query);
-        $result->execute(['email' => $email]);
-
-        return $result->fetchColumn() > 0;//devuelve si encuentra filas
+        $result->execute(['email' => strtolower(trim($email))]);
+        return $result->fetchColumn() > 0;
     }
     
+    // Login: obtiene los datos del usuario (para luego comparar el password)
+    public function login($email){
+        $query = "SELECT * FROM users WHERE email = :email";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->execute(['email' => strtolower(trim($email))]);
+        return $stmt->fetch(PDO::FETCH_ASSOC); // array asociativo o false
+    }
+    // Contar usuarios para paginación (con filtro)
+    public function countUsers($search = '', $role = ''){
+        $sql = "SELECT COUNT(*) FROM users WHERE 1";
+        $params = [];
+        if ($search) {
+            $sql .= " AND (name LIKE :search OR lastName LIKE :search OR email LIKE :search)";
+            $params['search'] = '%' . $search . '%';
+        }
+        if ($role) {
+            $sql .= " AND role = :role";
+            $params['role'] = $role;
+        }
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchColumn();
+    }
+    // Obtener usuario por ID
+    public function getUserById($id) {
+        $stmt = $this->conexion->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    //-----METODO CRUD------
+
+    // Crear usuario (para registro público o dashboard) Por defecto, el rol es 'user'
     public function createUser($name, $lastName, $email, $phone, $password, $role = 'user'){
-        $query = "INSERT INTO users (name, lastName, email, phone, password, role) VALUES (:name, :lastName, :email, :phone, :password, :role) ";
-        $result = $this->conexion->prepare($query);
+        // Previene duplicados
+        if ($this->emailExist($email)) {
+            return [
+                'success' => false,
+                'message' => 'A user with this email already exists.'
+            ];
+        }
 
-         //hasheo la contraseña antes de insertarla en la BD
-         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $query = "INSERT INTO users (name, lastName, email, phone, password, role) 
+                  VALUES (:name, :lastName, :email, :phone, :password, :role)";
+        $stmt = $this->conexion->prepare($query);
 
-         if ($result->execute([
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        $success = $stmt->execute([
             'name' => $name,
             'lastName' => $lastName,
-            'email' => $email,
+            'email' => strtolower(trim($email)),
             'phone' => $phone,
             'password' => $hashedPassword,
             'role' => $role
-        ])) {
-            return true; // Se insertó correctamente
+        ]);
+
+        if ($success) {
+            return [
+                'success' => true,
+                'message' => 'User created successfully.'
+            ];
         } else {
-            return false; // Hubo un error
+            return [
+                'success' => false,
+                'message' => 'Unexpected error when adding the user.'
+            ];
         }
     }
-
-    //método para iniciar sesión una vez validados los datos del usuario
-    public function login($email){
-        $query = "SELECT * FROM users WHERE email = :email";
-        $result = $this->conexion->prepare($query);
-        $result->execute(['email' => $email]);
-    
-       return $result->fetch(PDO::FETCH_ASSOC); // Obtener usuario de la base de datos, me devuelve array asoc  
+    // Read-Listar usuarios paginados y filtrados
+    public function getUsers($limit, $offset, $search = '', $role = '') {
+        $sql = "SELECT * FROM users WHERE 1";
+        $params = [];
+        if ($search) {
+            $sql .= " AND (name LIKE :search OR lastName LIKE :search OR email LIKE :search)";
+            $params['search'] = '%' . $search . '%';
+        }
+        if ($role) {
+            $sql .= " AND role = :role";
+            $params['role'] = $role;
+        }
+        $sql .= " ORDER BY id DESC LIMIT :limit OFFSET :offset";
+        $stmt = $this->conexion->prepare($sql);
+        foreach ($params as $key => $val) {
+            $stmt->bindValue(':' . $key, $val);
+        }
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-}
-    
+    // Update- Actualizar usuario
+    public function updateUser($id, $name, $lastName, $email, $phone, $role) {
+        $stmt = $this->conexion->prepare("UPDATE users SET name = ?, lastName = ?, email = ?, phone = ?, role = ? WHERE id = ?");
+        return $stmt->execute([$name, $lastName, $email, $phone, $role, $id]);
+    }
+    // Delete - Eliminar usuario
+    public function deleteUser($id) {
+        $stmt = $this->conexion->prepare("DELETE FROM users WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
+    // Resetear contraseña
+    public function resetPassword($id, $newPassword) {
+        $hashed = password_hash($newPassword, PASSWORD_DEFAULT);
+        $stmt = $this->conexion->prepare("UPDATE users SET password = ? WHERE id = ?");
+        return $stmt->execute([$hashed, $id]);
+    }
 
+}
 ?>

@@ -2,9 +2,8 @@
 require_once realpath(__DIR__ . '/../../config/config.php');
 require_once realpath(__DIR__ . '/../../session/session_manager.php');
 
-
 if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-    header('Location: " . BASE_URL . "public/inicio.php');
+    header('Location: ' . BASE_URL . 'public/inicio.php');
     exit;
 }
 ?>
@@ -21,8 +20,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
 
         <!-- Layout dashboard header y aside -->
         <?php require_once ROOT_PATH . '/app/views/layout/layout_dashboard.php';?>
-
-        <main class="flex-1 lg:flex-col mt-20 lg:mt-20">
+        <main class="flex-1 lg:flex-col mt-10">
             <!--Card del admin-->
             <div class="flex flex-row p-8 gap-4 mb-4 justify-between bg-brand-100 border border-brand-200 rounded-xl animate-fade-in">
                 <div class="flex-1 flex flex-col justify-center pl-8">
