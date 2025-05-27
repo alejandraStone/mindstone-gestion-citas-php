@@ -33,6 +33,7 @@ module.exports = {
         },
          oliveShade: "#2F2B20",
          lightOlive: "#CECDB9",
+         verdeOliva: "#9EB0A0",
       },
       fontFamily: {
         normal: ["Manrope", "sans-serif"],

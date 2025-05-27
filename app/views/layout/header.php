@@ -3,8 +3,8 @@ require_once realpath(__DIR__ . '/../../config/config.php');
 require_once ROOT_PATH . '/app/session/session_manager.php';
 ?>
 
-<header class="fixed top-0 left-0 right-0 z-50 w-full bg-brand-100 text-brand-950">
-  <div class="container mx-auto py-2 flex justify-between items-center relative">
+<header class="fixed top-0 left-0 right-0 z-50 bg-brand-100 text-brand-950 w-full box-border">
+    <div class="container mx-auto py-2 flex justify-between items-center relative">
 
         <!-- Logo -->
         <div id="logo">
@@ -25,8 +25,8 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
             </svg>
 
             <svg id="icon-close"
-            class="w-6 h-6 transition-transform duration-300 hidden"
-            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                class="w-6 h-6 transition-transform duration-300 hidden"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
 
@@ -36,7 +36,7 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
         <div id="mobileMenu"
             class="hidden lg:hidden flex flex-col items-center space-y-10 absolute top-full left-0 right-0 bg-brand-100 p-8 z-[100] transition-opacity duration-300 opacity-0">
             <a href="<?= BASE_URL ?>public/inicio.php" class="menu-link-desplegable">Home</a>
-            <a href="<?= BASE_URL ?>app/views/services.php" class="menu-link-desplegable">Services</a>
+            <a href="<?= BASE_URL ?>app/views/classes.php" class="menu-link-desplegable">Classes</a>
             <a href="<?= BASE_URL ?>app/views/about.php" class="menu-link-desplegable">About us</a>
             <a href="<?= BASE_URL ?>app/views/contact.php" class="menu-link-desplegable">Contact</a>
 
@@ -51,7 +51,7 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
         <!-- Menú pantallas grandes -->
         <nav class="hidden md:hidden lg:flex gap-10" id="menu">
             <a href="<?= BASE_URL ?>public/inicio.php" class="menu-link">Home</a>
-            <a href="<?= BASE_URL ?>app/views/services.php" class="menu-link">Services</a>
+            <a href="<?= BASE_URL ?>app/views/classes.php" class="menu-link">Classes</a>
             <a href="<?= BASE_URL ?>app/views/about.php" class="menu-link">About us</a>
             <a href="<?= BASE_URL ?>app/views/contact.php" class="menu-link">Contact</a>
 
@@ -65,9 +65,20 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
 
         <!-- Login / Logout -->
         <?php if (!isset($_SESSION['user'])): ?>
-            <button id="loginBtn" type="button" class="btn-peticion">Log in</button>
+            <button id="loginBtn" type="button" class="flex menu-link">
+                Log in
+                <svg class="w-6 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+
+            </button>
         <?php else: ?>
-            <a href="<?= BASE_URL ?>app/session/logout.php" class="btn-peticion">Log out</a>
+            <a href="<?= BASE_URL ?>app/session/logout.php" class="flex menu-link">
+                Log out
+                <svg class="w-6 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+            </a>
         <?php endif; ?>
 
     </div>
@@ -75,9 +86,8 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
 
 <!-- Popup Login Modal oculto por defecto-->
 <!-- Login Modal -->
-<div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
-    <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-md p-6 relative">
-        <!-- Botón para cerrar -->
+<div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden overflow-x-hidden overflow-y-auto">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative mx-4 sm:mx-auto max-h-screen overflow-y-auto">
         <button id="closeLoginModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
         <h2 class="text-xl font-bold mb-4 text-center">Sign in to your account</h2>
         <form class="space-y-4">
@@ -96,16 +106,11 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
                     class="bg-brand-600 hover:bg-brand-700 text-white font-medium py-2 px-4 rounded-lg">
                     Login
                 </button>
-                <!-- Enlace para contraseña olvidada -->
-                <button
-                    type="button"
-                    id="forgotPasswordBtn"
-                    class="text-brand-600 hover:underline text-sm ml-2">
+                <button type="button" id="forgotPasswordBtn" class="text-brand-600 hover:underline text-sm ml-2">
                     Forgot password?
                 </button>
             </div>
         </form>
-        <!-- Enlace de registro -->
         <div class="mt-10 text-sm text-center flex flex-col gap-2">
             Are you new to MindStone?
             <a href="<?= BASE_URL ?>app/views/auth/signup.php" class="text-brand-600 font-semibold hover:underline">
@@ -115,9 +120,9 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
     </div>
 </div>
 
-<!-- Modal para contraseña olvidada -->
-<div id="forgotPasswordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
-    <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-md p-6 relative">
+<!-- Forgot Password Modal -->
+<div id="forgotPasswordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden overflow-x-hidden overflow-y-auto">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative mx-4 sm:mx-auto max-h-screen overflow-y-auto">
         <button id="closeForgotPasswordModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
         <h2 class="text-xl font-bold mb-4 text-center">Forgot your password?</h2>
         <form id="forgotPasswordForm" class="space-y-4">

@@ -8,7 +8,7 @@
   @font-face {
     font-family: "Manrope";
     src: url("../fonts/Manrope/Manrope-VariableFont_wght.ttf") format("truetype");
-    font-weight: 100 800;;
+    font-weight: 100 800;
     font-style: normal;
   }
   @font-face {
@@ -33,25 +33,24 @@
   .menu-link-desplegable {
     @apply  text-center text-base font-normal py-3 px-6 rounded-full text-brand-700 hover:bg-brand-700 hover:text-white;
   }
-
   /*Tamaño del título grande*/
   .titulo-grande {
   @apply text-3xl md:text-4xl lg:text-6xl font-medium font-titulo leading-tight;
 }
 /*Tamaño de titulos de secciones*/
   .tamaño-titulo-seccion {
-    @apply text-[32px] md:text-[40px] lg:text-[48px] mb-8 font-titulo text-brand-900 text-center lg:text-left leading-tight;
+    @apply text-[32px] md:text-[40px] lg:text-[48px] font-titulo text-brand-900 text-center lg:text-left leading-tight;
   }
   /*Titulo sección gradiente*/
   .titulo-gradiente{
-    @apply text-[32px] md:text-[40px] lg:text-[48px] mb-10 font-titulo text-center lg:text-left leading-tight flex items-center gap-6 bg-gradient-to-r from-brand-900 via-brand-400 to-oliveShade bg-clip-text text-transparent
+    @apply text-[32px] md:text-[40px] lg:text-[48px] font-titulo text-center md:text-center lg:text-left leading-tight bg-gradient-to-r from-brand-900 via-brand-400 to-oliveShade bg-clip-text text-transparent;
   }
   .titulo-punto {
   @apply text-brand-800 text-[32px] md:text-[40px] lg:text-[48px] font-bold;
   }
   /*Tamaño de los subtítulos*/
   .tamaño-subtitulo {
-    @apply text-xl font-bold font-normal text-brand-900;
+    @apply text-2xl font-bold font-normal text-brand-900;
   }
     /*Tamaño de los textos generales*/
   .tamaño-texto-general {
@@ -96,6 +95,10 @@
   .day-times-container button[type="button"] {
     @apply bg-brand-500 hover:bg-brand-600 text-white py-1 px-3 rounded text-xs mt-2;
   }
+  /*Estilo para el calendario evitar scroll horizontal antes de mostrarlo*/
+  .calendar-wrapper.empty {
+    @apply  min-h-[200px] overflow-x-hidden;
+  }
 }
 /*CSS puro porque Tailwind no reconoce el after*/
 .menu-link::after {
@@ -136,7 +139,7 @@
 .form-select:focus {
   border-color: #7c3aed;
 }
-/*Estilos para la sección  misión*/
+/*Estilos para la sección  misión efecto borde radio en la parte superior*/
 .mission-arc {
   border-top-left-radius: 80% 8vw;
   border-top-right-radius: 80% 8vw;
