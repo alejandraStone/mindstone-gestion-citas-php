@@ -8,7 +8,6 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="/mindStone/public/js/calendario.js"></script>
   <link rel="stylesheet" href="/mindStone/public/css/output.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <!-- Lib JS slideshow -->
@@ -20,233 +19,342 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
   <title>Home</title>
 </head>
 
-<body class="font-normal pt-20 overflow-x-hidden">
-<?php
-require_once ROOT_PATH . '/app/views/layout/header.php';
-?>
+<body class="font-normal pt-20 box-border overflow-x-hidden">
+  <?php
+  require_once ROOT_PATH . '/app/views/layout/header.php';
+  ?>
 
-<!-- Hero Section -->
-<section class="relative h-[80vh] md:h-[80vh] lg:h-screen w-full overflow-x-hidden">
-  <div class="absolute inset-0 z-0">
-    <img src="img/hero.jpg" alt="Pilates Class" class="w-full h-full object-cover brightness-75" />
-  </div>
-  <div class="relative z-10 flex items-center justify-center h-full text-center px-4 sm:px-6">
-    <div class="max-w-[90%]">
-      <h1 id="hero-title" class="titulo-grande text-white mb-6 opacity-0 translate-y-12 transition-all duration-1000">
-        Transform Your Body <br class="hidden sm:block"> Elevate Your Mind
-      </h1>
-      <a id="hero-btn" href="#booking" class="opacity-0 translate-y-12 transition-all duration-700 inline-block px-6 py-2 border border-white text-white font-titulo sm:text-lg tracking-wide hover:bg-white hover:text-brand-800">
-        BOOK CLASS
-      </a>
+  <!-- Hero Section -->
+  <section class="relative h-[80vh] md:h-[80vh] lg:h-screen w-full">
+    <div class="absolute inset-0 z-0">
+      <img src="img/hero.jpg" alt="Pilates Class" class="w-full h-full object-cover brightness-75" />
     </div>
-  </div>
-</section>
-
-<!-- Misión -->
-<section class="relative w-full bg-brand-50 py-10 px-4 -mt-10 md:-mt-16 lg:-mt-24 z-20 mission-arc">
-  <div class="container flex flex-col md:flex-row items-center gap-10 md:gap-8 lg:gap-16 mt-16">
-    <div class="w-full md:w-1/2 flex justify-center md:justify-start">
-      <div id="mission-text" class="w-full max-w-md text-center md:text-left opacity-0 -translate-x-10 transition-all duration-1000">
-        <h2 class="titulo-gradiente">
-          <span class="titulo-punto">·</span>
-          Our Mission <span class="titulo-punto">·</span>
-        </h2>
-        <p class="tamaño-texto-general mb-5">
-          At MindStone, our mission is to provide a welcoming and empowering space where individuals of all levels can experience the transformative benefits of Pilates...<br><br>
-          Whether you're seeking improved flexibility, core stability, or a deeper connection with your body, MindStone is committed to helping you move with purpose and live with vitality.
-        </p>
-        <span class="block font-titulo text-brand-900 text-lg mt-4">— Ale & Ale</span>
+    <div class="relative z-10 flex items-center justify-center h-full text-center px-4 sm:px-6">
+      <div class="max-w-[90%]">
+        <h1 id="hero-title" class="titulo-grande text-white mb-6 opacity-0 translate-y-12 transition-all duration-1000">
+          Transform Your Body <br class="hidden sm:block"> Elevate Your Mind
+        </h1>
+        <a id="hero-btn" href="#booking" class="opacity-0 translate-y-12 transition-all duration-700 inline-block px-6 py-2 border border-white text-white font-titulo sm:text-lg tracking-wide hover:bg-white hover:text-brand-800">
+          BOOK NOW
+        </a>
       </div>
-    </div>
-    <div class="w-full md:w-1/2 flex justify-center">
-      <img id="mission-img" src="img/misión.jpg" alt="Our Mission" class="rounded-xl object-cover opacity-0 translate-x-10 transition-all duration-1000 w-full max-w-xs md:max-w-[350px] lg:max-w-[420px] aspect-[4/5] shadow-lg">
-    </div>
-  </div>
-</section>
-
-<!-- Servicios -->
-<section class="w-full bg-brand-50 py-20 px-4">
-  <div class="container flex flex-col items-center justify-center">
-    <h2 class="titulo-gradiente lg:text-center">
-      <span class="titulo-punto">·</span>
-      Our Classes <span class="titulo-punto">·</span>
-    </h2>
-    <div class="w-full max-w-7xl mx-auto mt-10">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        <!-- Servicio 1 -->
-        <div class="flex flex-col items-center text-center bg-white p-6 rounded-xl shadow-md transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg" data-aos="fade-up" data-aos-delay="100">
-          <div class="overflow-hidden w-48 h-64 mb-4 rounded-t-[100px]">
-            <img src="img/full_body.jpg" alt="full body" class="object-cover w-full h-full transition-transform duration-500 hover:scale-110" />
-          </div>
-          <h3 class="tamaño-subtitulo">Full Body Pilates Class</h3>
-          <p class="tamaño-texto-general text-sm">Strength, balance and energy in every move</p>
-          <a href="#booking" class="btn-cards">Booking</a>
-        </div>
-        <!-- Servicio 2 -->
-        <div class="flex flex-col items-center text-center bg-white p-6 rounded-xl shadow-md transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg" data-aos="fade-up" data-aos-delay="200">
-          <div class="overflow-hidden w-48 h-64 mb-4 rounded-t-[100px]">
-            <img src="img/mat.jpg" alt="Mat class" class="object-cover w-full h-full transition-transform duration-500 hover:scale-110" />
-          </div>
-          <h3 class="tamaño-subtitulo">Mat Pilates Class</h3>
-          <p class="tamaño-texto-general text-sm">Control your body, master your mind</p>
-          <a href="#booking" class="btn-cards">Booking</a>
-        </div>
-        <!-- Servicio 3 -->
-        <div class="flex flex-col items-center text-center bg-white p-6 rounded-xl shadow-md transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg" data-aos="fade-up" data-aos-delay="300">
-          <div class="overflow-hidden w-48 h-64 mb-4 rounded-t-[100px]">
-            <img src="img/reformer.jpg" alt="Reformer class" class="object-cover w-full h-full transition-transform duration-500 hover:scale-110" />
-          </div>
-          <h3 class="tamaño-subtitulo">Reformer Pilates Class</h3>
-          <p class="tamaño-texto-general text-sm">Precision, resistance, transformation</p>
-          <a href="#booking" class="btn-cards">Booking</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-  <!-- SlideShow-->
-<section class="bg-brand-50 pt-10 pb-20 px-4">
-  <div class="max-w-7xl mx-auto flex flex-col items-center justify-center">
-    <h2 class="titulo-gradiente text-center">
-      <span class="titulo-punto">·</span>
-      Our Pilates Center
-      <span class="titulo-punto">·</span>
-    </h2>
-    
-    <div class="w-full px-4 sm:px-8 md:px-16 lg:px-0 mt-6">
-      <div class="swiper gallery-swiper rounded-xl shadow-lg overflow-hidden w-full max-w-4xl mx-auto">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="/mindStone/public/img/hero.jpg" alt="Pilates Studio" class="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover" />
-          </div>
-          <div class="swiper-slide">
-            <img src="/mindStone/public/img/mat.jpg" alt="Pilates Class" class="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover" />
-          </div>
-          <div class="swiper-slide">
-            <img src="/mindStone/public/img/reformer.jpg" alt="Equipment" class="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover" />
-          </div>
-        </div>
-
-        <!-- Optional controls -->
-        <div class="swiper-pagination"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Horario -->
-<section class="relative min-h-screen bg-brand-600 py-20">
-  <div class="container">
-    <h2 class="text-4xl md:text-5xl lg:text-6xl font-titulo text-white text-center drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
-      <span class="text-white text-5xl mx-2">·</span>
-      Our Class Schedule
-      <span class="text-white text-5xl mx-2">·</span>
-    </h2>
-    <div class="absolute inset-0"></div>
-    <div id="calendar" class="relative max-w-5xl mx-auto mt-12 p-6 rounded-xl bg-white backdrop-blur-md shadow-lg overflow-x-auto"></div>
-  </div>
-</section>
-
-  <!-- Sección de Bonos-->
-<section class="w-full bg-white py-20 px-4">
-    <div class="container flex flex-col items-center">
-
-    <!-- Título de la sección -->
-    <h2 class="titulo-gradiente">
-      <span class="titulo-punto">·</span>
-      Our Prices <span class="titulo-punto">·</span>
-    </h2>
-    <!-- Contenedor de los bonos tipo grid, todos alineados verticalmente -->
-    <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-6">
-      <!-- Unlimited Classes Card -->
-      <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
-        data-aos-delay="100">
-        <div class="flex flex-col items-center w-full">
-          <h3 class="tamaño-subtitulo text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">Unlimited Classes</h3>
-          <span class="text-brand-900 mb-4 text-base font-titulo">Per month</span>
-        </div>
-        <div class="flex items-end justify-center my-3 h-[88px]">
-          <span class="text-brand-900 text-[4rem] font-titulo leading-none">250</span>
-          <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
-
-        </div>
-        <p class="text-base md:text-[18px] lg:text-[20px] text-brand-900 text-center mb-6 flex-1">
-          Attend every day of the week with no limitations.
-        </p>
-        <button class="btn-cards">Join now</button>
-      </div>
-      <!-- 10 Classes Card -->
-      <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
-        data-aos-delay="100">
-        <div class="flex flex-col items-center w-full">
-          <h3 class="tamaño-subtitulo text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">10 Classes</h3>
-          <span class="text-brand-800 mb-4 text-base font-titulo">Every 4 weeks</span>
-        </div>
-        <div class="flex items-end justify-center my-3 h-[88px]">
-          <span class="text-brand-900 text-[4rem] font-titulo leading-none">200</span>
-          <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
-
-        </div>
-        <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
-          10 classes per month at any level.
-        </p>
-        <button class="btn-cards">Join now</button>
-      </div>
-      <!-- 4 Classes Card -->
-      <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
-        data-aos-delay="100">
-        <div class="flex flex-col items-center w-full">
-          <h3 class="tamaño-subtitulo text-brand-900 text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">4 Classes</h3>
-          <span class="text-brand-900 mb-4 text-base font-titulo">Every 4 weeks</span>
-        </div>
-        <div class="flex items-end justify-center my-3 h-[88px]">
-          <span class="text-brand-900 text-[4rem] font-titulo leading-none">100</span>
-          <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
-
-        </div>
-        <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
-          4 classes per month at any level.
-        </p>
-        <button class="btn-cards">Join now</button>
-      </div>
-      <!-- 1 Class Card -->
-      <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
-        data-aos-delay="100">
-        <div class="flex flex-col items-center w-full">
-          <h3 class="tamaño-subtitulo text-brand-900 text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">1 Class</h3>
-          <span class="text-brand-900 mb-4 text-base font-titulo">Individual</span>
-        </div>
-        <div class="flex items-end justify-center my-3 h-[88px]">
-          <span class="text-brand-900 text-[4rem] font-titulo leading-none">35</span>
-          <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
-
-        </div>
-        <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
-          1 individual class.
-        </p>
-        <button class="btn-cards">Join now</button>
-      </div>
-    </div>
     </div>
   </section>
 
-  <!-- Sección de Contacto -->
-  <section
-    class="relative w-full min-h-[700px] flex items-center justify-center py-10 lg:py-24"
-    style="background-image: url('/mindStone/public/img/bg-contacto.jpg'); background-size: cover; background-position: center;">
-    <!-- Capa de opacidad usando color de marca -->
-    <div class="absolute inset-0 bg-brand-300/20"></div>
+  <!-- Bienvenida -->
+  <section class="relative bg-brand-50 py-20 -mt-10 md:-mt-16 lg:-mt-24 mission-arc h-[50vh] md:h-[50vh] lg:h-[70vh] w-full flex flex-col items-center justify-center text-center">
+    <!-- Texto bienvenida -->
+    <div class="max-w-5xl mx-auto px-4 flex flex-col items-center gap-2 justify-center" data-aos="fade-up">
+      <p class="font-normal font-extrabold text-black text-[24px] md:text-[28px] lg:text-[32px] leading-[35px] md:leading-[38px] lg:leading-[50px]">MINDSTONE A PILATES STUDIO IN THE HEART OF ALICANTE THAT YOU WILL LOVE, THAT WELCOMES YOU, HELPS YOU MOVE AND LOVES YOUR HARD WORK.</p>
+      <span class="flex text-normal text-lg font-bold text-center gap-4 p-4 items-center">Lets' flow
+        <svg class="w-4 animate-bounce" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
+        </svg>
+      </span>
+    </div>
+  </section>
+  <!-- Servicios -->
+  <section class="min-h-screen py-10 lg:py-20 bg-brand-900 relative">
+    <!-- Overlay oscuro -->
+    <div class="absolute inset-0 bg-gradient-to-r from-brand-100/30 via-transparent to-brand-200/30 z-0"></div>
 
-    <!-- Contenido principal -->
-    <div class="relative z-10 w-full max-w-7xl flex flex-col lg:flex-row items-center lg:items-stretch justify-between gap-8 px-4">
-      <!-- Lado Derecho: Formulario de contacto -->
-      <div class="flex-1 flex flex-col justify-center items-center" data-aos="fade-left">
-        <form class="w-full max-w-md bg-transparent flex flex-col gap-4" id="cta-contact-form" novalidate>
+    <!-- Contenedor principal -->
+    <div class="relative z-10 p-4 max-w-7xl mx-auto">
+
+      <!-- Título principal -->
+      <div class="flex items-center justify-center border border-white mb-10" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500"">
+        <h2 class=" text-[32px] md:text-[40px] lg:text-[48px] font-titulo text-white text-center drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+        <span class="text-white text-5xl mx-2">·</span>
+        Practice with Us
+        <span class="text-white text-5xl mx-2">·</span>
+        </h2>
+      </div>
+
+      <!-- Grid de servicios -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Servicio 1: Full Body -->
+        <div class="flex flex-col border border-white p-4 rounded-xl bg-black/10" data-aos="fade-up"
+          data-aos-duration="3000">
+          <img src="img/full_body.jpg" alt="Full Body"
+            class="object-cover w-full h-[300px] transition-transform duration-500 hover:scale-110 rounded-xl mb-4" />
+          <div class="flex flex-col sm:flex-row justify-center items-stretch w-full">
+            <h3 class="sm:w-1/2 text-white text-center p-4 border border-white">FULL BODY</h3>
+            <a href="<?= BASE_URL ?>app/views/classes.php"
+              class="sm:w-1/2 text-base flex items-center justify-center gap-2 text-white transition-all duration-500 hover:text-brand-400 border border-white">
+              Explore Classes
+              <svg xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor"
+                class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Servicio 2: Mat -->
+        <div class="flex flex-col border border-white p-4 rounded-xl bg-black/10" data-aos="fade-up"
+          data-aos-duration="3000">
+          <img src="img/mat.jpg" alt="Mat Class"
+            class="object-cover w-full h-[300px] transition-transform duration-500 hover:scale-110 rounded-xl mb-4" />
+          <div class="flex flex-col sm:flex-row justify-center items-stretch w-full">
+            <h3 class="sm:w-1/2 text-white text-center p-4 border border-white">MAT</h3>
+            <a href="<?= BASE_URL ?>app/views/classes.php"
+              class="sm:w-1/2 text-base flex items-center justify-center gap-2 text-white transition-all duration-500 hover:text-brand-400 border border-white">
+              Explore Classes
+              <svg xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor"
+                class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Servicio 3: Reformer -->
+        <div class="flex flex-col border border-white p-4 rounded-xl bg-black/10" data-aos="fade-up"
+          data-aos-duration="3000">
+          <img src="img/reformer.jpg" alt="Reformer Class"
+            class="object-cover w-full h-[300px] transition-transform duration-500 hover:scale-110 rounded-xl mb-4" />
+          <div class="flex flex-col sm:flex-row justify-center items-stretch w-full">
+            <h3 class="sm:w-1/2 text-white text-center p-4 border border-white">REFORMER</h3>
+            <a href="<?= BASE_URL ?>app/views/classes.php"
+              class="sm:w-1/2 text-base flex items-center justify-center gap-2 text-white transition-all duration-500 hover:text-brand-400 border border-white">
+              Explore Classes
+              <svg xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor"
+                class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficions iconos -->
+  <section class="bg-brand-50 flex flex-col md:flex-row lg:flex-row items-center justify-center w-full px-4 py-10 lg:py-24 gap-8">
+    <!-- Beneficio 1 -->
+    <div class="flex flex-col items-center justify-start text-center max-w-xs w-full px-4 
+              transition duration-300 hover:shadow-[0_0_25px_#c1734c] hover:scale-105 rounded-xl">
+      <img src="/mindStone/public/img/flor-de-loto.png" class="w-16 h-16">
+      <p class="tamaño-subtitulo mt-2">Reduces stress</p>
+      <p class="tamaño-texto-general mt-1">Through controlled breathing and mental focus, it helps reduce stress and improves oxygenation of the body.</p>
+    </div>
+
+    <!-- Beneficio 2 -->
+    <div class="flex flex-col items-center justify-start text-center max-w-xs w-full px-4 
+              transition duration-300 hover:shadow-[0_0_25px_#c1734c] hover:scale-105 rounded-xl">
+      <img src="/mindStone/public/img/estera-de-yoga.png" class="w-16 h-16">
+      <p class="tamaño-subtitulo mt-2">Increases flexibility</p>
+      <p class="tamaño-texto-general mt-1">Exercises stretch and lengthen muscles, improving range of motion throughout the body.</p>
+    </div>
+
+    <!-- Beneficio 3 -->
+    <div class="flex flex-col items-center justify-start text-center max-w-xs w-full px-4 
+              transition duration-300 hover:shadow-[0_0_25px_#c1734c] hover:scale-105 rounded-xl">
+      <img src="/mindStone/public/img/extendido.png" class="w-16 h-16">
+      <p class="tamaño-subtitulo mt-2">Improves posture</p>
+      <p class="tamaño-texto-general mt-1">Pilates strengthens the core and stabilising muscles, helping to maintain a correct and healthy posture.</p>
+    </div>
+  </section>
+
+  <!-- About Estudio -->
+  <section class="bg-brand-50 text-brand-900 pb-10 lg:pb-20">
+    <div class="grid grid-cols-1 lg:grid-cols-2 max-w-7xl mx-auto h-auto lg:h-[700px]">
+
+      <!-- Columna izquierda -->
+      <div class="flex flex-col h-full">
+
+        <!-- Título -->
+        <div class="flex border-t border-l border-r border-b-0 border-brand-900 p-4 md:p-6 lg:p-20 mx-4 lg:mx-0"
+          data-aos="fade-right">
+          <h2 class="titulo-gradiente text-center">
+            <span class="titulo-punto">·</span>
+            About the Studio
+            <span class="titulo-punto">·</span>
+          </h2>
+        </div>
+
+        <!-- Imagen SOLO en móvil y tablet -->
+        <div class="block lg:hidden max-w-5xl h-[300px] md:h-[400px] overflow-hidden border-l border-r border-t border-b-0 border-brand-900 p-4 lg:px-0 mx-4">
+          <img src="/mindStone/public/img/instalacion-principal.jpg" alt="Estudio de pilates"
+            class="w-full h-full object-cover rounded-br-[4rem]">
+        </div>
+
+
+        <!-- T1 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 border border-t border-b border-l border-brand-900 flex-grow mx-4 lg:mx-0">
+          <!-- Testimonio 1 -->
+          <div class="p-4 md:p-6 border border-r border-b border-l-0 border-t-0 border-brand-900">
+            <p class="font-bold mb-4">Top-Tier Instructors</p>
+
+            <p>Certified, experienced, and passionate about your progress.</p>
+          </div>
+
+          <!-- T2 -->
+          <div class="p-4 md:p-6 border border-r-0 border-b border-l-0 border-t-0 border-brand-900">
+            <p class="font-bold mb-4">Premium Equipment</p>
+            <p>Up to 8 reformers per class — space and comfort guaranteed.</p>
+          </div>
+
+          <!-- T3 -->
+          <div class="p-4 md:p-6 border border-r sm:border-b md:border-b-0 lg:border-b-0 border-l-0 border-t-0 border-brand-900">
+            <p class="font-bold mb-4">Prime Location</p>
+            <p>Located in the heart of Salamanca neighborhood.</p>
+          </div>
+
+          <!-- T4 -->
+          <div class="p-4 md:p-6">
+            <p class="font-bold mb-4">Extra Comforts</p>
+            <p>Towel rental & full changing rooms with showers available.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Imagen SOLO en desktop -->
+      <div class="hidden lg:block w-full h-full overflow-hidden border-r border-t border-b border-brand-900 p-8" data-aos="fade-left">
+        <img src="/mindStone/public/img/instalacion-principal.jpg" alt="Estudio de pilates"
+          class="w-full h-full object-cover rounded-br-[8rem]">
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Sección de Bonos-->
+  <section class="w-full bg-brand-50 pt-10 pb-20 lg:pt-8 lg:pb-24 px-4">
+    <div class="container flex flex-col items-center">
+
+      <!-- Título de la sección -->
+      <h2 class="titulo-gradiente mb-6">
+        <span class="titulo-punto mr-2">·</span>
+        Join the practice anytime<span class="titulo-punto ml-2">·</span>
+      </h2>
+      <!-- Contenedor de los bonos tipo grid, todos alineados verticalmente -->
+      <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-6">
+        <!-- Unlimited Classes Card -->
+        <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
+          data-aos-delay="100">
+          <div class="flex flex-col items-center w-full">
+            <h3 class="tamaño-subtitulo text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">Unlimited Classes</h3>
+            <span class="text-brand-900 mb-4 text-base font-titulo">Per month</span>
+          </div>
+          <div class="flex items-end justify-center my-3 h-[88px]">
+            <span class="text-brand-900 text-[4rem] font-titulo leading-none">250</span>
+            <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
+
+          </div>
+          <p class="text-base md:text-[18px] lg:text-[20px] text-brand-900 text-center mb-6 flex-1">
+            Attend every day of the week with no limitations.
+          </p>
+          <button class="btn-cards">Join now</button>
+        </div>
+        <!-- 10 Classes Card -->
+        <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
+          data-aos-delay="100">
+          <div class="flex flex-col items-center w-full">
+            <h3 class="tamaño-subtitulo text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">10 Classes</h3>
+            <span class="text-brand-800 mb-4 text-base font-titulo">Every 4 weeks</span>
+          </div>
+          <div class="flex items-end justify-center my-3 h-[88px]">
+            <span class="text-brand-900 text-[4rem] font-titulo leading-none">200</span>
+            <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
+
+          </div>
+          <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
+            10 classes per month at any level.
+          </p>
+          <button class="btn-cards">Join now</button>
+        </div>
+        <!-- 4 Classes Card -->
+        <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
+          data-aos-delay="100">
+          <div class="flex flex-col items-center w-full">
+            <h3 class="tamaño-subtitulo text-brand-900 text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">4 Classes</h3>
+            <span class="text-brand-900 mb-4 text-base font-titulo">Every 4 weeks</span>
+          </div>
+          <div class="flex items-end justify-center my-3 h-[88px]">
+            <span class="text-brand-900 text-[4rem] font-titulo leading-none">100</span>
+            <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
+
+          </div>
+          <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
+            4 classes per month at any level.
+          </p>
+          <button class="btn-cards">Join now</button>
+        </div>
+        <!-- 1 Class Card -->
+        <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
+          data-aos-delay="100">
+          <div class="flex flex-col items-center w-full">
+            <h3 class="tamaño-subtitulo text-brand-900 text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">1 Class</h3>
+            <span class="text-brand-900 mb-4 text-base font-titulo">Individual</span>
+          </div>
+          <div class="flex items-end justify-center my-3 h-[88px]">
+            <span class="text-brand-900 text-[4rem] font-titulo leading-none">35</span>
+            <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
+
+          </div>
+          <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
+            1 individual class.
+          </p>
+          <button class="btn-cards">Join now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de contacto-->
+  <section id="contacto" class="relative text-brand-50 w-full min-h-screen overflow-hidden flex items-center"
+    style="background-image: url('/mindStone/public/img/bg-contacto.jpg'); background-size: cover; background-position: center;">
+
+    <!-- Overlay oscuro -->
+    <div class="absolute inset-0 bg-black bg-opacity-20 z-0"></div>
+
+    <div class="max-w-7xl mx-auto px-6 py-10 md:px-6 lg:px-4 grid grid-cols-1 md:grid-cols-2 gap-8 z-10 items-center">
+
+      <!-- TEXTO E ÍCONOS -->
+      <div class="flex flex-col justify-center w-full overflow-hidden">
+        <h2 class="text-3xl md:text-3xl lg:text-4xl font-bold mb-6 text-brand-100 text-left">You can contact us via the form or using our contact details</h2>
+        <ul class="flex flex-col gap-4 text-base">
+          <li class="flex items-center gap-3">
+            <svg class="w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+            </svg>
+
+            <span class="truncate">Street example, Alicante, Spain</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <svg class="w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+            </svg>
+
+            <span class="truncate">info@example.com</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <svg class="w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+            </svg>
+            <span class="truncate">666 987 654</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- FORMULARIO -->
+      <div class="w-full flex justify-center items-center">
+        <form class="w-full max-w-sm md:max-w-md lg:max-w-md mx-auto bg-transparent flex flex-col gap-4" id="cta-contact-form" novalidate>
+
           <!-- Nombre -->
-          <div class="flex flex-col gap-1">
+          <div class="flex flex-col gap-1 w-full">
             <label for="name" class="text-brand-50 font-normal text-lg mb-1">Name <span class="text-brand-100">*</span></label>
             <input
               type="text"
@@ -254,11 +362,12 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
               name="name"
               required
               placeholder="Your name"
-              class="rounded-full px-6 py-2 bg-white/90 text-brand-950 font-normal placeholder-brand-200 focus:outline-brand-500 transition-all" />
+              class="w-full rounded-full px-4 py-2 bg-white/90 text-brand-950 placeholder-brand-200 focus:outline-brand-500 transition-all" />
             <span class="text-red-600 text-sm mt-1 hidden" id="name-error">Please enter a valid name (letters and spaces only).</span>
           </div>
+
           <!-- Email -->
-          <div class="flex flex-col gap-1">
+          <div class="flex flex-col gap-1 w-full">
             <label for="email" class="text-brand-50 font-normal text-lg mb-1">Email <span class="text-brand-100">*</span></label>
             <input
               type="email"
@@ -266,11 +375,12 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
               name="email"
               required
               placeholder="your@email.com"
-              class="rounded-full px-6 py-2 bg-white/90 text-brand-950 font-normal placeholder-brand-200 focus:outline-brand-500 transition-all" />
+              class="w-full rounded-full px-4 py-2 bg-white/90 text-brand-950 placeholder-brand-200 focus:outline-brand-500 transition-all" />
             <span class="text-red-600 text-sm mt-1 hidden" id="email-error">Please enter a valid email address.</span>
           </div>
+
           <!-- Teléfono -->
-          <div class="flex flex-col gap-1">
+          <div class="flex flex-col gap-1 w-full">
             <label for="phone" class="text-brand-50 font-normal text-lg mb-1">Phone <span class="text-brand-100">*</span></label>
             <input
               type="tel"
@@ -278,69 +388,39 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
               name="phone"
               required
               placeholder="Your phone"
-              class="rounded-full px-6 py-2 bg-white/90 text-brand-950 font-normal placeholder-brand-200 focus:outline-brand-500 transition-all" />
+              class="w-full rounded-full px-4 py-2 bg-white/90 text-brand-950 placeholder-brand-200 focus:outline-brand-500 transition-all" />
             <span class="text-red-600 text-sm mt-1 hidden" id="phone-error">Please enter a valid phone number.</span>
           </div>
+
           <!-- Botón -->
           <button
             type="submit"
-            class="btn-primary rounded-full">
+            class="btn-primary rounded-full w-full">
             Send
           </button>
+
           <span class="text-green-700 text-base mt-2 hidden text-center" id="success-message">Thank you! We will contact you soon.</span>
         </form>
-        <!-- Iconos de redes sociales -->
-        <div class="flex gap-6 justify-center mt-8" data-aos="fade-up" data-aos-delay="200">
-          <!-- WhatsApp -->
-          <a href="https://wa.me/tu_numero" target="_blank" rel="noopener" aria-label="WhatsApp" class="text-white hover:text-brand-950 transition text-3xl">
-            <!-- ...svg... -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" class="w-8 h-8">
-              <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
-            </svg>
-          </a>
-          <!-- Instagram -->
-          <a href="https://instagram.com/tu_usuario" target="_blank" rel="noopener" aria-label="Instagram" class="text-white hover:text-brand-950 transition text-3xl">
-            <!-- ...svg... -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" class="w-8 h-8"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-              <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
-            </svg>
-          </a>
-          <!-- TikTok -->
-          <a href="https://tiktok.com/@tu_usuario" target="_blank" rel="noopener" aria-label="TikTok" class="text-white hover:text-brand-950 transition text-3xl">
-            <!-- ...svg... -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" class="w-8 h-8"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-              <path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z" />
-            </svg>
-          </a>
-        </div>
       </div>
 
-      <!-- Lado Izquierdo: Título y descripción -->
-      <div class="flex-1 flex flex-col justify-center">
-        <h2 class="font-titulo text-white text-[2.1rem] md:text-5xl lg:text-6xl leading-tight mb-6" data-aos="fade-right">
-          Your Pilates studio<br>in Alicante.<br>Unlimited plans.
-        </h2>
-        <p class="text-brand-50 text-xl font-normal mb-2" data-aos="fade-right" data-aos-delay="100">
-          Write to us for more information.
-        </p>
-      </div>
     </div>
   </section>
 
   <!-- Scripts JS, jquery y AOS -->
-    <script src="/mindStone/app/lib/jquery-3.7.1.js"></script>
-    <script src="/mindStone/public/js/login.js"></script>
-    <script src="/mindStone/public/js/app.js"></script>
+  <script src="/mindStone/app/lib/jquery-3.7.1.js"></script>
+  <script src="/mindStone/public/js/login.js"></script>
+  <script src="/mindStone/public/js/app.js"></script>
+  <script src="/mindStone/public/js/calendario.js"></script>
   <!-- Scripts JS AOS animaciones -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-    <script>
-        AOS.init({
-            once: true,
-            duration: 800,
-            offset: 100,
-            easing: 'ease-in-out',
-        });
-    </script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 1000,
+      offset: 100,
+      easing: 'ease-in-out',
+    });
+  </script>
   <!-- Script personalizado para iniciar Swiper -->
   <script>
     const swiper = new Swiper(".gallery-swiper", {
@@ -362,6 +442,7 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
   </script>
 
   <!-- Footer -->
-  <?php require_once ROOT_PATH . '/app/views/layout/footer.php';?>
+  <?php require_once ROOT_PATH . '/app/views/layout/footer.php'; ?>
 </body>
+
 </html>

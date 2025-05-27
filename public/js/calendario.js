@@ -1,4 +1,4 @@
-const typeColorMap = { 
+const typeColorMap = {
   Yoga: "bg-emerald-100 border-emerald-300",
   Pilates: "bg-sky-100 border-sky-300",
   Stretch: "bg-orange-100 border-orange-300",
@@ -15,33 +15,24 @@ async function loadCalendar() {
   const classes = await res.json();
 
   const calendar = document.getElementById("calendar");
-  //calendar.innerHTML = "";
-
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-  // Agrupar por día y hora
   const timetable = {};
   const hoursSet = new Set();
-
-  days.forEach(day => {
-    timetable[day] = {};
-  });
+  days.forEach(day => { timetable[day] = {}; });
 
   classes.forEach(cl => {
-    // Cortamos segundos de la hora
-    const hourKey = cl.hour.substring(0,5);
+    const hourKey = cl.hour.substring(0, 5);
     hoursSet.add(hourKey);
     if (!timetable[cl.day]) timetable[cl.day] = {};
     if (!timetable[cl.day][hourKey]) timetable[cl.day][hourKey] = [];
     timetable[cl.day][hourKey].push(cl);
   });
 
-  // Solo horas que hay clases ordenadas
   const hours = Array.from(hoursSet).sort();
 
-  // Crear tabla
   const table = document.createElement("table");
-  table.className = "min-w-full border-collapse text-sm font-normal font-normal";
+  table.className = "min-w-full border-collapse text-sm font-normal";
 
   // Header
   const thead = document.createElement("thead");
@@ -53,14 +44,13 @@ async function loadCalendar() {
   `;
   table.appendChild(thead);
 
-  // Body con filas solo de horas que hay clases
+  // Body
   const tbody = document.createElement("tbody");
 
   hours.forEach(hour => {
     const tr = document.createElement("tr");
     tr.className = "hover:bg-brand-100";
 
-    // Col hora sticky
     const th = document.createElement("th");
     th.className = "p-2 sticky left-0 bg-white/50 backdrop-blur-sm font-titulo text-brand-700";
     th.textContent = hour;
@@ -69,8 +59,8 @@ async function loadCalendar() {
     days.forEach(day => {
       const td = document.createElement("td");
       td.className = "p-2 border border-brand-200 align-top min-w-[120px]";
-
       const lessons = timetable[day][hour] || [];
+
       if (lessons.length === 0) {
         td.innerHTML = '<span class="text-brand-400 italic">-</span>';
       } else {
@@ -96,6 +86,9 @@ async function loadCalendar() {
 
   table.appendChild(tbody);
   calendar.appendChild(table);
+
+  //Al final se quita la clase .empty para que vuelva el overflow-x-auto real
+  calendar.classList.remove("empty");
 
   if (typeof AOS !== "undefined") {
     AOS.init({ once: true });
