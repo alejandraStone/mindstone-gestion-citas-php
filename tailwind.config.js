@@ -19,7 +19,7 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-        '50': '#faf6f0',
+        '50': '#faf6f0', 
         '100': '#efe6d6',
         '200': '#decaa9',
         '300': '#cdac7c',
@@ -34,6 +34,8 @@ module.exports = {
          oliveShade: "#2F2B20",
          lightOlive: "#CECDB9",
          verdeOliva: "#9EB0A0",
+         verdeOlivaClaro: "#C1CEC1",
+         verdeOlivaMasClaro: "#E0E7E0",
       },
       fontFamily: {
         normal: ["Manrope", "sans-serif"],

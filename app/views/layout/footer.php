@@ -14,7 +14,7 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
             <ul class="flex flex-col sm:flex-row items-center gap-5 sm:gap-12 text-brand-50">
                 <li><a href="<?= BASE_URL ?>public/inicio.php" class="hover:text-brand-400 font-normal transition-all duration-300 focus-within:outline-0">Home</a></li>
                 <li><a href="<?= BASE_URL ?>app/views/classes.php" class="hover:text-brand-400 font-normal transition-all duration-300 focus-within:outline-0">Classes</a></li>
-                <li><a href="<?= BASE_URL ?>app/views/about.php" class="hover:text-brand-400 font-normal transition-all duration-300 focus-within:outline-0">About us</a></li>
+                <li><a href="<?= BASE_URL ?>app/views/studio.php" class="hover:text-brand-400 font-normal transition-all duration-300 focus-within:outline-0">Studio</a></li>
                 <li><a href="<?= BASE_URL ?>app/views/contact.php" class="hover:text-brand-400 font-normal transition-all duration-300 focus-within:outline-0">Contact</a></li>
             </ul>
         </div>

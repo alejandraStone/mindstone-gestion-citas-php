@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../app/config/config.php';
-require_once ROOT_PATH . '/app/views/layout/header.php';
+//require_once ROOT_PATH . '/app/views/layout/header.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,9 +9,6 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/mindStone/public/css/output.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <!-- Lib JS slideshow -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <!-- CND Iconos de rrss -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- AOS libreria para animaciones con JS -->
@@ -34,7 +31,7 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
         <h1 id="hero-title" class="titulo-grande text-white mb-6 opacity-0 translate-y-12 transition-all duration-1000">
           Transform Your Body <br class="hidden sm:block"> Elevate Your Mind
         </h1>
-        <a id="hero-btn" href="#booking" class="opacity-0 translate-y-12 transition-all duration-700 inline-block px-6 py-2 border border-white text-white font-titulo sm:text-lg tracking-wide hover:bg-white hover:text-brand-800">
+        <a id="hero-btn" href="<?= BASE_URL ?>app/views/user/reservations.php" class="opacity-0 translate-y-12 transition-all duration-700 inline-block px-6 py-2 border border-white text-white font-titulo sm:text-lg tracking-wide hover:bg-white hover:text-brand-800">
           BOOK NOW
         </a>
       </div>
@@ -47,19 +44,21 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
     <div class="max-w-5xl mx-auto px-4 flex flex-col items-center gap-2 justify-center" data-aos="fade-up">
       <p class="font-normal font-extrabold text-black text-[24px] md:text-[28px] lg:text-[32px] leading-[35px] md:leading-[38px] lg:leading-[50px]">MINDSTONE A PILATES STUDIO IN THE HEART OF ALICANTE THAT YOU WILL LOVE, THAT WELCOMES YOU, HELPS YOU MOVE AND LOVES YOUR HARD WORK.</p>
       <span class="flex text-normal text-lg font-bold text-center gap-4 p-4 items-center">Lets' flow
-        <svg class="w-4 animate-bounce" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
-        </svg>
+        <a href="#siguiente-seccion" id="scroll-trigger">
+          <svg class="w-4 animate-bounce" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
+          </svg>
+        </a>
       </span>
     </div>
   </section>
   <!-- Servicios -->
-  <section class="min-h-screen py-10 lg:py-20 bg-brand-900 relative">
-    <!-- Overlay oscuro -->
-    <div class="absolute inset-0 bg-gradient-to-r from-brand-100/30 via-transparent to-brand-200/30 z-0"></div>
+  <section id="siguiente-seccion" class="relative bg-verdeOliva py-10 overflow-hidden">
+    <!-- Overlay contenido dentro de un wrapper fijo -->
+    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-brand-100/30 via-transparent to-brand-200/30 z-0 pointer-events-none"></div>
 
     <!-- Contenedor principal -->
-    <div class="relative z-10 p-4 max-w-7xl mx-auto">
+    <div class="relative z-10 max-w-7xl mx-auto p-4">
 
       <!-- Título principal -->
       <div class="flex items-center justify-center border border-white mb-10" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500"">
@@ -141,7 +140,7 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
   </section>
 
   <!-- Beneficions iconos -->
-  <section class="bg-brand-50 flex flex-col md:flex-row lg:flex-row items-center justify-center w-full px-4 py-10 lg:py-24 gap-8">
+  <section class="bg-brand-50 flex flex-col md:flex-row lg:flex-row items-stretch justify-center w-full px-4 py-10 lg:py-24 gap-8">
     <!-- Beneficio 1 -->
     <div class="flex flex-col items-center justify-start text-center max-w-xs w-full px-4 
               transition duration-300 hover:shadow-[0_0_25px_#c1734c] hover:scale-105 rounded-xl">
@@ -190,7 +189,6 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
             class="w-full h-full object-cover rounded-br-[4rem]">
         </div>
 
-
         <!-- T1 -->
         <div class="grid grid-cols-1 sm:grid-cols-2 border border-t border-b border-l border-brand-900 flex-grow mx-4 lg:mx-0">
           <!-- Testimonio 1 -->
@@ -216,6 +214,17 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
           <div class="p-4 md:p-6">
             <p class="font-bold mb-4">Extra Comforts</p>
             <p>Towel rental & full changing rooms with showers available.</p>
+            <a href="<?= BASE_URL ?>app/views/studio.php"
+              class="w-1/2 text-sm flex items-center justify-start gap-2 transition-all duration-500 bg-verdeOliva text-black border hover:text-white border-black mt-4 rounded-full px-2 py-1">
+              View Studio
+              <svg xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor"
+                class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
           </div>
         </div>
       </div>
@@ -225,7 +234,6 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
         <img src="/mindStone/public/img/instalacion-principal.jpg" alt="Estudio de pilates"
           class="w-full h-full object-cover rounded-br-[8rem]">
       </div>
-
     </div>
   </section>
 
@@ -241,7 +249,7 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
       <!-- Contenedor de los bonos tipo grid, todos alineados verticalmente -->
       <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-6">
         <!-- Unlimited Classes Card -->
-        <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
+        <div class="flex flex-col items-center bg-verdeOliva p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
           data-aos-delay="100">
           <div class="flex flex-col items-center w-full">
             <h3 class="tamaño-subtitulo text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">Unlimited Classes</h3>
@@ -255,10 +263,10 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
           <p class="text-base md:text-[18px] lg:text-[20px] text-brand-900 text-center mb-6 flex-1">
             Attend every day of the week with no limitations.
           </p>
-          <button class="btn-cards">Join now</button>
+          <a href="<?= BASE_URL ?>app/views/user/buy_plan.php" class=" btn-cards">Join now</a>
         </div>
         <!-- 10 Classes Card -->
-        <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
+        <div class="flex flex-col items-center bg-verdeOliva p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
           data-aos-delay="100">
           <div class="flex flex-col items-center w-full">
             <h3 class="tamaño-subtitulo text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">10 Classes</h3>
@@ -272,10 +280,10 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
           <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
             10 classes per month at any level.
           </p>
-          <button class="btn-cards">Join now</button>
+          <a href="<?= BASE_URL ?>app/views/user/buy_plan.php" class=" btn-cards">Join now</a>
         </div>
         <!-- 4 Classes Card -->
-        <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
+        <div class="flex flex-col items-center bg-verdeOliva p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
           data-aos-delay="100">
           <div class="flex flex-col items-center w-full">
             <h3 class="tamaño-subtitulo text-brand-900 text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">4 Classes</h3>
@@ -289,10 +297,10 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
           <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
             4 classes per month at any level.
           </p>
-          <button class="btn-cards">Join now</button>
+          <a href="<?= BASE_URL ?>app/views/user/buy_plan.php" class=" btn-cards">Join now</a>
         </div>
         <!-- 1 Class Card -->
-        <div class="flex flex-col items-center bg-teal-100 p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
+        <div class="flex flex-col items-center bg-verdeOliva p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
           data-aos-delay="100">
           <div class="flex flex-col items-center w-full">
             <h3 class="tamaño-subtitulo text-brand-900 text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">1 Class</h3>
@@ -306,7 +314,7 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
           <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
             1 individual class.
           </p>
-          <button class="btn-cards">Join now</button>
+          <a href="<?= BASE_URL ?>app/views/user/buy_plan.php" class=" btn-cards">Join now</a>
         </div>
       </div>
     </div>
@@ -319,12 +327,13 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
     <!-- Overlay oscuro -->
     <div class="absolute inset-0 bg-black bg-opacity-20 z-0"></div>
 
-    <div class="max-w-7xl mx-auto px-6 py-10 md:px-6 lg:px-4 grid grid-cols-1 md:grid-cols-2 gap-8 z-10 items-center">
+    <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-2 gap-8 z-10 items-center">
 
       <!-- TEXTO E ÍCONOS -->
       <div class="flex flex-col justify-center w-full overflow-hidden">
-        <h2 class="text-3xl md:text-3xl lg:text-4xl font-bold mb-6 text-brand-100 text-left">You can contact us via the form or using our contact details</h2>
-        <ul class="flex flex-col gap-4 text-base">
+        <h2 class="font-titulo text-white text-[2.1rem] md:text-5xl lg:text-6xl leading-tight mb-6" data-aos="fade-right">
+          Your Pilates studio<br>in Alicante.<br>Unlimited plans.</h2>
+        <ul class="flex flex-col gap-4 text-base" data-aos="fade-right">
           <li class="flex items-center gap-3">
             <svg class="w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -351,7 +360,7 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
 
       <!-- FORMULARIO -->
       <div class="w-full flex justify-center items-center">
-        <form class="w-full max-w-sm md:max-w-md lg:max-w-md mx-auto bg-transparent flex flex-col gap-4" id="cta-contact-form" novalidate>
+        <form class="w-full max-w-sm md:max-w-md lg:max-w-md mx-auto bg-transparent flex flex-col gap-4" id="cta-contact-form" novalidate data-aos="fade-left">
 
           <!-- Nombre -->
           <div class="flex flex-col gap-1 w-full">
@@ -395,7 +404,7 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
           <!-- Botón -->
           <button
             type="submit"
-            class="btn-primary rounded-full w-full">
+            class="btn-primary rounded-full w-1/2">
             Send
           </button>
 
@@ -405,12 +414,12 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
 
     </div>
   </section>
+  <!-- Footer -->
+  <?php require_once ROOT_PATH . '/app/views/layout/footer.php'; ?>
 
-  <!-- Scripts JS, jquery y AOS -->
+  <!-- Scripts JS, JQuery y AOS -->
   <script src="/mindStone/app/lib/jquery-3.7.1.js"></script>
-  <script src="/mindStone/public/js/login.js"></script>
-  <script src="/mindStone/public/js/app.js"></script>
-  <script src="/mindStone/public/js/calendario.js"></script>
+  <script src="/mindStone/public/js/inicio.js"></script>
   <!-- Scripts JS AOS animaciones -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
@@ -421,28 +430,7 @@ require_once ROOT_PATH . '/app/views/layout/header.php';
       easing: 'ease-in-out',
     });
   </script>
-  <!-- Script personalizado para iniciar Swiper -->
-  <script>
-    const swiper = new Swiper(".gallery-swiper", {
-      loop: true,
-      effect: "fade",
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-      },
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
-  </script>
 
-  <!-- Footer -->
-  <?php require_once ROOT_PATH . '/app/views/layout/footer.php'; ?>
 </body>
 
 </html>

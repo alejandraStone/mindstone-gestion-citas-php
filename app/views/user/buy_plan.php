@@ -1,0 +1,4 @@
+<?php 
+
+echo "AQUI ESTARÁ EL FORMULARIO DE COMPRA DE PLANES";
+?>

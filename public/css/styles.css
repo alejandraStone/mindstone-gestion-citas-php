@@ -7,7 +7,8 @@
 @layer components {
   @font-face {
     font-family: "Manrope";
-    src: url("../fonts/Manrope/Manrope-VariableFont_wght.ttf") format("truetype");
+    src: url("../fonts/Manrope/Manrope-VariableFont_wght.ttf")
+      format("truetype");
     font-weight: 100 800;
     font-style: normal;
   }
@@ -18,46 +19,46 @@
     font-style: normal;
   }
   /* RESET GLOBAL */
-* {
-  @apply m-0 p-0 box-border;
-}
+  * {
+    @apply m-0 p-0 box-border;
+  }
   /* Ancho global para las secciones */
-.container {
-  @apply w-full max-w-5xl mx-auto px-4;
-}
+  .container {
+    @apply w-full max-w-7xl mx-auto px-4;
+  }
   /*Hover para el menú de inicio*/
   .menu-link {
     @apply relative text-brand-950 transition-colors duration-300 hover:text-brand-700;
   }
   /*Estilo para el menú desplegable*/
   .menu-link-desplegable {
-    @apply  text-center text-base font-normal py-3 px-6 rounded-full text-brand-700 hover:bg-brand-700 hover:text-white;
+    @apply text-center text-base font-normal py-3 px-6 rounded-full text-brand-700 hover:bg-brand-700 hover:text-white;
   }
   /*Tamaño del título grande*/
   .titulo-grande {
-  @apply text-3xl md:text-4xl lg:text-6xl font-medium font-titulo leading-tight;
-}
-/*Tamaño de titulos de secciones*/
+    @apply text-3xl md:text-4xl lg:text-6xl font-medium font-titulo leading-tight;
+  }
+  /*Tamaño de titulos de secciones*/
   .tamaño-titulo-seccion {
     @apply text-[32px] md:text-[40px] lg:text-[48px] font-titulo text-brand-900 text-center lg:text-left leading-tight;
   }
   /*Titulo sección gradiente*/
-  .titulo-gradiente{
+  .titulo-gradiente {
     @apply text-[32px] md:text-[40px] lg:text-[48px] font-titulo text-center md:text-center lg:text-left leading-tight bg-gradient-to-r from-brand-900 via-brand-400 to-oliveShade bg-clip-text text-transparent;
   }
   .titulo-punto {
-  @apply text-brand-800 text-[32px] md:text-[40px] lg:text-[48px] font-bold;
+    @apply text-brand-800 text-[32px] md:text-[40px] lg:text-[48px] font-bold;
   }
   /*Tamaño de los subtítulos*/
   .tamaño-subtitulo {
     @apply text-2xl font-bold font-normal text-brand-900;
   }
-    /*Tamaño de los textos generales*/
+  /*Tamaño de los textos generales*/
   .tamaño-texto-general {
     @apply text-base text-brand-800 leading-relaxed mt-1 mb-4 font-normal;
   }
   /*estilo para botones*/
-  .btn-cards{
+  .btn-cards {
     @apply bg-brand-200 text-brand-900 hover:bg-brand-600 hover:text-white mt-auto py-1.5 px-3 text-sm rounded-full sm:py-2 sm:px-4 transition duration-300 ease-in-out;
   }
   .btn-primary {
@@ -97,10 +98,10 @@
   }
   /*Estilo para el calendario evitar scroll horizontal antes de mostrarlo*/
   .calendar-wrapper.empty {
-    @apply  min-h-[200px] overflow-x-hidden;
+    @apply min-h-[200px] overflow-x-hidden;
   }
 }
-/*CSS puro porque Tailwind no reconoce el after*/
+/*CSS puro porque Tailwind no reconoce el after para el menu header*/
 .menu-link::after {
   content: ""; /*Aquí se "dibuja" el subrayado*/
   position: absolute;
@@ -139,47 +140,74 @@
 .form-select:focus {
   border-color: #7c3aed;
 }
-/*Estilos para la sección  misión efecto borde radio en la parte superior*/
-.mission-arc {
-  border-top-left-radius: 80% 8vw;
-  border-top-right-radius: 80% 8vw;
-}
-/* Estilos para el FAQ */
-.faq-arrow {
-  display: inline-block;
-  transition: transform 0.3s;
-}
-.rotate-180 {
-  transform: rotate(180deg);
-}
-/* Estilos para el slideahow */
-.gallery-swiper {
-  height: 70vh;
-  width: 100%;
-  border-radius: 1rem;
-  overflow: hidden;
+/* Oculta texto default slick */
+.slick-prev::before,
+.slick-next::before {
+  content: '' !important;
+  display: none !important;
 }
 
-.gallery-swiper .swiper-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.swiper-pagination-bullet{
-  background: white;
-  opacity: 0.6;
+/* Flechas personalizadas con SVG, usa Tailwind para posicionar */
+.custom-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.5rem;  /* 40px */
+  height: 2.5rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 1.5rem 1.5rem;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+  z-index: 10;
+  background-color: transparent;
 }
 
-.swiper-pagination-bullet{
+.custom-arrow:hover {
   opacity: 1;
 }
-.swiper-button-prev, .swiper-button-next{
-  color: white;
-  opacity: 0.6;
+
+.slick-prev.custom-arrow {
+  left: -25px;
+  background-image: url("data:image/svg+xml,%3Csvg fill='%238f5a3f' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E");
 }
-@media (max-width: 768px) {
-  .gallery-swiper {
-    height: 60vh;
-  }
+
+.slick-next.custom-arrow {
+  right: -25px;
+  background-image: url("data:image/svg+xml,%3Csvg fill='%238f5a3f' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E");
 }
+
+/* Dots debajo, centrados y con espacio */
+.slick-dots {
+  display: flex !important;
+  justify-content: center;
+  margin-top: 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* Dots estilos */
+.slick-dots li button:before {
+  content: '•' !important;
+  font-size: 1.5rem;
+  color: #8f5a3f;
+  opacity: 0.5;
+}
+
+/* Dot activo */
+.slick-dots li.slick-active button:before {
+  color: #385c4e;
+  opacity: 1;
+}
+
+/* Espacio entre slides */
+.slick-slide {
+  padding: 0 10px;
+}
+
+
+
+
+
 

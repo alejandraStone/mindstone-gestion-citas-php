@@ -8,7 +8,9 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
 
         <!-- Logo -->
         <div id="logo">
-            <img src="/mindStone/public/img/logo_mindStone_p.png" alt="logo" class="w-20 h-auto">
+        <a href="<?= BASE_URL ?>public/inicio.php">
+        <img src="/mindStone/public/img/logo_mindStone_p.png" alt="logo" class="w-20 h-auto">
+        </a>    
         </div>
 
         <!-- Botón hamburguesa (solo visible en móviles y tablet) -->
@@ -37,7 +39,7 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
             class="hidden lg:hidden flex flex-col items-center space-y-10 absolute top-full left-0 right-0 bg-brand-100 p-8 z-[100] transition-opacity duration-300 opacity-0">
             <a href="<?= BASE_URL ?>public/inicio.php" class="menu-link-desplegable">Home</a>
             <a href="<?= BASE_URL ?>app/views/classes.php" class="menu-link-desplegable">Classes</a>
-            <a href="<?= BASE_URL ?>app/views/about.php" class="menu-link-desplegable">About us</a>
+            <a href="<?= BASE_URL ?>app/views/studio.php" class="menu-link-desplegable">Studio</a>
             <a href="<?= BASE_URL ?>app/views/contact.php" class="menu-link-desplegable">Contact</a>
 
             <?php if (isset($_SESSION['user'])): ?>
@@ -52,7 +54,7 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
         <nav class="hidden md:hidden lg:flex gap-10" id="menu">
             <a href="<?= BASE_URL ?>public/inicio.php" class="menu-link">Home</a>
             <a href="<?= BASE_URL ?>app/views/classes.php" class="menu-link">Classes</a>
-            <a href="<?= BASE_URL ?>app/views/about.php" class="menu-link">About us</a>
+            <a href="<?= BASE_URL ?>app/views/studio.php" class="menu-link">Studio</a>
             <a href="<?= BASE_URL ?>app/views/contact.php" class="menu-link">Contact</a>
 
             <?php if (isset($_SESSION['user'])): ?>
@@ -139,3 +141,10 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
         <div id="forgotPasswordMsg" class="mt-4 text-center text-sm"></div>
     </div>
 </div>
+
+
+<!-- JS para animación y funcionamiento del menú hamburguesa -->
+<script src="/mindStone/app/lib/jquery-3.7.1.js"></script>
+<script src="/mindStone/public/js/menu.js"></script>
+<!-- JS para loguearse abre el modal e inicia sesión -->
+<script src="/mindStone/public/js/login.js"></script>
