@@ -121,45 +121,43 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
   // Enviar forgot password por AJAX
-  if (forgotPasswordForm) {
-    forgotPasswordForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      forgotPasswordMsg.textContent = "";
+if (forgotPasswordForm) {
+  forgotPasswordForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    forgotPasswordMsg.textContent = "";
 
-      const email = document.getElementById("forgot_email").value.trim();
+    const email = document.getElementById("forgot_email").value.trim();
 
-      // Validar email
-      if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-        forgotPasswordMsg.textContent = "Please enter a valid email address.";
-        forgotPasswordMsg.className = "mt-4 text-center text-sm text-red-700";
-        return;
-      }
+    // Validar email
+    if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      forgotPasswordMsg.textContent = "Please enter a valid email address.";
+      forgotPasswordMsg.className = "mt-4 text-center text-sm text-red-700";
+      return;
+    }
 
-      // Enviar petición al servidor
-      const formData = new FormData(forgotPasswordForm);
-      fetch("/mindStone/app/controllers/forgot_password_controller.php", {
-        method: "POST",
-        body: formData,
+    // Enviar petición al servidor
+    const formData = new FormData(forgotPasswordForm);
+    fetch("/mindStone/app/controllers/forgot_password_controller.php", {
+      method: "POST",
+      body: formData,
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success) {
+          forgotPasswordMsg.textContent =
+            "Password reset successfully. Please check your email.";
+          forgotPasswordMsg.className =
+            "mt-4 text-center text-sm text-green-700";
+        } else {
+          forgotPasswordMsg.textContent = data.message;
+          forgotPasswordMsg.className =
+            "mt-4 text-center text-sm text-red-700";
+        }
       })
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.success && data.newPassword) {
-            forgotPasswordMsg.innerHTML = `
-              <span class="font-semibold">New password:</span> <span class="font-mono">${data.newPassword}</span><br>
-              <span class="text-green-700">${data.message}</span>
-            `;
-            forgotPasswordMsg.className =
-              "mt-4 text-center text-sm text-green-700";
-          } else {
-            forgotPasswordMsg.textContent = data.message;
-            forgotPasswordMsg.className =
-              "mt-4 text-center text-sm text-red-700";
-          }
-        })
-        .catch(() => {
-          forgotPasswordMsg.textContent = "Unexpected error. Please try again.";
-          forgotPasswordMsg.className = "mt-4 text-center text-sm text-red-700";
-        });
-    });
-  }
+      .catch(() => {
+        forgotPasswordMsg.textContent = "Unexpected error. Please try again.";
+        forgotPasswordMsg.className = "mt-4 text-center text-sm text-red-700";
+      });
+  });
+}
 });
