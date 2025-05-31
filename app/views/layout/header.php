@@ -8,9 +8,9 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
 
         <!-- Logo -->
         <div id="logo">
-        <a href="<?= BASE_URL ?>public/inicio.php">
-        <img src="/mindStone/public/img/logo_mindStone_p.png" alt="logo" class="w-20 h-auto">
-        </a>    
+            <a href="<?= BASE_URL ?>public/inicio.php">
+                <img src="/mindStone/public/img/logo_mindStone_p.png" alt="logo" class="w-20 h-auto">
+            </a>
         </div>
 
         <!-- Botón hamburguesa (solo visible en móviles y tablet) -->
@@ -43,7 +43,9 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
             <a href="<?= BASE_URL ?>app/views/contact.php" class="menu-link-desplegable">Contact</a>
 
             <?php if (isset($_SESSION['user'])): ?>
-                <a href="<?= BASE_URL ?>app/views/user/reservations.php" class="menu-link-desplegable">My reservations</a>
+                <?php if ($_SESSION['user']['role'] === 'user'): ?>
+                    <a href="<?= BASE_URL ?>app/views/user/reservations.php" class="menu-link-desplegable">My reservations</a>
+                <?php endif; ?>
                 <?php if ($_SESSION['user']['role'] === 'admin'): ?>
                     <a href="/mindStone/app/views/admin/dashboard.php" class="menu-link-desplegable">Dashboard</a>
                 <?php endif; ?>
@@ -58,7 +60,9 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
             <a href="<?= BASE_URL ?>app/views/contact.php" class="menu-link">Contact</a>
 
             <?php if (isset($_SESSION['user'])): ?>
-                <a href="<?= BASE_URL ?>app/views/user/reservations.php" class="menu-link">My reservations</a>
+                <?php if ($_SESSION['user']['role'] === 'user'): ?>
+                    <a href="<?= BASE_URL ?>app/views/user/reservations.php" class="menu-link">My reservations</a>
+                <?php endif; ?>
                 <?php if ($_SESSION['user']['role'] === 'admin'): ?>
                     <a href="/mindStone/app/views/admin/dashboard.php" class="menu-link">Dashboard</a>
                 <?php endif; ?>

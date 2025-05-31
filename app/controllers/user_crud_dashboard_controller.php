@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 require_once ROOT_PATH . '/app/models/User.php';
+require_once ROOT_PATH . '/app/session/session_manager.php';
 
 
 header('Content-Type: application/json');
@@ -23,10 +24,20 @@ if ($input && isset($input['action'])) {
             echo json_encode(['success' => false, 'message' => 'Missing required fields.']);
             exit;
         }
-
+        // Crear el usuario
         $result = $userModel->createUser($name, $lastName, $email, $phone, $password, $role);
-        echo json_encode($result);
-        exit;
+        if ($result['success']) {
+            // Si el rol es 'user', es registro desde app, iniciamos sesión automáticamente y guardamos los datos del usuario o la sesión
+            if ($role === 'user' && isset($result['user'])) {
+                loginUserSession($result['user']);
+            }
+            echo json_encode($result);
+            exit;
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+            exit;
+        }
+
     } elseif ($input['action'] === 'update') {// Editar usuario
         $id = $input['id'];
         $name = $input['name'];

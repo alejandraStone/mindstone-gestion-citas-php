@@ -27,7 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
         email: signupForm.email.value.trim(),
         phone: signupForm.phone.value.trim(),
         password: signupForm.password.value,
-        role: "user"
+        role: "user",
+        context: 'signup'// Contexto para el controlador que la creación es desde el signup
       };
 
       // Enviar los datos como JSON al controlador
@@ -40,12 +41,13 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then((res) => res.json())
         .then((data) => {
+            console.log('Respuesta backend:', data);
           showSignupMessage(data.message || "Registration completed.", data.success ? "success" : "error");
           // Si el registro es exitoso, limpiar y redirigir
           if (data.success) {
             signupForm.reset();
             setTimeout(() => {
-              window.location.href = "/mindStone/app/views/book.php"; // Lo llevamo a la página de reservas
+              window.location.href = "/mindStone/public/pages/reservations.php"; // Lo llevo a la página de reservas
             }, 1500);
           }
         })

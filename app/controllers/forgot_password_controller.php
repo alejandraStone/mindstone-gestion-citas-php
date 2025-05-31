@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $conexion = getPDO();
     $user = new User($conexion);
-    $userData = $user->login($email);
+    $userData = $user->getUserByEmail($email);
 
     if (!$userData) {
         echo json_encode(["success" => false, "message" => "Email not found."]);
@@ -28,10 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Generar nueva contraseña aleatoria
     $newPassword = bin2hex(random_bytes(4));
-    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
     // Llama al método del modelo para actualizar la contraseña
-    if (!$user->resetPassword($userData['id'], $hashedPassword)) {
+    if (!$user->resetPassword($userData['id'], $newPassword)) {
         echo json_encode(["success" => false, "message" => "Failed to update password in database."]);
         exit;
     }
@@ -39,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // EN DESARROLLO: NO SE ENVÍA MAIL, SINO QUE SE DEVUELVE LA CONTRASEÑA EN EL JSON
     echo json_encode([
         "success" => true,
-        "message" => "Contraseña reseteada correctamente. (Solo para pruebas: revisa el alert)",
+        "message" => "Password has been reset successfully. Please log in with your new password.",
         "newPassword" => $newPassword
     ]);
     exit;

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../../config/config.php'; // Define ROOT_PATH y BASE_URL
 require_once ROOT_PATH . '/app/config/database.php'; // Carga conexión PDO
 require_once ROOT_PATH . '/app/models/User.php'; // Cargar el modelo de usuario
 require_once ROOT_PATH . '/app/session/session_manager.php'; // Cargar el gestor de sesiones
