@@ -2,26 +2,47 @@
 .DS_Store
 Thumbs.db
 
-# Configuraciones sensibles
+# Archivos sensibles y de configuración
+.env
 config/database.php
+config/config.php
 
-# Archivos temporales
+# Logs y archivos temporales
 *.log
 *.tmp
-
-# Cachés
-/cache/
-/tmp/
-
-# Backups o versiones antiguas
 *.bak
 *.old
-*.zip
 
-# Sistema de control de versiones de editores
+# Cachés y archivos temporales
+/cache/
+/tmp/
+/storage/
+*.cache
+
+# Archivos de sesiones para sesión por archivos
+sessions/
+
+# Archivos de respaldo y compresión
+*.zip
+*.tar
+*.gz
+
+# Archivos de swap o locks de editores
 *.swp
 *.swo
+*.lock
 
-# Dependencias externas (si llegas a usar Composer en el futuro)
+# Composer (dependencias externas)
 vendor/
+composer.lock
+
+# Archivos de compilación Tailwind o similares
 public/css/output.css
+
+# Node para frontend
+node_modules/
+package-lock.json
+
+# IDEs y editores
+.vscode/
+.idea/

@@ -1,11 +1,18 @@
 <?php
-//defino una constante global para que no me rompa la URL si entro desde un lado u otro y la agrego en todas mis redirecciones
 
-
-// apunta a la raíz del proyecto (para los require del servidor)
+// Definir ROOT_PATH primero
 define('ROOT_PATH', realpath(__DIR__ . '/../../'));
 
-//para ir a archivos html, css, js
+// Autoload Composer
+require_once ROOT_PATH . '/vendor/autoload.php';
+
+// Cargar variables de entorno desde .env
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable(ROOT_PATH);
+$dotenv->load();
+
+// Para URLs en HTML/CSS/JS
 define('BASE_URL', '/mindStone/');
 
 ?>
