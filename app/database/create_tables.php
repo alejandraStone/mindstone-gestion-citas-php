@@ -86,8 +86,78 @@ CREATE TABLE IF NOT EXISTS pilates_lessons (
     FOREIGN KEY (coach) REFERENCES coaches(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Créditos (bonos)
+CREATE TABLE IF NOT EXISTS credits (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  purchase_id INT NOT NULL,
+  total_credits INT NOT NULL,              -- créditos totales comprados
+  used_credits INT DEFAULT 0,              -- créditos ya utilizados
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  expires_at DATETIME NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (purchase_id) REFERENCES purchases(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+-- Reservas
+CREATE TABLE  IF NOT EXISTS class_reservations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  lesson_id INT,
+  reserved_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  credit_used BOOLEAN,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (lesson_id) REFERENCES pilates_lessons(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Bonos
+CREATE TABLE IF NOT EXISTS bonos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  description TEXT,
+  credits INT NOT NULL,                     -- cuántas clases incluye
+  price DECIMAL(8,2) NOT NULL,
+  duration_weeks INT DEFAULT 4,             -- duración fija de 4 semanas
+  activo TINYINT(1) DEFAULT 1,              -- 1 = activo, 0 = inactivo
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- Bonos de usuarios que lo compran
+CREATE TABLE IF NOT EXISTS user_bonos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  bono_id INT NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL, -- 4 semanas después de start_date
+  credits_remaining INT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (bono_id) REFERENCES bonos(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- Tabla de compras: almacena las compras de bonos realizadas por los usuarios
+CREATE TABLE IF NOT EXISTS purchases (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    bonus_id INT NOT NULL,
+    price DECIMAL(8,2) NOT NULL,
+    purchased_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    valid_until DATETIME NOT NULL,
+    credits INT NOT NULL DEFAULT 0,
+    stripe_session_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (bonus_id) REFERENCES bonos(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_stripe_session_id (stripe_session_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 ";
 
+    // Ejecutar la consulta para crear las tablas
     $conexion->exec($query);
     echo "Todas las tablas fueron creadas correctamente.";
 

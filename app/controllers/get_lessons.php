@@ -3,7 +3,7 @@
 require_once "../models/lesson.php";
 require_once '../config/database.php';
 
-//Muestro todas las clases disponibles para reservar
+//Muestro al admin todas las clases disponibles para reservar
 
 $conexion = getPDO();
 $lessonModel = new Lesson($conexion);

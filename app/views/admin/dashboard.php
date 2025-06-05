@@ -24,7 +24,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
             <!--Card del admin-->
             <div class="flex flex-row p-8 gap-4 mb-4 justify-between bg-brand-100 border border-brand-200 rounded-xl animate-fade-in">
                 <div class="flex-1 flex flex-col justify-center pl-8">
-                    <h2 class="text-4xl md:text-5xl font-titulo text-brand-900 mb-2">Hi, Admin</h2>
+                    <h2 class="text-4xl md:text-5xl font-titulo text-brand-900 mb-2">Hi,
+                        <?= htmlspecialchars($_SESSION['user']['name']) ?>
+                    </h2>
                     <p class="text-brand-700 font-normal">Ready to start your day with some MindStone?</p>
                 </div>
                 <div class="flex-1 flex items-center justify-center">

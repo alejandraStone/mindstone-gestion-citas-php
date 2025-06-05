@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../app/config/config.php';
+
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +18,7 @@ require_once __DIR__ . '/../app/config/config.php';
   <title>Home</title>
 </head>
 
-<body class="font-normal pt-20 box-border overflow-x-hidden">
+<body class="font-normal pt-20 box-border overflow-x-hidden bg-brand-50">
   <?php
   require_once ROOT_PATH . '/app/views/layout/header.php';
   ?>
@@ -237,83 +240,96 @@ require_once __DIR__ . '/../app/config/config.php';
   </section>
 
   <!-- Sección de Bonos-->
-  <section class="w-full bg-brand-50 pt-10 pb-20 lg:pt-8 lg:pb-24 px-4">
-    <div class="container flex flex-col items-center">
+  <section class="w-full bg-brand-50 py-4 px-4 pb-20 overflow-x-hidden">
+    <div class="max-w-6xl mx-auto text-center" data-aos="fade-up">
+      <!-- Título -->
+      <div class="p-4 md:p-6 lg:p-6">
+        <h2 class="titulo-gradiente text-center">
+          <span class="titulo-punto">·</span>
+          Your Pilates Journey Starts Here
+          <span class="titulo-punto">·</span>
+        </h2>
+        <!-- Subtítulo -->
+        <p class="text-brand-700 text-base mb-6 sm:text-lg max-w-xl mx-auto aos-init" data-aos="fade-up" data-aos-delay="100">
+          Choose the option that aligns best with your rhythm and goals.
+        </p>
+      </div>
+      <!-- Grid con los 4 bonos en una fila -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
 
-      <!-- Título de la sección -->
-      <h2 class="titulo-gradiente mb-6">
-        <span class="titulo-punto mr-2">·</span>
-        Join the practice anytime<span class="titulo-punto ml-2">·</span>
-      </h2>
-      <!-- Contenedor de los bonos tipo grid, todos alineados verticalmente -->
-      <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-6">
-        <!-- Unlimited Classes Card -->
-        <div class="flex flex-col items-center bg-verdeOliva p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
-          data-aos-delay="100">
-          <div class="flex flex-col items-center w-full">
-            <h3 class="tamaño-subtitulo text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">Unlimited Classes</h3>
-            <span class="text-brand-900 mb-4 text-base font-titulo">Per month</span>
+        <!-- Unlimited Classes -->
+        <div class="rounded-3xl bg-brand-600 text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
+          <div>
+            <h3 class="text-2xl font-titulo mb-2">Unlimited Classes</h3>
+            <p class="text-xs mb-6">Unlimited access<br>Your practice, your pace</p>
           </div>
-          <div class="flex items-end justify-center my-3 h-[88px]">
-            <span class="text-brand-900 text-[4rem] font-titulo leading-none">250</span>
-            <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
-
+          <div>
+            <div class="flex items-baseline justify-center gap-2 mb-6">
+              <span class="text-5xl font-bold">250</span>
+              <span class="text-xl">€</span>
+            </div>
+            <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+              class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+              Buy Now
+            </a>
           </div>
-          <p class="text-base md:text-[18px] lg:text-[20px] text-brand-900 text-center mb-6 flex-1">
-            Attend every day of the week with no limitations.
-          </p>
-          <a href="<?= BASE_URL ?>app/views/user/buy_plan.php" class=" btn-cards">Join now</a>
         </div>
-        <!-- 10 Classes Card -->
-        <div class="flex flex-col items-center bg-verdeOliva p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
-          data-aos-delay="100">
-          <div class="flex flex-col items-center w-full">
-            <h3 class="tamaño-subtitulo text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">10 Classes</h3>
-            <span class="text-brand-800 mb-4 text-base font-titulo">Every 4 weeks</span>
-          </div>
-          <div class="flex items-end justify-center my-3 h-[88px]">
-            <span class="text-brand-900 text-[4rem] font-titulo leading-none">200</span>
-            <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
 
+        <!-- 10-Class Pack -->
+        <div class="rounded-3xl bg-oliveShade text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
+          <div>
+            <h3 class="text-2xl font-titulo mb-2">10-Class Pack</h3>
+            <p class="text-xs mb-6">10 sessions/month<br>Consistency meets flexibility</p>
           </div>
-          <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
-            10 classes per month at any level.
-          </p>
-          <a href="<?= BASE_URL ?>app/views/user/buy_plan.php" class=" btn-cards">Join now</a>
+          <div>
+            <div class="flex items-baseline justify-center gap-2 mb-6">
+              <span class="text-5xl font-bold">200</span>
+              <span class="text-xl">€</span>
+            </div>
+            <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+              class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+              Buy now
+            </a>
+          </div>
         </div>
-        <!-- 4 Classes Card -->
-        <div class="flex flex-col items-center bg-verdeOliva p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
-          data-aos-delay="100">
-          <div class="flex flex-col items-center w-full">
-            <h3 class="tamaño-subtitulo text-brand-900 text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">4 Classes</h3>
-            <span class="text-brand-900 mb-4 text-base font-titulo">Every 4 weeks</span>
-          </div>
-          <div class="flex items-end justify-center my-3 h-[88px]">
-            <span class="text-brand-900 text-[4rem] font-titulo leading-none">100</span>
-            <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
 
+        <!-- 4-Class Pack -->
+        <div class="rounded-3xl bg-brand-600 text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
+          <div>
+            <span class="inline-block bg-verdeOlivaMasClaro text-oliveShade px-3 py-1 rounded-full text-xs font-semibold mb-4">
+              Most Popular
+            </span>
+            <h3 class="text-2xl font-titulo mb-2">4-Class Pack</h3>
+            <p class="text-xs mb-6">4 sessions/month<br>Improve steadily</p>
           </div>
-          <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
-            4 classes per month at any level.
-          </p>
-          <a href="<?= BASE_URL ?>app/views/user/buy_plan.php" class=" btn-cards">Join now</a>
+          <div>
+            <div class="flex items-baseline justify-center gap-2 mb-6">
+              <span class="text-5xl font-bold">100</span>
+              <span class="text-xl">€</span>
+            </div>
+            <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+              class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+              Buy Now
+            </a>
+          </div>
         </div>
-        <!-- 1 Class Card -->
-        <div class="flex flex-col items-center bg-verdeOliva p-8 rounded-lg shadow-lg max-w-sm" data-aos="fade-up"
-          data-aos-delay="100">
-          <div class="flex flex-col items-center w-full">
-            <h3 class="tamaño-subtitulo text-brand-900 text-xl md:text-[24px] lg:text-[30px] text-center mb-1 tracking-normal">1 Class</h3>
-            <span class="text-brand-900 mb-4 text-base font-titulo">Individual</span>
-          </div>
-          <div class="flex items-end justify-center my-3 h-[88px]">
-            <span class="text-brand-900 text-[4rem] font-titulo leading-none">35</span>
-            <span class="text-brand-900 text-2xl mr-2 font-titulo">€</span>
 
+        <!-- Single Class -->
+        <div class="rounded-3xl bg-oliveShade text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
+          <div>
+            <h3 class="text-2xl font-titulo mb-2">Single Class</h3>
+            <p class="text-xs mb-6">Ideal for flexibility<br>Try a session</p>
           </div>
-          <p class="tamaño-texto-general text-brand-900 text-center mb-6 flex-1">
-            1 individual class.
-          </p>
-          <a href="<?= BASE_URL ?>app/views/user/buy_plan.php" class=" btn-cards">Join now</a>
+          <div>
+            <div class="flex items-baseline justify-center gap-2 mb-6">
+              <span class="text-5xl font-bold">35</span>
+              <span class="text-xl">€</span>
+            </div>
+            <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+              class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+              Buy now
+            </a>
+          </div>
         </div>
       </div>
     </div>

@@ -129,7 +129,7 @@ class Lesson
     //Función para mostrar todas las clases con cierto campos AL USUARIO EN INDEX
     public function getAllLessonsForUser()
     {
-        $fields = "l.day, l.hour, s.name AS pilates_type_name, c.name AS coach_name";
+        $fields = "l.id, l.day, l.hour, s.name AS pilates_type_name, c.name AS coach_name";
         return $this->fetchLessons($fields);
     }
 

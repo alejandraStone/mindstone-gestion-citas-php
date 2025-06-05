@@ -11,9 +11,10 @@ use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(ROOT_PATH);
 $dotenv->load();
-
+//Defino la variable de clave secreta de Stripe para usarla en el checkout
+define('STRIPE_SECRET_KEY', $_ENV['STRIPE_SECRET_KEY']);
 // Para URLs en HTML/CSS/JS
-define('BASE_URL', '/mindStone/');
+define('BASE_URL', value: '/mindStone/');
 
 ?>
 

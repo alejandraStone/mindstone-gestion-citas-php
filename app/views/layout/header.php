@@ -38,9 +38,9 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
         <div id="mobileMenu"
             class="hidden lg:hidden flex flex-col items-center space-y-10 absolute top-full left-0 right-0 bg-brand-100 p-8 z-[100] transition-opacity duration-300 opacity-0">
             <a href="<?= BASE_URL ?>public/inicio.php" class="menu-link-desplegable">Home</a>
-            <a href="<?= BASE_URL ?>app/views/classes.php" class="menu-link-desplegable">Classes</a>
-            <a href="<?= BASE_URL ?>app/views/studio.php" class="menu-link-desplegable">Studio</a>
-            <a href="<?= BASE_URL ?>app/views/contact.php" class="menu-link-desplegable">Contact</a>
+            <a href="<?= BASE_URL ?>app/views/pages/classes.php" class="menu-link-desplegable">Classes</a>
+            <a href="<?= BASE_URL ?>app/views/pages/studio.php" class="menu-link-desplegable">Studio</a>
+            <a href="<?= BASE_URL ?>app/views/pages/contact.php" class="menu-link-desplegable">Contact</a>
 
             <?php if (isset($_SESSION['user'])): ?>
                 <?php if ($_SESSION['user']['role'] === 'user'): ?>
@@ -55,9 +55,9 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
         <!-- Menú pantallas grandes -->
         <nav class="hidden md:hidden lg:flex gap-10" id="menu">
             <a href="<?= BASE_URL ?>public/inicio.php" class="menu-link">Home</a>
-            <a href="<?= BASE_URL ?>app/views/classes.php" class="menu-link">Classes</a>
-            <a href="<?= BASE_URL ?>app/views/studio.php" class="menu-link">Studio</a>
-            <a href="<?= BASE_URL ?>app/views/contact.php" class="menu-link">Contact</a>
+            <a href="<?= BASE_URL ?>app/views/pages/classes.php" class="menu-link">Classes</a>
+            <a href="<?= BASE_URL ?>app/views/pages/studio.php" class="menu-link">Studio</a>
+            <a href="<?= BASE_URL ?>app/views/pages/contact.php" class="menu-link">Contact</a>
 
             <?php if (isset($_SESSION['user'])): ?>
                 <?php if ($_SESSION['user']['role'] === 'user'): ?>
@@ -99,13 +99,15 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
         <form class="space-y-4">
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input type="email" name="email" id="email" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-400">
+                <input type="email" name="email" id="email"
+                    class="w-full px-3 py-2 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-400"
+                    placeholder="name@example.com">
             </div>
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                <input type="password" name="password" id="password" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-400">
+                <input type="password" name="password" id="password"
+                    class="w-full px-3 py-2 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-400"
+                    placeholder="Your password">
             </div>
             <div class="flex flex-col gap-2">
                 <button type="submit"
@@ -134,7 +136,7 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
         <form id="forgotPasswordForm" class="space-y-4">
             <div>
                 <label for="forgot_email" class="block text-sm font-medium text-gray-700 mb-1">Enter your email address</label>
-                <input type="email" name="forgot_email" id="forgot_email" required
+                <input type="email" name="forgot_email" id="forgot_email"
                     class="w-full px-3 py-2 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-400">
             </div>
             <button type="submit"

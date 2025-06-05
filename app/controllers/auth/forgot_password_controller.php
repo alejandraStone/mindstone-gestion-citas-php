@@ -26,9 +26,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(["success" => false, "message" => "Email not found."]);
         exit;
     }
+    // Generar una contraseña segura de 12 caracteres
+    function generateSecurePassword($length = 12)
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+';
+        $password = '';
+        $maxIndex = strlen($chars) - 1;
 
-    // Generar nueva contraseña aleatoria
-    $newPassword = bin2hex(random_bytes(4));
+        // Garantizar que la contraseña tenga al menos una minúscula, una mayúscula, un número y un símbolo
+        $password .= $chars[random_int(0, 25)]; // minúscula
+        $password .= $chars[random_int(26, 51)]; // mayúscula
+        $password .= $chars[random_int(52, 61)]; // número
+        $password .= $chars[random_int(62, strlen($chars) - 1)]; // símbolo
+
+        // Completar el resto de la contraseña con caracteres aleatorios
+        for ($i = 4; $i < $length; $i++) {
+            $password .= $chars[random_int(0, $maxIndex)];
+        }
+
+        // Mezclar la contraseña para evitar patrón fijo
+        $password = str_shuffle($password);
+
+        return $password;
+    }
+
+    // Y aquí la llamada para generar la contraseña segura de 12 caracteres:
+    $newPassword = generateSecurePassword(12);
 
     // Actualizar la contraseña en la base de datos
     if (!$user->resetPassword($userData['id'], $newPassword)) {

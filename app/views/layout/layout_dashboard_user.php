@@ -34,23 +34,34 @@ require_once realpath(__DIR__ . '/../../config/config.php');
     <div class="flex flex-col lg:flex-row lg:items-start w-full gap-4 px-2 lg:px-8">
         <!-- Sidebar -->
         <aside class="sidebar fixed flex flex-col top-0 left-0 w-full lg:static lg:w-[240px] h-full mt-20 lg:mt-10 p-4 gap-4 lg:translate-x-0 transform -translate-x-full transition-transform duration-300 bg-brand-100 z-45 rounded-xl border border-brand-200">
-            <!-- Card aside 1 -->
+            <!-- Sidebar links Dashboard -->
             <div class="bg-white rounded-xl shadow-md p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-                <!-- Sidebar links Dashboard -->
-                <a href="<?= BASE_URL ?>public/pages/reservations.php" class="flex items-center text-brand-700 hover:text-brand-900 py-3 ml-2 transition-all duration-300 hover:translate-x-1 font-normal">
+
+                <!--Calencario de lecciones-->
+                <a href="<?= BASE_URL ?>app/views/user/reservations.php" class="flex items-center text-brand-700 hover:text-brand-900 py-3 ml-2 transition-all duration-300 hover:translate-x-1 font-normal">
+                    <svg class="size-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                    </svg>
+                    TimeTable
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
                         stroke="currentColor"
-                        class="size-6 mr-2">
+                        class="size-4 ml-auto">
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+                            d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                     </svg>
-                    TimeTable
+                </a>
+                <!--Packs para comprar-->
+                <a href="<?= BASE_URL ?>app/views/user/buy_plan.php" class="flex items-center text-brand-700 hover:text-brand-900 py-3 ml-2 transition-all duration-300 hover:translate-x-1 font-normal">
+                    <svg class="size-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                    </svg>
+                    Packs
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -123,4 +134,5 @@ require_once realpath(__DIR__ . '/../../config/config.php');
                 </a>
             </div>
         </aside>
+
 </html>

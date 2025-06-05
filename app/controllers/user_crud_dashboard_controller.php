@@ -34,7 +34,7 @@ if ($input && isset($input['action'])) {
             echo json_encode($result);
             exit;
         } else {
-            echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+            echo json_encode(['success' => false, 'message' => $result['message'] ?? 'Invalid request.']);
             exit;
         }
 
@@ -60,20 +60,6 @@ if ($input && isset($input['action'])) {
             echo json_encode(['success' => true, 'message' => 'User deleted successfully.']);
         } else {
             echo json_encode(['success' => false, 'error' => 'Failed to delete user.']);
-        }
-        exit;
-    } elseif ($input['action'] === 'reset') {// Resetear contraseña
-        $id = $input['id'];
-        $newPassword = bin2hex(random_bytes(4)); // random 8-character password
-        $result = $userModel->resetPassword($id, $newPassword);
-        if ($result) {
-            echo json_encode([
-                'success' => true,
-                'message' => 'Password reset successfully.',
-                'newPassword' => $newPassword
-            ]);
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Failed to reset password.']);
         }
         exit;
     } else {

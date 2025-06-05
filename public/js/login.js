@@ -8,9 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeLoginModal = document.getElementById("closeLoginModal");
   const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
   const forgotPasswordModal = document.getElementById("forgotPasswordModal");
-  const closeForgotPasswordModal = document.getElementById(
-    "closeForgotPasswordModal"
-  );
+  const closeForgotPasswordModal = document.getElementById("closeForgotPasswordModal");
   const forgotPasswordForm = document.getElementById("forgotPasswordForm");
   const forgotPasswordMsg = document.getElementById("forgotPasswordMsg");
 
@@ -29,74 +27,82 @@ document.addEventListener("DOMContentLoaded", function () {
       loginModal.classList.add("hidden")
     );
 
-  // Cerrar login modal al hacer clic fuera de él
+  /* Cerrar login modal al hacer clic fuera de él
   if (loginModal)
     loginModal.addEventListener("click", (e) => {
       if (e.target === loginModal) loginModal.classList.add("hidden");
     });
+  */
 
   // Enviar login por AJAX con validaciones
+if (loginForm && !loginForm.dataset.listenerAttached) {
+  loginForm.dataset.listenerAttached = "true";// Evita múltiples envíos del listener
+
   if (loginForm) {
-    loginForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      loginForm.querySelectorAll(".ajax-msg").forEach((el) => el.remove());
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-      const messageBox = document.createElement("div");
-      messageBox.className = "mb-4 text-center text-sm ajax-msg";
+    // Elimina mensajes previos
+    loginForm.querySelectorAll(".ajax-msg").forEach((el) => el.remove());
 
-      const email = loginForm.querySelector('input[name="email"]').value.trim();
-      const password = loginForm.querySelector('input[name="password"]').value;
+    const messageBox = document.createElement("div");
+    messageBox.className = "mb-4 text-center text-sm ajax-msg";
 
-      // Validar correo
-      if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-        messageBox.textContent = "Please enter a valid email address.";
-        messageBox.classList.add("text-red-700");
+    const email = loginForm.querySelector('input[name="email"]').value.trim();
+    const password = loginForm.querySelector('input[name="password"]').value;
+
+    // Validación acumulativa para mostrar todos los errores juntos
+    let errors = [];
+
+    if (!email) {
+      errors.push("Email cannot be empty.");
+    } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      errors.push("Please enter a valid email address.");
+    }
+
+    if (!password) {
+      errors.push("Password cannot be empty.");
+    }
+
+    if (errors.length) {
+      messageBox.innerHTML = errors.join("<br>");
+      messageBox.classList.add("text-red-700");
+      loginForm.insertBefore(messageBox, loginForm.firstChild);
+      return;
+    }
+
+    // Si pasa validación, envía datos al servidor
+    const formData = new FormData(loginForm);
+    fetch("/mindStone/app/controllers/auth/log_in_controller.php", {
+      method: "POST",
+      body: formData,
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        messageBox.textContent = data.message;
+        messageBox.classList.add(data.success ? "text-green-700" : "text-red-700");
         loginForm.insertBefore(messageBox, loginForm.firstChild);
-        return;
-      }
 
-      // Validar que la contraseña no esté vacía
-      if (!password) {
-        messageBox.textContent = "Password cannot be empty.";
-        messageBox.classList.add("text-red-700");
-        loginForm.insertBefore(messageBox, loginForm.firstChild);
-        return;
-      }
-
-      // Si pasa las validaciones, envía los datos al servidor
-      const formData = new FormData(loginForm);
-      fetch("/mindStone/app/controllers/auth/log_in_controller.php", {
-        method: "POST",
-        body: formData,
+        if (data.success) {
+          setTimeout(() => {
+            loginModal.classList.add("hidden");
+            if (data.role === "admin") {
+              window.location.href = "/mindStone/app/views/admin/dashboard.php";
+            } else {
+              window.location.href = "/mindStone/app/views/user/reservations.php";
+            }
+          }, 800);
+        }
       })
-        .then((r) => r.json())
-        .then((data) => {
-          messageBox.textContent = data.message;
-          messageBox.classList.add(
-            data.success ? "text-green-700" : "text-red-700"
-          );
-          loginForm.insertBefore(messageBox, loginForm.firstChild);
+      .catch(() => {
+        messageBox.textContent = "Unexpected error. Please try again.";
+        messageBox.classList.add("text-red-700");
+        loginForm.insertBefore(messageBox, loginForm.firstChild);
+      });
+  });
+}
+}
 
-          if (data.success) {
-            setTimeout(() => {
-              loginModal.classList.add("hidden");
-              if (data.role === "admin") {
-                window.location.href =
-                  "/mindStone/public/pages/admin/dashboard.php";
-              } else {
-                window.location.href =
-                  "/mindStone/public/pages/reservations.php";
-              }
-            }, 800);
-          }
-        })
-        .catch(() => {
-          messageBox.textContent = "Unexpected error. Please try again.";
-          messageBox.classList.add("text-red-700");
-          loginForm.insertBefore(messageBox, loginForm.firstChild);
-        });
-    });
-  }
 
   // Mostrar forgot password modal
   if (forgotPasswordBtn)
@@ -113,13 +119,13 @@ document.addEventListener("DOMContentLoaded", function () {
       forgotPasswordModal.classList.add("hidden")
     );
 
-  // Cerrar forgot password modal al hacer clic fuera
+  /* Cerrar forgot password modal al hacer clic fuera
   if (forgotPasswordModal)
     forgotPasswordModal.addEventListener("click", (e) => {
       if (e.target === forgotPasswordModal)
         forgotPasswordModal.classList.add("hidden");
     });
-
+  */
   // Enviar forgot password por AJAX
 if (forgotPasswordForm) {
   forgotPasswordForm.addEventListener("submit", function (e) {
@@ -137,7 +143,7 @@ if (forgotPasswordForm) {
 
     // Enviar petición al servidor
     const formData = new FormData(forgotPasswordForm);
-    fetch("/mindStone/app/controllers/forgot_password_controller.php", {
+    fetch("/mindStone/app/controllers/auth/forgot_password_controller.php", {
       method: "POST",
       body: formData,
     })
