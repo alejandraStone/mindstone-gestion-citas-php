@@ -8,9 +8,11 @@ $userModel = new User($conexion);
 
 // Parámetros de paginación y filtro
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-$perPage = 2; // Número de usuarios por página
-$search = $_GET['search'] ?? '';
-$role = $_GET['role'] ?? '';
+$perPage = 10; // Número de usuarios por página
+//limpiar un string de entrada para evitar HTML u otras inyecciones
+$search = isset($_GET['search']) ? htmlspecialchars(trim($_GET['search'])) : '';
+$role = isset($_GET['role']) ? htmlspecialchars(trim($_GET['role'])) : '';
+
 
 // Total de usuarios y páginas
 $totalUsers = $userModel->countUsers($search, $role);

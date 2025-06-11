@@ -69,7 +69,7 @@ require_once __DIR__ . '/../../config/config.php';
         </div>
     </div>
 
-    <script src="/mindStone/public/js/signup.js"></script>
+    <script type="module" src="/mindStone/public/js/signup.js"></script>
 </body>
 
 </html>

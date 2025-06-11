@@ -81,9 +81,55 @@ CREATE TABLE IF NOT EXISTS pilates_lessons (
     day VARCHAR(10) NOT NULL,
     hour TIME NOT NULL,
     capacity INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (pilates_type, coach, day, hour, capacity),
     FOREIGN KEY (pilates_type) REFERENCES pilates_specialities(id) ON DELETE CASCADE,
     FOREIGN KEY (coach) REFERENCES coaches(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Instancias de clases: almacena las instancias de las lecciones programadas por fechas
+CREATE TABLE IF NOT EXISTS class_instances (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    lesson_id INT NOT NULL,
+    instance_date DATE NOT NULL,
+    hour TIME NOT NULL, -- 🕒 NUEVA COLUMNA para guardar la hora real de la instancia
+    coach_id INT NOT NULL,
+    capacity INT NOT NULL,
+    is_cancelled BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_class_instances_lesson
+        FOREIGN KEY (lesson_id) REFERENCES pilates_lessons(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_class_instances_coach
+        FOREIGN KEY (coach_id) REFERENCES coaches(id)
+        ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--Reservas de clases
+CREATE TABLE IF NOT EXISTS class_reservations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    class_instance_id INT NOT NULL,
+    reserved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    used_credit_id INT DEFAULT NULL,
+    is_cancelled BOOLEAN NOT NULL DEFAULT FALSE,
+
+    CONSTRAINT fk_reservations_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_reservations_instance
+        FOREIGN KEY (class_instance_id) REFERENCES class_instances(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_reservations_credit
+        FOREIGN KEY (used_credit_id) REFERENCES credits(id)
+        ON DELETE SET NULL,
+
+    UNIQUE (user_id, class_instance_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Créditos (bonos)
@@ -97,19 +143,6 @@ CREATE TABLE IF NOT EXISTS credits (
   expires_at DATETIME NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (purchase_id) REFERENCES purchases(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
--- Reservas
-CREATE TABLE  IF NOT EXISTS class_reservations (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT,
-  lesson_id INT,
-  reserved_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  credit_used BOOLEAN,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (lesson_id) REFERENCES pilates_lessons(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Bonos

@@ -96,7 +96,7 @@ class User
             ];
         }
     }
-    // Read-Listar usuarios paginados y filtrados
+    // Read-Listar usuarios paginados
     public function getUsers($limit, $offset, $search = '', $role = '')
     {
         $sql = "SELECT * FROM users WHERE 1";
@@ -119,11 +119,34 @@ class User
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    // Update- Actualizar usuario
+    // Comprueba si el email existe en otro usuario distinto al actual (por ID)
+    public function emailExistOtherUser($email, $id)
+    {
+        $query = "SELECT COUNT(*) FROM users WHERE email = :email AND id <> :id";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->execute(['email' => strtolower(trim($email)), 'id' => $id]);
+        return $stmt->fetchColumn() > 0;
+    }
+    //Actualizar user
     public function updateUser($id, $name, $lastName, $email, $phone, $role)
     {
-        $stmt = $this->conexion->prepare("UPDATE users SET name = ?, lastName = ?, email = ?, phone = ?, role = ? WHERE id = ?");
-        return $stmt->execute([$name, $lastName, $email, $phone, $role, $id]);
+        // Previene duplicados en otros usuarios
+        if ($this->emailExistOtherUser($email, $id)) {
+            return [
+                'success' => false,
+                'error' => 'A user with this email already exists.'
+            ];
+        }
+        try {
+            $stmt = $this->conexion->prepare("UPDATE users SET name = ?, lastName = ?, email = ?, phone = ?, role = ? WHERE id = ?");
+            $stmt->execute([$name, $lastName, $email, $phone, $role, $id]);
+            return ['success' => true];
+        } catch (PDOException $e) {
+            if ($e->getCode() === '23000') {
+                return ['success' => false, 'error' => 'The email already exists.'];
+            }
+            return ['success' => false, 'error' => 'Database error: ' . $e->getMessage()];
+        }
     }
     // Delete - Eliminar usuario
     public function deleteUser($id)
@@ -139,10 +162,10 @@ class User
         return $stmt->execute([$hashed, $id]);
     }
     // Obtener usuario por email (para login y recuperación de contraseña)
-    public function getUserByEmail($email) {
-    $stmt = $this->conexion->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([strtolower(trim($email))]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
+    public function getUserByEmail($email)
+    {
+        $stmt = $this->conexion->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute([strtolower(trim($email))]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

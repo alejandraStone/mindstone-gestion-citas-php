@@ -1,31 +1,9 @@
 // Espera a que el DOM esté cargado
 document.addEventListener("DOMContentLoaded", () => {
-  // --- VARIABLES PARA FORMULARIO DE ALTA ---
-  const select = document.getElementById("coach");
-  const pilatesTypeSelect = document.getElementById("pilates-type");
-  const capacityInput = document.getElementById("capacity");
-  let occupiedHours = {};
-  let selectedHours = {};
-
-  // --- VARIABLES PARA MODAL DE EDICIÓN ---
-  let pilatesTypesOptions = [];
-
-  // --- VARIABLES PARA MOSTRAR EL BLOQUE DE TODAS LAS CLASES ---
-  const toggleBtn = document.getElementById("toggle-class-list");
-  const classListSection = document.getElementById("class-list-section");
-  let visible = false;
-
-  // --- FUNCION PARA MOSTRAR U OCULTAR EL LISTADO DE CLASES ---
-  toggleBtn.addEventListener("click", function () {
-    visible = !visible;
-    classListSection.classList.toggle("hidden", !visible);
-    toggleBtn.textContent = visible ? "Hide Classes" : "Show Classes";
-  });
-  // --- FUNCIONES AUXILIARES ---
+  //Normaliza la hora parsa mostrarla con 4 dígitos hh:mm
   function normalizeHour(hourStr) {
     return hourStr && hourStr.length >= 5 ? hourStr.slice(0, 5) : hourStr;
   }
-
   //Mapeo del tipo de clase a color pastel (no brand, pero combinan con la paleta tailwind)
   const typeColorMap = {
     Yoga: "bg-emerald-100 border-emerald-300",
@@ -38,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
     Mat: "bg-emerald-100 border-emerald-200",
     Default: "bg-gray-100 border-gray-300",
   };
-
   function getClassBg(typeName) {
     for (const key in typeColorMap) {
       if (typeName && typeName.toLowerCase().includes(key.toLowerCase())) {
@@ -47,8 +24,124 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     return typeColorMap["Default"];
   }
+  //Función para mostrar el calendadario de clases que se carga cuando se rellena el formulario
+  function renderCalendarClassList(classes) {
+    const calendar = document.getElementById("calendar-class-list");
+    calendar.innerHTML = "";
 
-  // --- CARGA OPCIONES DE TIPO (para el alta y el modal) ---
+    // Agrupa las clases por día
+    const grouped = {};
+    daysOfWeek.forEach((day) => (grouped[day.key] = []));
+    classes.forEach((cls) => {
+      if (typeof cls.day === "string") {
+        const dayNormalized =
+          cls.day.charAt(0).toUpperCase() + cls.day.slice(1).toLowerCase();
+        if (grouped[dayNormalized]) {
+          grouped[dayNormalized].push(cls);
+        } else {
+          console.warn(
+            `Día no reconocido para agrupar: "${cls.day}" normalizado como "${dayNormalized}"`,
+            cls
+          );
+        }
+      } else {
+        console.warn("Clase sin propiedad day válida:", cls);
+      }
+    });
+    console.log("Clases agrupadas:", grouped); //depurar para ver si se agrupan bien los días
+
+    // Calendario grid: 7 columnas fijas en desktop
+    const calendarGrid = document.createElement("div");
+    calendarGrid.className =
+      `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 lg:gap-1`.replace(
+        /\s+/g,
+        " "
+      );
+    daysOfWeek.forEach((day) => {
+      const col = document.createElement("div");
+      col.className =
+        "rounded-xl p-2 bg-brand-300 flex flex-col h-full min-h-[350px] w-full";
+
+      const header = document.createElement("div");
+      header.className =
+        "font-bold mb-4 text-center text-brand-900 uppercase tracking-wide text-base";
+      header.textContent = day.label;
+      col.appendChild(header);
+
+      if (grouped[day.key].length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "text-brand-50 text-sm text-center py-8";
+        empty.textContent = "No classes";
+        col.appendChild(empty);
+      } else {
+        grouped[day.key].forEach((cls) => {
+          const colorBg = getClassBg(cls.pilates_type_name || cls.pilates_type);
+          const block = document.createElement("div");
+          block.className = `
+    ${colorBg} border rounded-lg mb-4 p-4 shadow
+    flex flex-col gap-1 text-sm w-full
+    transition hover:scale-105 hover:shadow-lg
+  `.replace(/\s+/g, " ");
+
+          // Aquí usamos normalizeHour para mostrar la hora con formato hh:mm
+          const displayHour = normalizeHour(cls.hour);
+
+          block.innerHTML = `
+    <div class="font-semibold text-brand-900">${cls.pilates_type_name}</div>
+    <div class="text-brand-800">
+      <span class="inline-block mr-1">⏰</span>
+      ${displayHour}
+    </div>
+    <div class="text-brand-700">Capacity: ${cls.capacity}</div>
+    <div class="text-brand-700">Coach: ${cls.coach_name}</div>
+    <div class="flex gap-2 mt-2">
+      <button class="edit-class-btn border border-brand-200 text-brand-900 bg-white rounded px-3 py-1 text-xs hover:bg-brand-100" data-id="${cls.id}">
+        <!-- SVG edit icon -->  
+        <svg xmlns="http://www.w3.org/2000/svg"  class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        aria-hidden="true" data-slot="icon">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+        </svg>
+      </button>
+      <button class="delete-class-btn border border-red-100 text-red-600 bg-white rounded px-3 py-1 text-xs hover:bg-red-100" data-id="${cls.id}">
+      <!-- SVG delete icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        aria-hidden="true" data-slot="icon" class="w-4 h-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+        </svg>
+      </button>
+    </div>
+  `;
+
+          block.querySelector(".edit-class-btn").onclick = () =>
+            openEditModal(cls);
+          block.querySelector(".delete-class-btn").onclick = () =>
+            deleteClass(cls.id);
+          col.appendChild(block);
+        });
+      }
+      calendarGrid.appendChild(col);
+    });
+
+    calendar.appendChild(calendarGrid);
+  }
+  // --- VARIABLES PARA MODAL DE EDICIÓN ---
+  let pilatesTypesOptions = [];
+  // --- VARIABLES PARA FORMULARIO DE ALTA ---
+  const select = document.getElementById("coach");
+  const pilatesTypeSelect = document.getElementById("pilates-type");
+  const capacityInput = document.getElementById("capacity");
+  let occupiedHours = {};
+  let selectedHours = {};
+  const daysOfWeek = [
+    { key: "Monday", label: "Monday" },
+    { key: "Tuesday", label: "Tuesday" },
+    { key: "Wednesday", label: "Wednesday" },
+    { key: "Thursday", label: "Thursday" },
+    { key: "Friday", label: "Friday" },
+    { key: "Saturday", label: "Saturday" },
+    { key: "Sunday", label: "Sunday" },
+  ];
+  // --- CARGA OPCIONES DE TIPO DE PILATES (para el alta y el modal) ---
   async function loadPilatesTypes() {
     const res = await fetch(
       "/mindStone/app/controllers/get_all_specialities_controller.php"
@@ -57,7 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
     pilatesTypesOptions = data.specialities || [];
     return pilatesTypesOptions;
   }
-
   // --- CARGA COACHES POR ESPECIALIDAD ---
   async function loadCoachesBySpeciality(
     specialityId,
@@ -97,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "<option disabled>Error loading coaches</option>";
     }
   }
-
+  //rellena el select con los valores
   function fillSelectOptions(
     select,
     options,
@@ -114,64 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
       select.appendChild(option);
     });
   }
-
-  // --- LOGICA DEL FORMULARIO DE ALTA ---
-  async function loadSpecialitiesForCreate() {
-    const types = await loadPilatesTypes();
-    pilatesTypeSelect.innerHTML =
-      '<option value="">--Select class type--</option>';
-    types.forEach((spec) => {
-      const opt = document.createElement("option");
-      opt.value = spec.id;
-      opt.textContent = spec.name;
-      pilatesTypeSelect.appendChild(opt);
-    });
-  }
-
-  pilatesTypeSelect.addEventListener("change", () => {
-    const selectedType = pilatesTypeSelect.value;
-    loadCoachesBySpeciality(selectedType, select);
-  });
-
-  const daysOfWeek = [
-    { key: "Monday", label: "Monday" },
-    { key: "Tuesday", label: "Tuesday" },
-    { key: "Wednesday", label: "Wednesday" },
-    { key: "Thursday", label: "Thursday" },
-    { key: "Friday", label: "Friday" },
-    { key: "Saturday", label: "Saturday" },
-    { key: "Sunday", label: "Sunday" },
-  ];
-  const agendaGrid = document.getElementById("agenda-grid");
-
-  pilatesTypeSelect.addEventListener("change", loadOccupiedHours);
-  select.addEventListener("change", loadOccupiedHours);
-
-  function loadOccupiedHours() {
-    const pilates_type = pilatesTypeSelect.value;
-    const coach = select.value;
-    if (!pilates_type || !coach) {
-      renderWeeklyAgenda();
-      return;
-    }
-    fetch(
-      `/mindStone/app/controllers/get_occupied_schedules.php?pilates_type=${encodeURIComponent(
-        pilates_type
-      )}&coach=${encodeURIComponent(coach)}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        occupiedHours = {};
-        if (data.success && Array.isArray(data.occupied)) {
-          data.occupied.forEach(({ day, hour }) => {
-            if (!occupiedHours[day]) occupiedHours[day] = [];
-            occupiedHours[day].push(normalizeHour(hour));
-          });
-        }
-        renderWeeklyAgenda();
-      });
-  }
-
+  //Funcion para mostrar los dias de la semana con las horas para agregar una clase
   function renderWeeklyAgenda() {
     agendaGrid.innerHTML = "";
     daysOfWeek.forEach((dayObj) => {
@@ -249,7 +284,50 @@ document.addEventListener("DOMContentLoaded", () => {
       agendaGrid.appendChild(dayDiv);
     });
   }
-
+  // --- LOGICA DEL FORMULARIO DE ALTA ---
+  async function loadSpecialitiesForCreate() {
+    const types = await loadPilatesTypes();
+    pilatesTypeSelect.innerHTML =
+      '<option value="">--Select class type--</option>';
+    types.forEach((spec) => {
+      const opt = document.createElement("option");
+      opt.value = spec.id;
+      opt.textContent = spec.name;
+      pilatesTypeSelect.appendChild(opt);
+    });
+  }
+  pilatesTypeSelect.addEventListener("change", () => {
+    const selectedType = pilatesTypeSelect.value;
+    loadCoachesBySpeciality(selectedType, select);
+  });
+  const agendaGrid = document.getElementById("agenda-grid");
+  pilatesTypeSelect.addEventListener("change", loadOccupiedHours);
+  select.addEventListener("change", loadOccupiedHours);
+  //muestra los horarios que ya se han guardado y que no se puede repetir
+  function loadOccupiedHours() {
+    const pilates_type = pilatesTypeSelect.value;
+    const coach = select.value;
+    if (!pilates_type || !coach) {
+      renderWeeklyAgenda();
+      return;
+    }
+    fetch(
+      `/mindStone/app/controllers/get_occupied_schedules.php?pilates_type=${encodeURIComponent(
+        pilates_type
+      )}&coach=${encodeURIComponent(coach)}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        occupiedHours = {};
+        if (data.success && Array.isArray(data.occupied)) {
+          data.occupied.forEach(({ day, hour }) => {
+            if (!occupiedHours[day]) occupiedHours[day] = [];
+            occupiedHours[day].push(normalizeHour(hour));
+          });
+        }
+        renderWeeklyAgenda();
+      });
+  }
   function addHour(day, hour) {
     if (!selectedHours[day]) selectedHours[day] = [];
     selectedHours[day].push(hour);
@@ -259,12 +337,9 @@ document.addEventListener("DOMContentLoaded", () => {
     selectedHours[day] = selectedHours[day].filter((h) => h !== hour);
     renderWeeklyAgenda();
   }
-
-  document
-    .getElementById("add-class-form")
-    .addEventListener("submit", function (e) {
+  //cuando envia el formulario para crear una clase
+  document.getElementById("add-class-form").addEventListener("submit", function (e) {
       e.preventDefault();
-
       const pilates_type = pilatesTypeSelect.value;
       const capacity = capacityInput.value;
       const coach = select.value;
@@ -291,6 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const formData = new FormData();
+      console.log(days);
       formData.append("pilates_type", pilates_type);
       formData.append("coach", coach);
       formData.append("capacity", capacity);
@@ -329,52 +405,64 @@ document.addEventListener("DOMContentLoaded", () => {
           submitBtn.disabled = false;
         });
     });
-
   // --- FILTRADO Y LISTADO DE CLASES EN CALENDARIO ---
   let allClasses = [];
   let filterType = "";
   let filterDay = "";
-
+  //muestra el calendario aplicando los filtros
   function renderClassFilters(types) {
     // --- TYPE ---
     const typeList = document.getElementById("filter-type-list");
     typeList.innerHTML = "";
     typeList.className = "grid grid-cols-2 gap-2 sm:flex sm:gap-2";
 
+    // Helper para actualizar botones (quita clase activo a todos, pone solo a uno)
+    function setActiveButton(container, activeBtn) {
+      [...container.children].forEach((btn) => {
+        btn.classList.remove("bg-brand-600", "text-white");
+        btn.classList.add("bg-white", "text-brand-800", "border-brand-200");
+      });
+      if (activeBtn) {
+        activeBtn.classList.remove(
+          "bg-white",
+          "text-brand-800",
+          "border-brand-200"
+        );
+        activeBtn.classList.add("bg-brand-600", "text-white");
+      }
+    }
+
     const allBtn = document.createElement("button");
     allBtn.textContent = "All";
-    const isAllType = !filterType || filterType === "";
-    allBtn.className = `px-3 py-1 rounded-full border text-sm font-medium
-    ${
-      isAllType
-        ? "bg-white text-brand-800 border-brand-200"
-        : "bg-white text-brand-800 border-brand-200"
+    allBtn.className = `px-3 py-1 rounded-full border text-sm font-medium`;
+    if (!filterType) {
+      allBtn.classList.add("bg-brand-600", "text-white");
+    } else {
+      allBtn.classList.add("bg-white", "text-brand-800", "border-brand-200");
     }
-    hover:bg-brand-100 transition`;
-    //bg-brand-600 text-white" : "bg-white text-brand-800 border-brand-200
     allBtn.onclick = () => {
       filterType = "";
       applyClassFilters();
+      setActiveButton(typeList, allBtn);
     };
     typeList.appendChild(allBtn);
 
     types.forEach((type) => {
-      // Comparación estricta, normalizando a lower case y quitando espacios
-      const isSelected =
-        (filterType || "").toLowerCase().trim() ===
-        (type.name || "").toLowerCase().trim();
       const btn = document.createElement("button");
       btn.textContent = type.name;
-      btn.className = `px-3 py-1 rounded-full border text-sm font-medium
-      ${
-        isSelected
-          ? "bg-brand-600 text-white"
-          : "bg-white text-brand-800 border-brand-200"
+      btn.className = `px-3 py-1 rounded-full border text-sm font-medium`;
+      if (
+        (filterType || "").toLowerCase().trim() ===
+        (type.name || "").toLowerCase().trim()
+      ) {
+        btn.classList.add("bg-brand-600", "text-white");
+      } else {
+        btn.classList.add("bg-white", "text-brand-800", "border-brand-200");
       }
-      hover:bg-brand-100 transition`;
       btn.onclick = () => {
         filterType = type.name;
         applyClassFilters();
+        setActiveButton(typeList, btn);
       };
       typeList.appendChild(btn);
     });
@@ -386,44 +474,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const allDayBtn = document.createElement("button");
     allDayBtn.textContent = "All";
-    const isAllDay = !filterDay || filterDay === "";
-    allDayBtn.className = `px-3 py-1 rounded-full border text-sm font-medium
-    ${
-      isAllDay
-        ? "bg-brand-600 text-white"
-        : "bg-white text-brand-800 border-brand-200"
+    allDayBtn.className = `px-3 py-1 rounded-full border text-sm font-medium`;
+    if (!filterDay) {
+      allDayBtn.classList.add("bg-brand-600", "text-white");
+    } else {
+      allDayBtn.classList.add("bg-white", "text-brand-800", "border-brand-200");
     }
-    hover:bg-brand-100 transition`;
     allDayBtn.onclick = () => {
       filterDay = "";
       applyClassFilters();
+      setActiveButton(dayList, allDayBtn);
     };
     dayList.appendChild(allDayBtn);
 
-    [
-      { key: "Monday", label: "Monday" },
-      { key: "Tuesday", label: "Tuesday" },
-      { key: "Wednesday", label: "Wednesday" },
-      { key: "Thursday", label: "Thursday" },
-      { key: "Friday", label: "Friday" },
-      { key: "Saturday", label: "Saturday" },
-      { key: "Sunday", label: "Sunday" },
-    ].forEach((day) => {
-      const isSelected =
-        (filterDay || "").toLowerCase().trim() ===
-        (day.key || "").toLowerCase().trim();
+    // Uso daysOfWeek aquí para listar días
+    daysOfWeek.forEach((day) => {
       const btn = document.createElement("button");
       btn.textContent = day.label;
-      btn.className = `px-3 py-1 rounded-full border text-sm font-medium
-      ${
-        isSelected
-          ? "bg-brand-600 text-white"
-          : "bg-white text-brand-800 border-brand-200"
+      btn.className = `px-3 py-1 rounded-full border text-sm font-medium`;
+      if (
+        (filterDay || "").toLowerCase().trim() ===
+        (day.key || "").toLowerCase().trim()
+      ) {
+        btn.classList.add("bg-brand-600", "text-white");
+      } else {
+        btn.classList.add("bg-white", "text-brand-800", "border-brand-200");
       }
-      hover:bg-brand-100 transition`;
       btn.onclick = () => {
         filterDay = day.key;
         applyClassFilters();
+        setActiveButton(dayList, btn);
       };
       dayList.appendChild(btn);
     });
@@ -447,95 +527,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     renderCalendarClassList(filtered);
   }
-
-  function renderCalendarClassList(classes) {
-    const daysOfWeek = [
-      { key: "Monday", label: "Monday" },
-      { key: "Tuesday", label: "Tuesday" },
-      { key: "Wednesday", label: "Wednesday" },
-      { key: "Thursday", label: "Thursday" },
-      { key: "Friday", label: "Friday" },
-      { key: "Saturday", label: "Saturday" },
-      { key: "Sunday", label: "Sunday" },
-    ];
-    const calendar = document.getElementById("calendar-class-list");
-    calendar.innerHTML = "";
-
-    // Agrupa las clases por día
-    const grouped = {};
-    daysOfWeek.forEach((day) => (grouped[day.key] = []));
-    classes.forEach((cls) => {
-  if (typeof cls.day === "string") {
-    const dayNormalized = cls.day.charAt(0).toUpperCase() + cls.day.slice(1).toLowerCase();
-    if (grouped[dayNormalized]) {
-      grouped[dayNormalized].push(cls);
-    } else {
-      console.warn(`Día no reconocido para agrupar: "${cls.day}" normalizado como "${dayNormalized}"`, cls);
-    }
-  } else {
-    console.warn("Clase sin propiedad day válida:", cls);
-  }
-});
-    console.log("Clases agrupadas:", grouped); //depurar para ver si se agrupan bien los días
-
-    // Calendario grid: 7 columnas fijas en desktop
-    const calendarGrid = document.createElement("div");
-    calendarGrid.className = `
-    grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 lg:gap-1
-    w-full max-w-7xl mx-auto
-  `.replace(/\s+/g, " ");
-
-    daysOfWeek.forEach((day) => {
-      const col = document.createElement("div");
-      col.className =
-        "rounded-xl p-2 bg-brand-300 flex flex-col h-full min-h-[350px]";
-
-      const header = document.createElement("div");
-      header.className =
-        "font-bold mb-4 text-center text-brand-900 uppercase tracking-wide text-base";
-      header.textContent = day.label;
-      col.appendChild(header);
-
-      if (grouped[day.key].length === 0) {
-        const empty = document.createElement("div");
-        empty.className = "text-brand-50 text-sm text-center py-8";
-        empty.textContent = "No classes";
-        col.appendChild(empty);
-      } else {
-        grouped[day.key].forEach((cls) => {
-          const colorBg = getClassBg(cls.pilates_type_name || cls.pilates_type);
-          const block = document.createElement("div");
-          block.className = `
-          ${colorBg} border rounded-lg mb-4 p-4 shadow
-          flex flex-col gap-1 text-sm w-full
-          transition hover:scale-105 hover:shadow-lg
-        `.replace(/\s+/g, " ");
-          block.innerHTML = `
-          <div class="font-semibold text-brand-900">${cls.pilates_type_name}</div>
-          <div class="text-brand-800">
-            <span class="inline-block mr-1">⏰</span>
-            ${cls.hour}
-          </div>
-          <div class="text-brand-700">Capacity: ${cls.capacity}</div>
-          <div class="text-brand-700">Coach: ${cls.coach_name}</div>
-          <div class="flex gap-2 mt-2">
-            <button class="edit-class-btn border border-brand-200 text-brand-900 bg-white rounded px-3 py-1 text-xs hover:bg-brand-100" data-id="${cls.id}">Edit</button>
-            <button class="delete-class-btn border border-red-100 text-red-600 bg-white rounded px-3 py-1 text-xs hover:bg-red-100" data-id="${cls.id}">Delete</button>
-          </div>
-        `;
-          block.querySelector(".edit-class-btn").onclick = () =>
-            openEditModal(cls);
-          block.querySelector(".delete-class-btn").onclick = () =>
-            deleteClass(cls.id);
-          col.appendChild(block);
-        });
-      }
-      calendarGrid.appendChild(col);
-    });
-
-    calendar.appendChild(calendarGrid);
-  }
-
+  //abre el modal de edicion
   function openEditModal(cls) {
     let loadTypesPromise =
       pilatesTypesOptions.length === 0
@@ -566,10 +558,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   // --- EDITAR Y BORRAR ---
-
   document.getElementById("close-edit-modal").onclick = () =>
-  document.getElementById("edit-class-modal").classList.add("hidden");
-
+    document.getElementById("edit-class-modal").classList.add("hidden");
+  //cuando envia el formulario de edicion
   document.getElementById("edit-class-form").onsubmit = async function (e) {
     e.preventDefault();
     const id = document.getElementById("edit-class-id").value;
@@ -612,7 +603,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   // --- BORRAR CLASE --
   async function deleteClass(id) {
-    // Confirmation before deleting
     if (!confirm("Are you sure you want to delete this class?")) return;
 
     try {
@@ -624,24 +614,42 @@ document.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify({ id }),
         }
       );
-      const data = await response.json();
+
+      const rawText = await response.text();
+      console.log("[deleteClass] Raw server response:", rawText);
+
+      let data;
+      try {
+        data = JSON.parse(rawText);
+      } catch (jsonError) {
+        // Posible HTML por error en el backend
+        console.error("[deleteClass] Invalid JSON response:", jsonError);
+        console.error("[deleteClass] Server said:", rawText);
+        alert("Something went wrong on the server. Please try again later.");
+        return;
+      }
+
       if (data.success) {
-        alert("The class was successfully deleted!");
+        alert(data.message || "The class was successfully deleted!");
         fetchAndRenderClassList();
       } else {
-        alert(data.message || "Could not delete the class.");
+        alert(
+          data.message ||
+            "Could not delete the class. Maybe it has active reservations."
+        );
+        console.warn("[deleteClass] Server rejected deletion:", data);
       }
     } catch (err) {
-      alert("Error deleting class: " + err.message);
-      console.error("Error deleting class:", err.message);
+      console.error("[deleteClass] Network or JS error:", err);
+      alert(
+        "Network error while trying to delete the class. Please check your connection."
+      );
     }
   }
-
   // --- INICIALIZACIÓN ---
   loadSpecialitiesForCreate();
   renderWeeklyAgenda();
   fetchAndRenderClassList();
-
   // --- ACTUALIZA FILTROS Y CALENDARIO CUANDO SE CARGAN LAS CLASES ---
   async function fetchAndRenderClassList() {
     try {

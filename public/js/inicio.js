@@ -8,7 +8,7 @@ $(document).ready(function () {
       .addClass("opacity-100 translate-y-0");
   }, 300);
   setTimeout(function () {
-    $("#hero-btn")
+    $(".hero-btn")
       .removeClass("opacity-0 translate-y-12")
       .addClass("opacity-100 translate-y-0");
   }, 700);

@@ -89,7 +89,7 @@ if (loginForm && !loginForm.dataset.listenerAttached) {
             if (data.role === "admin") {
               window.location.href = "/mindStone/app/views/admin/dashboard.php";
             } else {
-              window.location.href = "/mindStone/app/views/user/reservations.php";
+              window.location.href = "/mindStone/app/views/user/timetable.php";
             }
           }, 800);
         }

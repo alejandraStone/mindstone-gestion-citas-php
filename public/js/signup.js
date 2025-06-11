@@ -1,5 +1,8 @@
 // JS para el registro de usuario normal usando controlador que recibe JSON y "action: create".
 
+//importo validaciones para el registro de usuario
+import { isValidName, isValidEmail, isValidInternationalPhone, isValidPassword } from '/mindStone/public/js/modules/validations.js';
+
 document.addEventListener("DOMContentLoaded", function () {
   const signupForm = document.getElementById("formSignup");
   const signupMsg = document.getElementById("signupMsg");
@@ -11,29 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
       (type === "success" ? "text-green-700" : "text-red-700");
   }
 
-  // Validadores específicos
-  function isValidName(name) {
-    // Solo letras y espacios, sin números ni caracteres extraños
-    return /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s'-]+$/.test(name);
-  }
-
-  function isValidEmail(email) {
-    // Validación básica de email
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
-  function isValidInternationalPhone(phone) {
-    // Empieza con +, seguido de entre 6 y 15 dígitos
-    return /^\+\d{6,15}$/.test(phone);
-  }
-
-  function isValidPassword(password) {
-    // Mínimo 8 caracteres, al menos 1 mayúscula, 1 número y 1 carácter especial
-    return /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{};:'",.<>\/?\\|`~])[A-Za-z\d!@#$%^&*()_\-+=\[\]{};:'",.<>\/?\\|`~]{8,}$/.test(
-      password
-    );
-  }
-
+  
   if (signupForm) {
     signupForm.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -88,7 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         return;
       }
-
       if (!password) {
         showSignupMessage("Password cannot be empty.");
         return;
@@ -129,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (data.success) {
             signupForm.reset();
             setTimeout(() => {
-              window.location.href = "/mindStone/public/pages/reservations.php";
+              window.location.href = "/mindStone/app/views/user/timetable.php";
             }, 1500);
           }
         })

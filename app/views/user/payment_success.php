@@ -19,7 +19,7 @@ require_once __DIR__ . '/../../../app/config/config.php';
         Your bonus <strong><?= htmlspecialchars($bonusName) ?></strong> is now active.<br>
         Valid until <?= htmlspecialchars($validUntil) ?>.
     </p>
-    <a href="<?= BASE_URL ?>app/views/user/reservations.php" class="px-6 py-3 bg-green-700 text-white rounded-full hover:bg-green-800 transition">
+    <a href="<?= BASE_URL ?>app/views/user/timetable.php" class="px-6 py-3 bg-green-700 text-white rounded-full hover:bg-green-800 transition">
         Go to your TimeTable
     </a>
 <?php endif; ?>

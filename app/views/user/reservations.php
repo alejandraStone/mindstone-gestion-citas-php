@@ -1,57 +1,62 @@
 <?php
-require_once realpath(__DIR__ . '/../../config/config.php');
-require_once realpath(__DIR__ . '/../../session/session_manager.php');
+require_once __DIR__ . '/../../../app/config/config.php';
 
-
-if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'user') {
-    header('Location: ' . BASE_URL . 'public/inicio.php');
-    exit;
-}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Reservation</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/output.css">
-    <title>Dashboard-User</title>
 </head>
-
 <!-- Layout dashboard header y aside -->
 <?php require_once ROOT_PATH . '/app/views/layout/layout_dashboard_user.php'; ?>
-<main class="flex-1 lg:flex-col mt-10" data-user-id="<?= $_SESSION['user']['id'] ?>">
-    <!--Card del user-->
-    <div class="flex flex-row p-8 gap-4 justify-between bg-brand-100 border border-brand-200 rounded-xl animate-fade-in">
-        <div class="flex-1 flex flex-col justify-center pl-8">
-            <h2 class="text-4xl md:text-5xl font-titulo text-brand-900 mb-2">Hi,
-                <?= htmlspecialchars($_SESSION['user']['name']) ?></h2>
-            <p class="text-brand-700 font-normal">Choose a class and book</p>
-        </div>
-        <div class="flex-1 flex items-center justify-center">
-            <img src="/mindStone/public/img/logo_mindStone_p.png" class="w-20 h-20" alt="logo-mindStone" />
-        </div>
-    </div>
-    <!-- Horario -->
-    <section class="relative bg-brand-50 py-5 mb-10">
-        <div class="container">
-            <!-- Mes actual que muestra las clases -->
-                <div
-                    id="monthDisplay"
-                    class="mx-auto block rounded-full border border-verdeOliva bg-verdeOlivaClaro text-brand-900 font-semibold px-4 py-2 mb-4 text-center select-none w-max">
-                    Month: <!-- Aquí JS pondrá el mes y año -->
-                </div>
-            <!-- Calendario -->
-            <div id="calendar" class="calendar-wrapper empty relative max-w-7xl mx-auto rounded-xl bg-white shadow-lg overflow-x-auto">
-                <!-- Tabla se inyecta por JavaScript -->
-            </div>
-    </section>
-</main>
-</div><!-- cierre del div del Contenedor del aside y main -->
 
-<script src="/mindStone/app/lib/jquery-3.7.1.js"></script>
-<script src="/mindStone/public/js/calendario.js"></script>
+<main class="mt-10 bg-white flex flex-col items-center rounded-xl border border-brand-200 box-border w-full overflow-hidden px-4 sm:px-6 py-10 lg:py-20">
+
+<!-- Contenedor título + tarjeta en fila -->
+<section class="flex flex-col lg:flex-row items-center justify-between w-full max-w-5xl mb-8 gap-6">
+
+  <!-- Título ocupa todo el ancho en móvil, y auto en desktop -->
+  <h1 class="text-2xl font-semibold text-brand-900 font-titulo whitespace-nowrap w-full lg:w-auto text-center lg:text-left">
+    My Reservations
+  </h1>
+
+  <!-- Contenedor tarjetas de créditos -->
+  <section id="credits-container" class="w-full lg:w-auto flex flex-col gap-4">
+    <!-- JS inyecta tarjetas -->
+  </section>
+</section>
+
+    <!-- Tabla ocupa ancho completo -->
+    <div class="overflow-x-auto rounded-2xl shadow-xl border border-brand-200 bg-white w-full max-w-5xl">
+        <table class="table-auto text-sm text-left text-brand-900 bg-white rounded-2xl w-full">
+            <thead class="bg-gradient-to-r from-brand-400 via-brand-600 to-brand-800 text-white uppercase text-xs tracking-widest">
+                <tr>
+                    <th class="px-5 py-4">Class</th>
+                    <th class="px-5 py-4">Coach</th>
+                    <th class="px-5 py-4">Date</th>
+                    <th class="px-5 py-4">Hour</th>
+                    <th class="px-5 py-4">Reserved at</th>
+                    <th class="px-5 py-4">Status</th>
+                    <th class="px-5 py-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="reservations-table-body" class="divide-y divide-brand-100 bg-brand-50">
+                <!-- JS injects rows here -->
+            </tbody>
+        </table>
+    </div>
+    <div id="pagination-controls" class="flex items-center justify-center gap-4 mt-6"></div>
+
+
+</main>
+
+
+</div><!-- cierre del div del Contenedor del aside y main -->
+<script type="module" src="/mindStone/public/js/modules/show_user_reservations.js"></script>
 
 </body><!-- cierre del body del Contenedor del aside y main -->
 

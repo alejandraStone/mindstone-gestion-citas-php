@@ -33,16 +33,35 @@ require_once realpath(__DIR__ . '/../../config/config.php');
     <!-- Contenedor del aside y main -->
     <div class="flex flex-col lg:flex-row lg:items-start w-full gap-4 px-2 lg:px-8">
         <!-- Sidebar -->
-        <aside class="sidebar fixed flex flex-col top-0 left-0 w-full lg:static lg:w-[240px] h-full mt-20 lg:mt-10 p-4 gap-4 lg:translate-x-0 transform -translate-x-full transition-transform duration-300 bg-brand-100 z-45 rounded-xl border border-brand-200">
+        <aside class="sidebar fixed flex flex-col top-0 left-0 w-full lg:static lg:w-[240px] h-full mt-20 lg:mt-10 p-4 gap-4 lg:translate-x-0 transform -translate-x-full transition-transform duration-300 bg-brand-100 z-50 rounded-xl border border-brand-200">
             <!-- Sidebar links Dashboard -->
             <div class="bg-white rounded-xl shadow-md p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
 
                 <!--Calencario de lecciones-->
-                <a href="<?= BASE_URL ?>app/views/user/reservations.php" class="flex items-center text-brand-700 hover:text-brand-900 py-3 ml-2 transition-all duration-300 hover:translate-x-1 font-normal">
+                <a href="<?= BASE_URL ?>app/views/user/timetable.php" class="flex items-center text-brand-700 hover:text-brand-900 py-3 ml-2 transition-all duration-300 hover:translate-x-1 font-normal">
                     <svg class="size-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
                     </svg>
                     TimeTable
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-4 ml-auto">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </a>
+                <!--Mis reservas-->
+                <a href="<?= BASE_URL ?>app/views/user/reservations.php" class="flex items-center text-brand-700 hover:text-brand-900 py-3 ml-2 transition-all duration-300 hover:translate-x-1 font-normal">
+                    <svg class="size-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                    </svg>
+                    Reservations
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"

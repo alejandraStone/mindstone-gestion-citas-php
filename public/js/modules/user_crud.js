@@ -1,166 +1,217 @@
-document.addEventListener("DOMContentLoaded", function () {
-  // ===== CREATE USER FUNCTIONALITY =====
-  const addForm = document.getElementById("add-user-form");
-  const msg = document.getElementById("form-message");
+import {
+  isValidName,
+  isValidEmail,
+  isValidInternationalPhone,
+  isValidPassword,
+} from "/mindStone/public/js/modules/validations.js";
 
-  function showFormMessage(message, type = "error") {
-    msg.textContent = message;
-    msg.className =
-      "mt-4 text-center text-sm font-semibold " +
+document.addEventListener("DOMContentLoaded", () => {
+  // ============================
+  // UTILS
+  // ============================
+
+  const showMessage = (elementId, message, type = "error") => {
+    const el = document.getElementById(elementId);
+    el.textContent = message;
+    el.className =
+      "text-center mt-4 text-sm font-semibold " +
       (type === "success" ? "text-green-700" : "text-red-700");
-  }
+  };
 
-  if (addForm) {
-    addForm.addEventListener("submit", function (e) {
+  const jsonPost = async (url, data) => {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    return await res.json();
+  };
+
+  // ============================
+  // CREATE USER
+  // ============================
+
+  const initCreateUserForm = (
+    formId = "add-user-form",
+    msgId = "form-message"
+  ) => {
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      msg.textContent = "";
-      msg.className = "mt-4 text-center text-sm font-semibold";
+      showMessage(msgId, "", ""); // Reset
 
-      // Recolectar los datos del formulario
-      const formData = new FormData(addForm);
-      const data = {};
-      formData.forEach((value, key) => (data[key] = value));
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      if (
+        !data.name ||
+        !data.lastName ||
+        !data.email ||
+        !data.phone ||
+        !data.password
+      ) {
+        showMessage(msgId, "All fields are required.");
+        return;
+      }
+
+      // Validaciones
+      if (!isValidName(data.name))
+        return showMessage(
+          msgId,
+          "First name must contain only letters and spaces."
+        );
+      if (!isValidName(data.lastName))
+        return showMessage(
+          msgId,
+          "Last name must contain only letters and spaces."
+        );
+      if (!isValidEmail(data.email))
+        return showMessage(msgId, "Invalid email format.");
+      if (!isValidInternationalPhone(data.phone))
+        return showMessage(
+          msgId,
+          "Phone number must start with '+' followed by 6 to 15 digits."
+        );
+      if (!isValidPassword(data.password))
+        return showMessage(
+          msgId,
+          "Password must be at least 8 characters, including 1 uppercase letter, 1 number, and 1 special character."
+        );
+
       data.action = "create";
 
-      fetch("/mindStone/app/controllers/user_crud_dashboard_controller.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          showFormMessage(data.message || "User created.", data.success ? "success" : "error");
-          if (data.success) {
-            addForm.reset();
-          }
-        })
-        .catch(() => {
-          showFormMessage("Error connecting to server.", "error");
-        });
+      try {
+        const result = await jsonPost(
+          "/mindStone/app/controllers/user_crud_dashboard_controller.php",
+          data
+        );
+        showMessage(
+          msgId,
+          result.message || "User created.",
+          result.success ? "success" : "error"
+        );
+        if (result.success) form.reset();
+        location.reload(); // recarga todo y la tabla se ve actualizada
+      } catch {
+        showMessage(msgId, "Connection error.");
+      }
     });
-  }
+  };
 
-  // ======= EDIT USER MODAL =======
-  document.querySelectorAll(".edit-class-btn").forEach((btn) => {
-    btn.addEventListener("click", function () {
-      document.getElementById("edit-user-id").value = this.dataset.id;
-      document.getElementById("edit-user-name").value = this.dataset.name;
-      document.getElementById("edit-user-lastname").value = this.dataset.lastname;
-      document.getElementById("edit-user-email").value = this.dataset.email;
-      document.getElementById("edit-user-phone").value = this.dataset.phone;
-      document.getElementById("edit-user-role").value = this.dataset.role;
-      document.getElementById("edit-user-modal").classList.remove("hidden");
-    });
-  });
+  initCreateUserForm();
 
-  function showEditUserMessage(message, type = "error") {
-    const msgDiv = document.getElementById("edit-user-form-message");
-    msgDiv.textContent = message;
-    msgDiv.className = "text-center font-semibold mt-2 " + (type === "success" ? "text-green-600" : "text-red-600");
-  }
+  // ============================
+  // EDIT USER
+  // ============================
 
-  // ======= CLOSE MODAL =======
-  const closeBtn = document.getElementById("close-edit-user-modal");
-  if (closeBtn) {
-    closeBtn.addEventListener("click", function () {
-      document.getElementById("edit-user-modal").classList.add("hidden");
-    });
-  }
+  const openEditModal = (btn) => {
+    document.getElementById("edit-user-id").value = btn.dataset.id;
+    document.getElementById("edit-user-name").value = btn.dataset.name;
+    document.getElementById("edit-user-lastname").value = btn.dataset.lastname;
+    document.getElementById("edit-user-email").value = btn.dataset.email;
+    document.getElementById("edit-user-phone").value = btn.dataset.phone;
+    document.getElementById("edit-user-role").value = btn.dataset.role;
+    document.getElementById("edit-user-modal").classList.remove("hidden");
+  };
 
-  // ======= SUBMIT EDIT FORM =======
+  document.querySelectorAll(".edit-class-btn").forEach((btn) => btn.addEventListener("click", () => openEditModal(btn)));
+
+  document.getElementById("close-edit-user-modal")?.addEventListener("click", () => {
+  document.getElementById("edit-user-modal").classList.add("hidden");});
+
   const editForm = document.getElementById("edit-user-form");
   if (editForm) {
-    editForm.addEventListener("submit", function (e) {
+    editForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const id = document.getElementById("edit-user-id").value;
-      const name = document.getElementById("edit-user-name").value;
-      const lastName = document.getElementById("edit-user-lastname").value;
-      const email = document.getElementById("edit-user-email").value;
-      const phone = document.getElementById("edit-user-phone").value;
-      const role = document.getElementById("edit-user-role").value;
+      const data = {
+        action: "update",
+        id: document.getElementById("edit-user-id").value,
+        name: document.getElementById("edit-user-name").value,
+        lastName: document.getElementById("edit-user-lastname").value,
+        email: document.getElementById("edit-user-email").value,
+        phone: document.getElementById("edit-user-phone").value,
+        role: document.getElementById("edit-user-role").value,
+      };
 
-      fetch("/mindStone/app/controllers/user_crud_dashboard_controller.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "update",
-          id,
-          name,
-          lastName,
-          email,
-          phone,
-          role,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            showEditUserMessage("User updated successfully!", "success");
-            setTimeout(() => {
-              document.getElementById("edit-user-form-message").textContent = "";
-              document.getElementById("edit-user-modal").classList.add("hidden");
-              location.reload();
-            }, 1000);
-          } else {
-            showEditUserMessage(data.error || data.message || "Error updating user.", "error");
-          }
-        })
-        .catch(() => {
-          showEditUserMessage("Connection error.", "error");
-        });
+      try {
+        const result = await jsonPost(
+          "/mindStone/app/controllers/user_crud_dashboard_controller.php",
+          data
+        );
+        if (result.success) {
+          showMessage(
+            "edit-user-form-message",
+            result.message || "User updated successfully.",
+            "success"
+          );
+          setTimeout(() => location.reload(), 1000);
+        } else {
+          showMessage(
+            "edit-user-form-message",
+            result.message || result.error || "Error updating user.",
+            "error"
+          );
+        }
+      } catch {
+        showMessage("edit-user-form-message", "Connection error.");
+      }
     });
   }
 
-  // ======= DELETE USER =======
-  document.querySelectorAll(".btn-delete-user").forEach((btn) => {
-    btn.addEventListener("click", function () {
-      const userId = this.dataset.id;
-      if (!confirm("Are you sure you want to delete this user?")) return;
-      fetch("/mindStone/app/controllers/user_crud_dashboard_controller.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "delete", id: userId }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            alert("User deleted successfully.");
-            location.reload();
-          } else {
-            alert(data.error || data.message || "Error deleting user.");
-          }
-        })
-        .catch(() => {
-          alert("Connection error.");
-        });
-    });
-  });
+  // ============================
+  // DELETE USER
+  // ============================
 
-  // ======= RESET PASSWORD =======
-  document.querySelectorAll(".btn-reset-user").forEach((btn) => {
-    btn.addEventListener("click", function () {
-      const userId = this.dataset.id;
-      if (!confirm("Are you sure you want to reset the password for this user?")) return;
-      fetch("/mindStone/app/controllers/user_crud_dashboard_controller.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "reset", id: userId }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            alert("Password reset successfully.\nNew password: " + data.newPassword);
-            location.reload();
-          } else {
-            alert(data.error || data.message || "Error resetting password.");
+  document.querySelectorAll(".btn-delete-user").forEach((btn) =>
+    btn.addEventListener("click", async () => {
+      if (!confirm("Are you sure you want to delete this user?")) return;
+
+      try {
+        const result = await jsonPost(
+          "/mindStone/app/controllers/user_crud_dashboard_controller.php",
+          {
+            action: "delete",
+            id: btn.dataset.id,
           }
-        })
-        .catch(() => {
-          alert("Connection error.");
-        });
+        );
+
+        if (result.success) {
+          alert("User deleted successfully.");
+          location.reload();
+        } else {
+          alert(result.message || "Error deleting user.");
+        }
+      } catch {
+        alert("Connection error.");
+      }
+    })
+  );
+
+  // ============================
+  // TOGGLE CREATE USER FORM
+  // ============================
+
+  const createUserBtn = document.getElementById("toggle-add-user");
+  const createUserContainer = document.getElementById("create-user-container");
+
+  if (createUserBtn && createUserContainer) {
+    createUserBtn.addEventListener("click", async () => {
+      if (createUserContainer.classList.contains("hidden")) {
+        try {
+          const res = await fetch("/mindStone/app/views/admin/create_user.php");
+          const html = await res.text();
+          createUserContainer.innerHTML = html;
+          createUserContainer.classList.remove("hidden");
+          initCreateUserForm(); // Reinicializar validaciones en el nuevo DOM
+        } catch {
+          alert("Error loading create form.");
+        }
+      } else {
+        createUserContainer.classList.add("hidden");
+      }
     });
-  });
+  }
 });

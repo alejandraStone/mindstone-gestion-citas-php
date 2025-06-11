@@ -44,7 +44,7 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
 
             <?php if (isset($_SESSION['user'])): ?>
                 <?php if ($_SESSION['user']['role'] === 'user'): ?>
-                    <a href="<?= BASE_URL ?>app/views/user/reservations.php" class="menu-link-desplegable">My reservations</a>
+                    <a href="<?= BASE_URL ?>app/views/user/timetable.php" class="menu-link-desplegable">My reservations</a>
                 <?php endif; ?>
                 <?php if ($_SESSION['user']['role'] === 'admin'): ?>
                     <a href="/mindStone/app/views/admin/dashboard.php" class="menu-link-desplegable">Dashboard</a>
@@ -61,7 +61,7 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
 
             <?php if (isset($_SESSION['user'])): ?>
                 <?php if ($_SESSION['user']['role'] === 'user'): ?>
-                    <a href="<?= BASE_URL ?>app/views/user/reservations.php" class="menu-link">My reservations</a>
+                    <a href="<?= BASE_URL ?>app/views/user/timetable.php" class="menu-link">My reservations</a>
                 <?php endif; ?>
                 <?php if ($_SESSION['user']['role'] === 'admin'): ?>
                     <a href="/mindStone/app/views/admin/dashboard.php" class="menu-link">Dashboard</a>

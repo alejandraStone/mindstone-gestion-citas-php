@@ -1,8 +1,11 @@
 <?php
 require_once __DIR__ . '/../app/config/config.php';
+require_once realpath(__DIR__ . '/../app/session/session_manager.php');
 
+if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
+    $user = $_SESSION['user']['id'];
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,9 +22,7 @@ require_once __DIR__ . '/../app/config/config.php';
 </head>
 
 <body class="font-normal pt-20 box-border overflow-x-hidden bg-brand-50">
-  <?php
-  require_once ROOT_PATH . '/app/views/layout/header.php';
-  ?>
+  <?php require_once ROOT_PATH . '/app/views/layout/header.php'; ?>
 
   <!-- Hero Section -->
   <section class="relative h-[80vh] md:h-[80vh] lg:h-screen w-full">
@@ -33,9 +34,17 @@ require_once __DIR__ . '/../app/config/config.php';
         <h1 id="hero-title" class="titulo-grande text-white mb-6 opacity-0 translate-y-12 transition-all duration-1000">
           Transform Your Body <br class="hidden sm:block"> Elevate Your Mind
         </h1>
-        <a id="hero-btn" href="<?= BASE_URL ?>app/views/user/reservations.php" class="opacity-0 translate-y-12 transition-all duration-700 inline-block px-6 py-2 border border-white text-white font-titulo sm:text-lg tracking-wide hover:bg-white hover:text-brand-800">
+          <?php $user = getUser(); ?>
+        <?php if ($user && $user['role'] === 'user'): ?>
+        <a href="<?= BASE_URL ?>app/views/user/timetable.php" class="hero-btn opacity-0 translate-y-12 transition-all duration-700 inline-block px-6 py-2 border border-white text-white font-titulo sm:text-lg tracking-wide hover:bg-white hover:text-brand-800">
           BOOK NOW
         </a>
+        <?php else: ?>
+              <button onclick="document.getElementById('loginModal')?.classList.remove('hidden')"
+                class="hero-btn opacity-0 translate-y-12 transition-all duration-700 inline-block px-6 py-2 border border-white text-white font-titulo sm:text-lg tracking-wide hover:bg-white hover:text-brand-800">
+                BOOK Now
+              </button>
+            <?php endif; ?>
       </div>
     </div>
   </section>
@@ -81,7 +90,7 @@ require_once __DIR__ . '/../app/config/config.php';
             class="object-cover w-full h-[300px] transition-transform duration-500 hover:scale-110 rounded-xl mb-4" />
           <div class="flex flex-col sm:flex-row justify-center items-stretch w-full">
             <h3 class="sm:w-1/2 text-white text-center p-4 border border-white">FULL BODY</h3>
-            <a href="<?= BASE_URL ?>app/views/classes.php"
+            <a href="<?= BASE_URL ?>app/views/pages/classes.php"
               class="sm:w-1/2 text-base flex items-center justify-center gap-2 text-white transition-all duration-500 hover:text-brand-400 border border-white">
               Explore Classes
               <svg xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +111,7 @@ require_once __DIR__ . '/../app/config/config.php';
             class="object-cover w-full h-[300px] transition-transform duration-500 hover:scale-110 rounded-xl mb-4" />
           <div class="flex flex-col sm:flex-row justify-center items-stretch w-full">
             <h3 class="sm:w-1/2 text-white text-center p-4 border border-white">MAT</h3>
-            <a href="<?= BASE_URL ?>app/views/classes.php"
+            <a href="<?= BASE_URL ?>app/views/pages/classes.php"
               class="sm:w-1/2 text-base flex items-center justify-center gap-2 text-white transition-all duration-500 hover:text-brand-400 border border-white">
               Explore Classes
               <svg xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +132,7 @@ require_once __DIR__ . '/../app/config/config.php';
             class="object-cover w-full h-[300px] transition-transform duration-500 hover:scale-110 rounded-xl mb-4" />
           <div class="flex flex-col sm:flex-row justify-center items-stretch w-full">
             <h3 class="sm:w-1/2 text-white text-center p-4 border border-white">REFORMER</h3>
-            <a href="<?= BASE_URL ?>app/views/classes.php"
+            <a href="<?= BASE_URL ?>app/views/pages/classes.php"
               class="sm:w-1/2 text-base flex items-center justify-center gap-2 text-white transition-all duration-500 hover:text-brand-400 border border-white">
               Explore Classes
               <svg xmlns="http://www.w3.org/2000/svg"
@@ -239,8 +248,9 @@ require_once __DIR__ . '/../app/config/config.php';
     </div>
   </section>
 
-  <!-- Sección de Bonos-->
-  <section class="w-full bg-brand-50 py-4 px-4 pb-20 overflow-x-hidden">
+  <?php $user = getUser(); ?>
+  <!-- Sección de Bonos -->
+  <section class="w-full bg-brand-50 py-4 px-4 mb-10">
     <div class="max-w-6xl mx-auto text-center" data-aos="fade-up">
       <!-- Título -->
       <div class="p-4 md:p-6 lg:p-6">
@@ -254,10 +264,11 @@ require_once __DIR__ . '/../app/config/config.php';
           Choose the option that aligns best with your rhythm and goals.
         </p>
       </div>
+
       <!-- Grid con los 4 bonos en una fila -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
 
-        <!-- Unlimited Classes -->
+        <!-- BONO: Unlimited Classes -->
         <div class="rounded-3xl bg-brand-600 text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
           <div>
             <h3 class="text-2xl font-titulo mb-2">Unlimited Classes</h3>
@@ -268,14 +279,22 @@ require_once __DIR__ . '/../app/config/config.php';
               <span class="text-5xl font-bold">250</span>
               <span class="text-xl">€</span>
             </div>
-            <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
-              class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
-              Buy Now
-            </a>
+
+            <?php if ($user && $user['role'] === 'user'): ?>
+              <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+                class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                Buy Now
+              </a>
+            <?php else: ?>
+              <button onclick="document.getElementById('loginModal')?.classList.remove('hidden')"
+                class="block w-full text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                Buy Now
+              </button>
+            <?php endif; ?>
           </div>
         </div>
 
-        <!-- 10-Class Pack -->
+        <!-- BONO: 10-Class Pack -->
         <div class="rounded-3xl bg-oliveShade text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
           <div>
             <h3 class="text-2xl font-titulo mb-2">10-Class Pack</h3>
@@ -286,14 +305,22 @@ require_once __DIR__ . '/../app/config/config.php';
               <span class="text-5xl font-bold">200</span>
               <span class="text-xl">€</span>
             </div>
-            <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
-              class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
-              Buy now
-            </a>
+
+            <?php if ($user && $user['role'] === 'user'): ?>
+              <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+                class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                Buy Now
+              </a>
+            <?php else: ?>
+              <button onclick="document.getElementById('loginModal')?.classList.remove('hidden')"
+                class="block w-full text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                Buy Now
+              </button>
+            <?php endif; ?>
           </div>
         </div>
 
-        <!-- 4-Class Pack -->
+        <!-- BONO: 4-Class Pack -->
         <div class="rounded-3xl bg-brand-600 text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
           <div>
             <span class="inline-block bg-verdeOlivaMasClaro text-oliveShade px-3 py-1 rounded-full text-xs font-semibold mb-4">
@@ -307,14 +334,22 @@ require_once __DIR__ . '/../app/config/config.php';
               <span class="text-5xl font-bold">100</span>
               <span class="text-xl">€</span>
             </div>
-            <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
-              class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
-              Buy Now
-            </a>
+
+            <?php if ($user && $user['role'] === 'user'): ?>
+              <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+                class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                Buy Now
+              </a>
+            <?php else: ?>
+              <button onclick="document.getElementById('loginModal')?.classList.remove('hidden')"
+                class="block w-full text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                Buy Now
+              </button>
+            <?php endif; ?>
           </div>
         </div>
 
-        <!-- Single Class -->
+        <!-- BONO: Single Class -->
         <div class="rounded-3xl bg-oliveShade text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
           <div>
             <h3 class="text-2xl font-titulo mb-2">Single Class</h3>
@@ -325,10 +360,18 @@ require_once __DIR__ . '/../app/config/config.php';
               <span class="text-5xl font-bold">35</span>
               <span class="text-xl">€</span>
             </div>
-            <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
-              class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
-              Buy now
-            </a>
+
+            <?php if ($user && $user['role'] === 'user'): ?>
+              <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+                class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                Buy Now
+              </a>
+            <?php else: ?>
+              <button onclick="document.getElementById('loginModal')?.classList.remove('hidden')"
+                class="block w-full text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                Buy Now
+              </button>
+            <?php endif; ?>
           </div>
         </div>
       </div>
@@ -435,6 +478,7 @@ require_once __DIR__ . '/../app/config/config.php';
   <!-- Scripts JS, JQuery y AOS -->
   <script src="/mindStone/app/lib/jquery-3.7.1.js"></script>
   <script src="/mindStone/public/js/inicio.js"></script>
+  <script src="/mindStone/public/js/login.js"></script>
   <!-- Scripts JS AOS animaciones -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>

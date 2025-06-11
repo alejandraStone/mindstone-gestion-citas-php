@@ -203,4 +203,33 @@ class Bonus
             ];
         }
     }
+
+    // Obtener los bonos comprados por un usuario
+    public function getUserCredits(int $user_id): array
+    {
+        try {
+            $sql = "SELECT 
+                    total_credits,
+                    used_credits,
+                    expires_at
+                FROM credits
+                WHERE user_id = :user_id
+                AND expires_at > NOW()
+                ORDER BY expires_at ASC";
+
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->execute(['user_id' => $user_id]);
+            $credits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return [
+                'success' => true,
+                'data' => $credits
+            ];
+        } catch (PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ];
+        }
+    }
 }

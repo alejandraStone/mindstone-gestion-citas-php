@@ -205,7 +205,11 @@
 .slick-slide {
   padding: 0 10px;
 }
-
+#coach-list-wrapper {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #a0aec0 #edf2f7;
+}
 
 
 

@@ -5,7 +5,6 @@ require_once realpath(__DIR__ . '/../../session/session_manager.php');
 if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
     $user = $_SESSION['user']['id'];
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -52,181 +51,9 @@ if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
                 </a>
             </div>
         </section>
-        <!-- Sección servicios -->
-        <section id="siguiente-seccion" class="grid grid-cols-1 md:grid-cols-2">
-
-            <!-- REFORMER -->
-            <!-- Imagen en md a la izquierda, en mobile después del texto -->
-            <div class="bg-brand-100 order-2 md:order-1">
-                <img src="/mindStone/public/img/reformer2.jpg" alt="reformer" class="w-full h-full object-cover" />
-            </div>
-            <!-- Texto primero en mobile, segundo en md -->
-            <div class="bg-white flex items-center justify-center p-8 order-1 md:order-2">
-                <div class="text-center md:text-left" data-aos="fade-up">
-                    <h2 class="font-titulo text-2xl md:text-3xl mb-4">Reformer</h2>
-                    <p class="text-sm md:text-base text-oliveShade max-w-md mx-auto md:mx-0">
-                        Elevate your core strength and posture with our Reformer sessions. Ideal for improving alignment, flexibility, and toning with precision-controlled movements.
-                    </p>
-                </div>
-            </div>
-            <!-- MAT -->
-            <!-- Texto primero en todos los tamaños -->
-            <div class="bg-brand-50 flex items-center justify-center p-8 order-3" data-aos="fade-up">
-                <div class="text-center md:text-left">
-                    <h2 class="font-titulo text-2xl md:text-3xl mb-4">Mat</h2>
-                    <p class="text-sm md:text-base text-oliveShade max-w-md mx-auto md:mx-0">
-                        Build deep strength using only your body weight. Our Mat classes focus on breath, stability, and control — no machines, just pure pilates on the mat.
-                    </p>
-                </div>
-            </div>
-            <!-- Imagen después en todos los tamaños -->
-            <div class="bg-brand-50 order-4">
-                <img src="/mindStone/public/img/mat2.png" alt="mat" class="w-full h-full object-cover" />
-            </div>
-            <!-- FULL BODY -->
-            <!-- Imagen primero en md, después en mobile -->
-            <div class="bg-brand-300 order-6 md:order-5">
-                <img src="/mindStone/public/img/full_body.jpg" alt="full body" class="w-full h-full object-cover" />
-            </div>
-            <!-- Texto primero en mobile, después en md -->
-            <div class="bg-white flex items-center justify-center p-8 order-5 md:order-6">
-                <div class="text-center md:text-left data-aos=" fade-up">
-                    <h2 class="font-titulo text-2xl md:text-3xl mb-4">Full Body</h2>
-                    <p class="text-sm md:text-base text-oliveShade max-w-md mx-auto md:mx-0">
-                        Challenge your entire body in one dynamic session. From core to cardio, this class blends Pilates principles with functional training for total body power.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Horario -->
-        <section class="relative bg-brand-50 py-10 mb-10">
-            <div class="container">
-                <!-- Título -->
-                <div class="p-4 md:p-6 lg:p-6"
-                    data-aos="fade-in">
-                    <h2 class="titulo-gradiente text-center mb-6">
-                        <span class="titulo-punto">·</span>
-                        Class Timetable
-                        <span class="titulo-punto">·</span>
-                    </h2>
-                </div>
-                <!-- Calendario -->
-                <div id="calendar" class="calendar-wrapper empty relative max-w-7xl mx-auto rounded-xl bg-white shadow-lg overflow-x-auto">
-                    <!-- Tabla se inyecta por JavaScript -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Sección de Bonos-->
-        <section class="w-full bg-brand-50 py-4 px-4 mb-10">
-            <div class="max-w-6xl mx-auto text-center" data-aos="fade-up">
-                <!-- Título -->
-                <div class="p-4 md:p-6 lg:p-6">
-                    <h2 class="titulo-gradiente text-center">
-                        <span class="titulo-punto">·</span>
-                        Your Pilates Journey Starts Here
-                        <span class="titulo-punto">·</span>
-                    </h2>
-                    <!-- Subtítulo -->
-                    <p class="text-brand-700 text-base mb-6 sm:text-lg max-w-xl mx-auto aos-init" data-aos="fade-up" data-aos-delay="100">
-                        Choose the option that aligns best with your rhythm and goals.
-                    </p>
-                </div>
-                <!-- Grid con los 4 bonos en una fila -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-
-                    <!-- Unlimited Classes -->
-                    <div class="rounded-3xl bg-brand-600 text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
-                        <div>
-                            <h3 class="text-2xl font-titulo mb-2">Unlimited Classes</h3>
-                            <p class="text-xs mb-6">Unlimited access<br>Your practice, your pace</p>
-                        </div>
-                        <div>
-                            <div class="flex items-baseline justify-center gap-2 mb-6">
-                                <span class="text-5xl font-bold">250</span>
-                                <span class="text-xl">€</span>
-                            </div>
-
-                            <?php if (isset($_SESSION['user'])): ?>
-                                <?php if ($_SESSION['user']['role'] === 'user'): ?>
-                                    <a href="<?= BASE_URL ?>app/views/user/checkout.php?name=Unlimited+Classes&price=250"
-                                        class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
-                                        Buy Now
-                                    </a>
-                                    <?php else: ?>
-                                        <a href="<?= BASE_URL ?>app/views/admin/checkout.php?name=Unlimited+Classes&price=250"
-                                            class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
-                                            Buy Now
-                                        </a>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-
-                    <!-- 10-Class Pack -->
-                    <div class="rounded-3xl bg-oliveShade text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
-                        <div>
-                            <h3 class="text-2xl font-titulo mb-2">10-Class Pack</h3>
-                            <p class="text-xs mb-6">10 sessions/month<br>Consistency meets flexibility</p>
-                        </div>
-                        <div>
-                            <div class="flex items-baseline justify-center gap-2 mb-6">
-                                <span class="text-5xl font-bold">200</span>
-                                <span class="text-xl">€</span>
-                            </div>
-                            <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
-                                class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
-                                Buy now
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- 4-Class Pack -->
-                    <div class="rounded-3xl bg-brand-600 text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
-                        <div>
-                            <span class="inline-block bg-verdeOlivaMasClaro text-oliveShade px-3 py-1 rounded-full text-xs font-semibold mb-4">
-                                Most Popular
-                            </span>
-                            <h3 class="text-2xl font-titulo mb-2">4-Class Pack</h3>
-                            <p class="text-xs mb-6">4 sessions/month<br>Improve steadily</p>
-                        </div>
-                        <div>
-                            <div class="flex items-baseline justify-center gap-2 mb-6">
-                                <span class="text-5xl font-bold">100</span>
-                                <span class="text-xl">€</span>
-                            </div>
-                            <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
-                                class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
-                                Buy Now
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Single Class -->
-                    <div class="rounded-3xl bg-oliveShade text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
-                        <div>
-                            <h3 class="text-2xl font-titulo mb-2">Single Class</h3>
-                            <p class="text-xs mb-6">Ideal for flexibility<br>Try a session</p>
-                        </div>
-                        <div>
-                            <div class="flex items-baseline justify-center gap-2 mb-6">
-                                <span class="text-5xl font-bold">35</span>
-                                <span class="text-xl">€</span>
-                            </div>
-                            <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
-                                class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
-                                Buy now
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
 
         <!-- Info de las clases -->
-        <section class="flex flex-col md:flex-row items-stretch justify-stretch w-full bg-brand-50 py-20">
+        <section class="flex flex-col md:flex-row items-stretch justify-stretch w-full bg-brand-50">
             <!-- Info1 -->
             <div data-aos="fade-up" class="bg-verdeOlivaClaro flex flex-col items-center justify-center text-center w-full flex-1 px-6 py-20">
                 <p class="text-lg italic text-black font-titulo">Suitable for Beginners<br>and Advanced Students</p>
@@ -243,8 +70,217 @@ if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
             </div>
         </section>
 
+        <!-- Sección servicios -->
+        <section class="grid grid-cols-1 md:grid-cols-2">
+            <!-- REFORMER -->
+            <div class="bg-brand-100 order-2 md:order-1 h-[400px] md:h-[600px]">
+                <img src="/mindStone/public/img/reformer2.jpg" alt="reformer" class="w-full h-full object-cover" />
+            </div>
+
+            <div class="bg-white flex items-center justify-center p-8 order-1 md:order-2 h-[400px] md:h-[600px]">
+                <div
+                    class="text-center md:text-left"
+                    data-aos="fade-up">
+                    <h2 class="font-titulo text-2xl md:text-3xl mb-4">Reformer</h2>
+                    <p class="text-sm md:text-base text-oliveShade max-w-md mx-auto md:mx-0">
+                        Elevate your core strength and posture with our Reformer sessions. Ideal for improving alignment, flexibility, and toning with precision-controlled movements.
+                    </p>
+                </div>
+            </div>
+
+            <!-- MAT -->
+            <div
+                class="bg-brand-50 flex items-center justify-center p-8 order-3 h-[400px] md:h-[600px]"
+                data-aos="fade-up"
+                data-aos-md="fade-right">
+                <div class="text-center md:text-left">
+                    <h2 class="font-titulo text-2xl md:text-3xl mb-4">Mat</h2>
+                    <p class="text-sm md:text-base text-oliveShade max-w-md mx-auto md:mx-0">
+                        Build deep strength using only your body weight. Our Mat classes focus on breath, stability, and control — no machines, just pure pilates on the mat.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-brand-50 order-4 h-[400px] md:h-[600px]">
+                <img src="/mindStone/public/img/misión.jpg" alt="mat" class="w-full h-full object-cover" />
+            </div>
+
+            <!-- FULL BODY -->
+            <div class="bg-brand-300 order-6 md:order-5 h-[400px] md:h-[600px]">
+                <img src="/mindStone/public/img/full_body.jpg" alt="full body" class="w-full h-full object-cover" />
+            </div>
+
+            <div class="bg-white flex items-center justify-center p-8 order-5 md:order-6 h-[400px] md:h-[600px]">
+                <div
+                    class="text-center md:text-left"
+                    data-aos="fade-up">
+                    <h2 class="font-titulo text-2xl md:text-3xl mb-4">Full Body</h2>
+                    <p class="text-sm md:text-base text-oliveShade max-w-md mx-auto md:mx-0">
+                        Challenge your entire body in one dynamic session. From core to cardio, this class blends Pilates principles with functional training for total body power.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Horario -->
+        <section id="siguiente-seccion" class="relative bg-brand-50 py-10 mb-10">
+            <div class="container">
+                <!-- Título -->
+                <div class="p-4 md:p-6 lg:p-6"
+                    data-aos="fade-in">
+                    <h2 class="titulo-gradiente text-center mb-2">
+                        <span class="titulo-punto">·</span>
+                        Class Timetable
+                        <span class="titulo-punto">·</span>
+                    </h2>
+                    <!-- Semana actual que muestra las clases -->
+                    <div
+                        id="monthDisplay"
+                        class="mx-auto mb-6 w-max rounded-full text-brand-800 hover:bg-brand-800 hover:text-white font-semibold px-6 py-2 text-xs md:text-base tracking-tight shadow ring-1 ring-brand-200 select-none">
+                        <!-- Aquí JS pondrá la semana de clases -->
+                    </div>
+
+                </div>
+
+                <!-- Calendario -->
+                <div id="calendar" class="mt-2 calendar-wrapper empty relative max-w-7xl mx-auto rounded-xl bg-white shadow-lg overflow-x-auto">
+                    <!-- Tabla se inyecta por JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <?php $user = getUser(); ?>
+        <!-- Sección de Bonos -->
+        <section class="w-full bg-brand-50 py-4 px-4 mb-10">
+            <div class="max-w-6xl mx-auto text-center" data-aos="fade-up">
+                <!-- Título -->
+                <div class="p-4 md:p-6 lg:p-6">
+                    <h2 class="titulo-gradiente text-center">
+                        <span class="titulo-punto">·</span>
+                        Your Pilates Journey Starts Here
+                        <span class="titulo-punto">·</span>
+                    </h2>
+                    <!-- Subtítulo -->
+                    <p class="text-brand-700 text-base mb-6 sm:text-lg max-w-xl mx-auto aos-init" data-aos="fade-up" data-aos-delay="100">
+                        Choose the option that aligns best with your rhythm and goals.
+                    </p>
+                </div>
+
+                <!-- Grid con los 4 bonos en una fila -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+
+                    <!-- BONO: Unlimited Classes -->
+                    <div class="rounded-3xl bg-brand-600 text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
+                        <div>
+                            <h3 class="text-2xl font-titulo mb-2">Unlimited Classes</h3>
+                            <p class="text-xs mb-6">Unlimited access<br>Your practice, your pace</p>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline justify-center gap-2 mb-6">
+                                <span class="text-5xl font-bold">250</span>
+                                <span class="text-xl">€</span>
+                            </div>
+
+                            <?php if ($user && $user['role'] === 'user'): ?>
+                                <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+                                    class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                                    Buy Now
+                                </a>
+                            <?php else: ?>
+                                <button onclick="document.getElementById('loginModal')?.classList.remove('hidden')"
+                                    class="block w-full text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                                    Buy Now
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- BONO: 10-Class Pack -->
+                    <div class="rounded-3xl bg-oliveShade text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
+                        <div>
+                            <h3 class="text-2xl font-titulo mb-2">10-Class Pack</h3>
+                            <p class="text-xs mb-6">10 sessions/month<br>Consistency meets flexibility</p>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline justify-center gap-2 mb-6">
+                                <span class="text-5xl font-bold">200</span>
+                                <span class="text-xl">€</span>
+                            </div>
+
+                            <?php if ($user && $user['role'] === 'user'): ?>
+                                <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+                                    class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                                    Buy Now
+                                </a>
+                            <?php else: ?>
+                                <button onclick="document.getElementById('loginModal')?.classList.remove('hidden')"
+                                    class="block w-full text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                                    Buy Now
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- BONO: 4-Class Pack -->
+                    <div class="rounded-3xl bg-brand-600 text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-105 transition-transform duration-300">
+                        <div>
+                            <span class="inline-block bg-verdeOlivaMasClaro text-oliveShade px-3 py-1 rounded-full text-xs font-semibold mb-4">
+                                Most Popular
+                            </span>
+                            <h3 class="text-2xl font-titulo mb-2">4-Class Pack</h3>
+                            <p class="text-xs mb-6">4 sessions/month<br>Improve steadily</p>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline justify-center gap-2 mb-6">
+                                <span class="text-5xl font-bold">100</span>
+                                <span class="text-xl">€</span>
+                            </div>
+
+                            <?php if ($user && $user['role'] === 'user'): ?>
+                                <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+                                    class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                                    Buy Now
+                                </a>
+                            <?php else: ?>
+                                <button onclick="document.getElementById('loginModal')?.classList.remove('hidden')"
+                                    class="block w-full text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                                    Buy Now
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- BONO: Single Class -->
+                    <div class="rounded-3xl bg-oliveShade text-white p-8 flex flex-col justify-between shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
+                        <div>
+                            <h3 class="text-2xl font-titulo mb-2">Single Class</h3>
+                            <p class="text-xs mb-6">Ideal for flexibility<br>Try a session</p>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline justify-center gap-2 mb-6">
+                                <span class="text-5xl font-bold">35</span>
+                                <span class="text-xl">€</span>
+                            </div>
+
+                            <?php if ($user && $user['role'] === 'user'): ?>
+                                <a href="<?= BASE_URL ?>app/views/user/buy_plan.php"
+                                    class="block text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                                    Buy Now
+                                </a>
+                            <?php else: ?>
+                                <button onclick="document.getElementById('loginModal')?.classList.remove('hidden')"
+                                    class="block w-full text-center bg-verdeOlivaMasClaro text-oliveShade font-semibold py-3 rounded-full hover:bg-verdeOlivaClaro transition">
+                                    Buy Now
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- FAQ-->
-        <section class="w-full bg-brand-50 pt-10 pb-10 md:pt-10 md:pb-20 lg:pt-10 lg:pb-20 mx-auto">
+        <section class="w-full bg-brand-50 pt-10 pb-10 md:pt-10 md:pb-20 lg:pt-10 lg:pb-20 px-4 mx-auto">
             <!-- Título de la sección -->
             <h2 class="titulo-gradiente mb-10 text-center">
                 <span class="titulo-punto mr-2">·</span>
@@ -252,7 +288,7 @@ if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
                 <span class="titulo-punto ml-2">·</span>
             </h2>
 
-            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-stretch gap-4">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-stretch">
                 <!-- Imagen -->
                 <div class="w-full md:w-1/2 flex items-center justify-center">
                     <img src="/mindStone/public/img/full_body.jpg" alt="Full Body Pilates" class="object-cover w-full h-full">

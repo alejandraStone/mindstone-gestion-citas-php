@@ -141,4 +141,83 @@ class Coach
         }
         return $coaches;
     }
+    public function getById($id)
+    {
+        try {
+            $stmt = $this->conexion->prepare("SELECT * FROM coaches WHERE id = ?");
+            $stmt->execute([$id]);
+            $coach = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$coach) {
+                error_log("Coach with ID $id not found.");
+                return null;
+            }
+            // Suponiendo que tienes que sacar especialities también
+            $coach['specialities'] = $this->getSpecialitiesByCoach($id);
+            return $coach;
+        } catch (PDOException $e) {
+            error_log('PDO error in getById: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    // Devuelve array de IDs de las especialidades de un coach
+    public function getSpecialityIdsByCoach($coachId)
+    {
+        $sql = "SELECT speciality_id FROM coach_speciality WHERE coach_id = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute([$coachId]);
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+    public function update($id, $name, $lastName, $email, $phone, $specialities)
+    {
+        try {
+            $this->conexion->beginTransaction();
+
+            // Actualizar datos del coach
+            $stmt = $this->conexion->prepare("UPDATE coaches SET name = ?, lastName = ?, email = ?, phone = ? WHERE id = ?");
+            $stmt->execute([$name, $lastName, $email, $phone, $id]);
+
+            // Eliminar especialidades anteriores
+            $this->conexion->prepare("DELETE FROM coach_speciality WHERE coach_id = ?")->execute([$id]);
+
+            // Insertar nuevas especialidades
+            $insert = $this->conexion->prepare("INSERT INTO coach_speciality (coach_id, speciality_id) VALUES (?, ?)");
+            foreach ($specialities as $sid) {
+                $insert->execute([$id, $sid]);
+            }
+
+            $this->conexion->commit();
+            return ['success' => true, 'message' => 'Coach updated successfully.'];
+        } catch (PDOException $e) {
+            if ($this->conexion->inTransaction()) {
+                $this->conexion->rollBack();
+            }
+            // Detectar error por email duplicado
+            if ($e->getCode() === '23000') {
+                return ['success' => false, 'message' => 'This email is already in use by another coach.'];
+            }
+            return ['success' => false, 'message' => 'Unexpected database error occurred. Please try again later.'];
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $this->conexion->beginTransaction();
+
+            // Primero eliminar las relaciones con especialidades
+            $this->conexion->prepare("DELETE FROM coach_speciality WHERE coach_id = ?")->execute([$id]);
+
+            // Luego eliminar el coach
+            $stmt = $this->conexion->prepare("DELETE FROM coaches WHERE id = ?");
+            $stmt->execute([$id]);
+
+            $this->conexion->commit();
+
+            return ['success' => true, 'message' => 'Coach deleted successfully.'];
+        } catch (PDOException $e) {
+            $this->conexion->rollBack();
+            return ['success' => false, 'message' => 'Error deleting coach: ' . $e->getMessage()];
+        }
+    }
 }

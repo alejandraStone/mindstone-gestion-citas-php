@@ -16,7 +16,6 @@ $specialities = Speciality::getAll();
 
 <head>
     <meta charset="UTF-8">
-    <script src="<?= BASE_URL ?>/public/js/modules/add_class.js"></script>
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/output.css">
     <title>Add Pilates Class</title>
 </head>
@@ -24,11 +23,45 @@ $specialities = Speciality::getAll();
 <?php require_once ROOT_PATH . '/app/views/layout/layout_dashboard.php'; ?>
 
 <!-- Bloque que contiene todo el tema para agregar una clase -->
-<main class="flex-1 mt-10 bg-white min-h-screen flex flex-col items-center p-6 rounded-xl border border-brand-200">
-    <h1 class="text-2xl font-semibold mb-10 text-brand-900 font-titulo text-left">Add a Pilates Class</h1>
-    <form id="add-class-form" class="space-y-10 w-full max-w-5xl mt-6">
+<main class="flex-1 mt-10 bg-white min-h-screen flex flex-col p-6 rounded-xl border border-brand-200">
+    <h1 class="w-full max-w-7xl mx-auto text-2xl font-semibold mb-6 text-brand-900 font-titulo text-left">TimeTable of Pilates Class</h1>
+
+    <!--Contenedor principal para mostrar las clases -->
+    <div id="class-list-section" class="w-full max-w-7xl mt-6 mb-10 mx-auto">
+
+        <!-- Bloque que contiene el filtrado de una clase -->
+        <div id="class-filters" class="flex flex-col gap-6 mb-2 rounded-lg">
+            <!-- Filtro Día de la semana -->
+            <div class="flex flex-col lg:flex-row lg:items-center gap-2">
+                <label
+                    for="filter-day-list"
+                    class="font-semibold text-brand-900 whitespace-nowrap">Day:</label>
+                <span
+                    id="filter-day-list"
+                    class="inline-flex gap-3 flex-wrap w-full"
+                    aria-label="Filter by day"></span>
+            </div>
+
+            <!-- Filtro Tipo de clase -->
+            <div class="flex flex-col lg:flex-row lg:items-center gap-2">
+                <label
+                    for="filter-type-list"
+                    class="font-semibold text-brand-900 whitespace-nowrap">Type:</label>
+                <span
+                    id="filter-type-list"
+                    class="inline-flex gap-3 flex-wrap w-full"
+                    aria-label="Filter by class type"></span>
+            </div>
+        </div>
+
+        <!-- Bloque que contiene el listado tipo calendario de las clases -->
+        <div id="calendar-class-list" class="w-full max-w-7xl mt-8 mb-8 mx-auto"></div>
+    </div>
+
+    <form id="add-class-form" class="space-y-10 mt-6 w-full max-w-7xl mx-auto">
+        <h1 class="text-2xl font-semibold mb-6 text-brand-900 font-titulo text-left lg:text-left">Create a Class</h1>
         <!--Bloque principal de tipo, capacidad y coach -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <div class="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             <div>
                 <label class="block font-semibold text-brand-800 mb-2">Choose pilates type:</label>
                 <?php if (!empty($specialities)): ?>
@@ -62,46 +95,19 @@ $specialities = Speciality::getAll();
         <div id="weekly-agenda" class="mt-8">
             <h3 class="text-base font-semibold text-brand-900 mb-3">Select days and hours for the class:</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-2" id="agenda-grid">
-                <!-- Agenda injected by JS -->
+                <!-- Agenda inyectada por JS -->
             </div>
         </div>
-        <!--Bloque para el botón de guardar clase y mostrar clases -->
+        <!--Bloque para el botón de guardar clase -->
         <div class="flex justify-start gap-4">
             <button type="submit" id="submit-button"
                 class="bg-brand-600 hover:bg-brand-700 text-white font-medium text-base py-2 px-6 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed shadow-none">
                 Save Class
             </button>
-            <button type="button" id="toggle-class-list"
-                class="bg-brand-600 hover:bg-brand-700 text-white font-medium text-base py-2 px-6 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed shadow-none">
-                Show Classes
-            </button>
         </div>
         <!--Bloque para el mensaje de error/correcto -->
         <div id="form-message" class="mt-4 text-center text-sm font-semibold font-normal"></div>
     </form>
-
-    <!--Contenedor principal para mostrar las clases -->
-    <div id="class-list-section" class="w-full max-w-7xl mt-10 mx-auto hidden">
-        <h1 class="text-2xl font-semibold mb-10 text-brand-900 font-titulo text-center">Class List</h1>
-        <!-- Bloque que contiene el filtrado de una clase -->
-        <div id="class-filters"
-            class="w-full flex flex-wrap gap-4 mb-8 items-center bg-brand-50 rounded-xl px-6 py-4 shadow">
-            <!-- Filtro día de la semana -->
-            <div>
-                <span class="font-semibold text-brand-900 mr-3">Day:</span>
-                <span id="filter-day-list" class="inline-flex gap-2"></span>
-            </div>
-            <!-- Filtro tipo de clase -->
-            <div>
-                <span class="font-semibold text-brand-900 mr-3">Type:</span>
-                <span id="filter-type-list" class="grid grid-cols-2 gap-2 sm:flex sm:gap-2"></span>
-            </div>
-
-        </div>
-
-        <!-- Bloque que contiene el listado tipo calendario de las clases -->
-        <div id="calendar-class-list" class="w-full mt-8 mb-8"></div>
-    </div>
 </main>
 <!-- Popup para editar la clase -->
 <div id="edit-class-modal" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 hidden">
@@ -146,6 +152,9 @@ $specialities = Speciality::getAll();
     </div>
 </div>
 </div><!-- cierre del div del Contenedor del aside y main -->
+
+<script src="<?= BASE_URL ?>/public/js/modules/add_class.js"></script>
+
 </body>
 
 </html>

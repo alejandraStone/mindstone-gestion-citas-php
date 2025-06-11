@@ -4,13 +4,14 @@ require_once ROOT_PATH . '/app/config/database.php'; // Carga conexión PDO
 require_once ROOT_PATH . '/app/models/speciality_model.php'; // Cargar el modelo de especialidades
 
 // Obtener las especialidades desde el modelo
-$specialities = Speciality::getAll(); // Aquí obtenemos todas las especialidades
+$specialities = Speciality::getAll();
 
 // Procesamiento del formulario
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-     ini_set('display_errors', 1);
+    ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
     require_once ROOT_PATH . '/app/models/add_a_class_model.php'; // Modelo de clases
     header('Content-Type: application/json');
 
@@ -25,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         exit;
     }
 
-    // Horarios
+    // Construir lista de días y horas
     $classEntries = [];
     foreach ($days as $dayName => $dayData) {
         if (isset($dayData['enabled']) && is_array($dayData['times'])) {
@@ -43,15 +44,20 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         exit;
     }
 
-    // Guardar clases
-    $conexion = getPDO();
-    $lesson = new Lesson($conexion);
-    $result = $lesson->addLessons($pilates_type, $coach, $capacity, $classEntries);
+    // Guardar en base de datos
+    try {
+        $conexion = getPDO();
+        $lesson = new Lesson($conexion);
+        $result = $lesson->addLessons($pilates_type, $coach, $capacity, $classEntries);
 
-    echo json_encode($result);
-    exit;
-
+        echo json_encode($result);
+        exit;
+    } catch (Exception $e) {
+        echo json_encode(["success" => false, "message" => "Internal server error."]);
+        exit;
+    }
 }
 
-require ROOT_PATH . '/app/views/admin/add_a_class.php'; // Cargar vista
+// Cargar vista
+require ROOT_PATH . '/app/views/admin/add_a_class.php';
 ?>
