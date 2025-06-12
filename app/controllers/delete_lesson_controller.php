@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/config.php'; // Define ROOT_PATH y BASE_URL
-require_once ROOT_PATH . '../app/config/database.php';
-require_once ROOT_PATH . '../app/models/add_a_class_model.php';
+require_once ROOT_PATH . '/app/config/database.php';
+require_once ROOT_PATH . '/app/models/add_a_class_model.php';
 
 header('Content-Type: application/json');
 

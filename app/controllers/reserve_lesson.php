@@ -1,7 +1,10 @@
 <?php
-require_once '../config/database.php';
-require_once '../models/reservation.php'; // Un modelo para reservas
-require_once '../models/lesson.php'; // Para obtener la clase y su capacidad
+
+require_once __DIR__ . '/../config/config.php';
+require_once ROOT_PATH . '/app/config/database.php';
+require_once ROOT_PATH . '/app/models/reservation.php';// Un modelo para reservas
+require_once ROOT_PATH . '/app/models/lesson.php';// Para obtener la clase y su capacidad
+
 
 // Establece el tipo de contenido como JSON desde el inicio
 header('Content-Type: application/json');

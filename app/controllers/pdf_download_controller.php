@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../config/config.php';
+require_once ROOT_PATH . '/app/session/session_manager.php';
 require_once ROOT_PATH . '/app/config/database.php';
 require_once ROOT_PATH . '/app/models/upload_files_model.php';
-require_once realpath(__DIR__ . '/../session/session_manager.php');
 
 // 1. Verifica permisos (solo admin)
 if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {

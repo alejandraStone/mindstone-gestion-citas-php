@@ -1,5 +1,5 @@
 <?php
-require_once realpath(__DIR__ . '/../../config/config.php');
+require_once __DIR__ . '/../../../app/config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 require_once ROOT_PATH . '/app/models/bono_model.php';
 

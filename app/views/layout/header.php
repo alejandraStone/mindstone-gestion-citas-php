@@ -1,6 +1,7 @@
 <?php
-require_once realpath(__DIR__ . '/../../config/config.php');
+require_once __DIR__ . '/../../../app/config/config.php';
 require_once ROOT_PATH . '/app/session/session_manager.php';
+
 ?>
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-brand-100 text-brand-950 w-full box-border">

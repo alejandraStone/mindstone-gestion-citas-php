@@ -1,7 +1,9 @@
 <?php
 
-require_once "../models/lesson.php";
-require_once '../config/database.php';
+require_once __DIR__ . '/../config/config.php';
+require_once ROOT_PATH . '/app/config/database.php';
+require_once ROOT_PATH . '/app/models/lesson.php';
+
 
 //Muestro al admin todas las clases disponibles para reservar
 

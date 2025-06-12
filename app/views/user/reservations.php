@@ -50,10 +50,7 @@ require_once __DIR__ . '/../../../app/config/config.php';
         </table>
     </div>
     <div id="pagination-controls" class="flex items-center justify-center gap-4 mt-6"></div>
-
-
 </main>
-
 
 </div><!-- cierre del div del Contenedor del aside y main -->
 <script type="module" src="/mindStone/public/js/modules/show_user_reservations.js"></script>

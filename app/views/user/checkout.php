@@ -1,5 +1,5 @@
 <?php
-require_once realpath(__DIR__ . '/../../config/config.php');
+require_once __DIR__ . '/../../../app/config/config.php';
 require_once ROOT_PATH . '/app/controllers/bono_checkout_controller.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

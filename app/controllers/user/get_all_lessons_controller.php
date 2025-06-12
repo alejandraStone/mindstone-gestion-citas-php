@@ -1,8 +1,8 @@
 <?php 
 // Muestra todas las clases programadas reales (fechadas) al usuario vía AJAX
 require_once __DIR__ . '/../../config/config.php';
-require_once ROOT_PATH . '../app/config/database.php';
-require_once ROOT_PATH . '../app/models/add_a_class_model.php';
+require_once ROOT_PATH . '/app/config/database.php';
+require_once ROOT_PATH . '/app/models/add_a_class_model.php';
 
 header('Content-Type: application/json');
 

@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../app/config/config.php';
-require_once realpath(__DIR__ . '/../../session/session_manager.php');
+require_once ROOT_PATH . '/app/session/session_manager.php';
 
 if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
     $user = $_SESSION['user']['id'];

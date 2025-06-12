@@ -1,5 +1,5 @@
 <?php
-require_once realpath(__DIR__ . '/../../config/config.php');
+require_once __DIR__ . '/../../../app/config/config.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +10,9 @@ require_once realpath(__DIR__ . '/../../config/config.php');
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/output.css">
     <title>Upload Invoice / PDF</title>
 </head>
+
 <?php require_once ROOT_PATH . '/app/views/layout/layout_dashboard.php'; ?>
+
 <main class="flex-1 mt-6 bg-white min-h-screen flex flex-col items-center p-2 sm:p-6 rounded-xl border border-brand-200">
     <h1 class="text-lg sm:text-2xl font-semibold mb-6 sm:mb-10 text-brand-900 font-titulo w-full text-center">
         Upload Invoice / PDF

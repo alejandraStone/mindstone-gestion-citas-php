@@ -7,8 +7,9 @@
  *
  * Ubicación: /app/views/admin/add_a_class.php
  */
-require_once realpath(__DIR__ . '/../../config/config.php');
-require_once realpath(__DIR__ . '/../../models/speciality_model.php');
+require_once __DIR__ . '/../../../app/config/config.php';
+require_once ROOT_PATH . '/app/models/speciality_model.php';
+
 $specialities = Speciality::getAll();
 ?>
 <!DOCTYPE html>

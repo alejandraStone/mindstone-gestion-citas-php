@@ -1,5 +1,5 @@
 <?php
-require_once realpath(__DIR__ . '/../../config/config.php');
+require_once __DIR__ . '/../../../app/config/config.php';
 require_once ROOT_PATH . '/app/session/session_manager.php';
 ?>
 

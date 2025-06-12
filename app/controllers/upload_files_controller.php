@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../config/config.php';
+require_once ROOT_PATH . '/app/session/session_manager.php';
 require_once ROOT_PATH . '/app/config/database.php';
 require_once ROOT_PATH . '/app/models/upload_files_model.php'; // Cargar el modelo de archivos
-require_once realpath(__DIR__ . '/../session/session_manager.php');
 
 // Verificar si el usuario está autenticado y es un administrador
 

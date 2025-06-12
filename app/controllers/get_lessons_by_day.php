@@ -1,6 +1,8 @@
 <?php
-require_once '../config/database.php';
-require_once '../models/lesson.php';
+require_once __DIR__ . '/../config/config.php';
+require_once ROOT_PATH . '/app/config/database.php';
+require_once ROOT_PATH . '/app/models/lesson.php';
+
 
 
 header('Content-Type: application/json'); //para decirle al navegador que se está enviando json
