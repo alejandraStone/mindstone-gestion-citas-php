@@ -103,7 +103,6 @@ if (loginForm && !loginForm.dataset.listenerAttached) {
 }
 }
 
-
   // Mostrar forgot password modal
   if (forgotPasswordBtn)
     forgotPasswordBtn.addEventListener("click", () => {
@@ -126,18 +125,21 @@ if (loginForm && !loginForm.dataset.listenerAttached) {
         forgotPasswordModal.classList.add("hidden");
     });
   */
-  // Enviar forgot password por AJAX
-if (forgotPasswordForm) {
+
+// Enviar forgot password por AJAX
+if (forgotPasswordForm && !forgotPasswordForm.dataset.listenerAttached) {
+  forgotPasswordForm.dataset.listenerAttached = "true";//evita múltiples envíos del listene
   forgotPasswordForm.addEventListener("submit", function (e) {
     e.preventDefault();
     forgotPasswordMsg.textContent = "";
+    forgotPasswordMsg.className = "mt-4 text-center text-sm"; // reset classes
 
     const email = document.getElementById("forgot_email").value.trim();
 
-    // Validar email
+    // Validar email en JS solo si el campo está vacío o el formato es incorrecto
     if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       forgotPasswordMsg.textContent = "Please enter a valid email address.";
-      forgotPasswordMsg.className = "mt-4 text-center text-sm text-red-700";
+      forgotPasswordMsg.classList.add("text-red-700");
       return;
     }
 
@@ -149,21 +151,35 @@ if (forgotPasswordForm) {
     })
       .then((r) => r.json())
       .then((data) => {
-        if (data.success) {
-          forgotPasswordMsg.textContent =
-            "Password reset successfully. Please check your email.";
-          forgotPasswordMsg.className =
-            "mt-4 text-center text-sm text-green-700";
-        } else {
+        // Si el backend retorna un mensaje, mostrarlo siempre (sea success o error)
+        if (data && data.message) {
           forgotPasswordMsg.textContent = data.message;
-          forgotPasswordMsg.className =
-            "mt-4 text-center text-sm text-red-700";
+          if (data.success) {
+            forgotPasswordMsg.classList.remove("text-red-700");
+            forgotPasswordMsg.classList.add("text-green-700");
+          } else {
+            forgotPasswordMsg.classList.remove("text-green-700");
+            forgotPasswordMsg.classList.add("text-red-700");
+          }
+        } else {
+          // Si no hay mensaje del back, mostrar uno genérico según el resultado
+          if (data && data.success) {
+            forgotPasswordMsg.textContent = "Password reset successfully. Please check your email.";
+            forgotPasswordMsg.classList.remove("text-red-700");
+            forgotPasswordMsg.classList.add("text-green-700");
+          } else {
+            forgotPasswordMsg.textContent = "There was a problem resetting your password. Please try again.";
+            forgotPasswordMsg.classList.remove("text-green-700");
+            forgotPasswordMsg.classList.add("text-red-700");
+          }
         }
       })
       .catch(() => {
         forgotPasswordMsg.textContent = "Unexpected error. Please try again.";
-        forgotPasswordMsg.className = "mt-4 text-center text-sm text-red-700";
+        forgotPasswordMsg.classList.remove("text-green-700");
+        forgotPasswordMsg.classList.add("text-red-700");
       });
   });
 }
+
 });

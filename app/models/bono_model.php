@@ -1,4 +1,7 @@
 <?php
+/*
+Archivo que define la clase Bonus para manejar operaciones relacionadas con los bonos en la base de datos.
+*/
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 
@@ -59,7 +62,7 @@ class Bonus
         }
     }
 
-    // Crear un bono nuevo
+    // Crear un bono nuevo (en un futuro utilizaré esta función para crear bonos desde el panel de administración)
     public function createBonus($name, $description, $price, $credits)
     {
         try {

@@ -15,7 +15,7 @@ if (!isAuthenticated()) {
     echo json_encode(['success' => false, 'message' => 'User not authenticated.']);
     exit;
 }
-
+// Sanitización de datos
 $bonusId = isset($_POST['bonus_id']) ? (int)$_POST['bonus_id'] : 0;
 $price = isset($_POST['price']) ? filter_var($_POST['price'], FILTER_VALIDATE_FLOAT) : false;
 $stripeSessionId = isset($_POST['stripe_session_id']) ? trim($_POST['stripe_session_id']) : '';
@@ -28,30 +28,30 @@ if ($bonusId <= 0 || $price === false || $price <= 0 || empty($stripeSessionId))
 try {
     $conexion = getPDO();
     $bonusModel = new Bonus($conexion);
-
+// Verificar si el bono existe y es válido
     $bonus = $bonusModel->getBonusById($bonusId);
 
     if (!$bonus) {
         echo json_encode(['success' => false, 'message' => 'Bonus not found.']);
         exit;
     }
-
+// Verificar si el precio coincide con el del bono
     if ((float)$bonus['price'] !== $price) {
         echo json_encode(['success' => false, 'message' => 'Price mismatch.']);
         exit;
     }
-
+// Verificar si ya existe una compra con el mismo ID de sesión de Stripe
     if ($bonusModel->purchaseExistsBySessionId($stripeSessionId)) {
         echo json_encode(['success' => false, 'message' => 'Duplicate purchase detected.']);
         exit;
     }
-
+// Crear la compra
     $validUntil = (new DateTime())->modify('+4 weeks')->format('Y-m-d H:i:s');
     $userId = getUser()['id'];
     $credits = (int)$bonus['credits'];
 
     $result = $bonusModel->createPurchase($userId, $bonusId, $price, $validUntil, $stripeSessionId, $credits);
-
+// Verificar si la compra se creó correctamente y asignar los créditos
     if ($result['success']) {
         $assign = $bonusModel->assignCredits($userId, $result['purchase_id'], $credits, $validUntil);
 

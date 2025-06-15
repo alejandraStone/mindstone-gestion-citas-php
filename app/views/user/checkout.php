@@ -49,42 +49,44 @@ if (!$bonus) {
                         </div>
                     </div>
 
-                    <div class="flex-1 space-y-4">
+                    <div class="flex flex-col gap-4 md:gap-6 w-full">
+                        <!-- Duración del bono -->
                         <div>
-                            <h3 class="font-semibold text-brand-700">📅 Duración</h3>
-                            <p class="text-sm text-brand-600">Este bono es válido por 4 semanas desde la fecha de compra.</p>
+                            <h3 class="font-semibold text-brand-700 text-base md:text-lg">📅 Duration</h3>
+                            <p class="text-sm md:text-base text-brand-600">This pass is valid for 4 weeks from the purchase date.</p>
                         </div>
-
+                        <!-- Renovación -->
                         <div>
-                            <h3 class="font-semibold text-brand-700">🔁 Renovación</h3>
-                            <p class="text-sm text-brand-600">No se renueva automáticamente. Deberás comprar un nuevo bono cuando expire.</p>
+                            <h3 class="font-semibold text-brand-700 text-base md:text-lg">🔁 Renewal</h3>
+                            <p class="text-sm md:text-base text-brand-600">It does not renew automatically. You will need to purchase a new pass when it expires.</p>
                         </div>
-
+                        <!-- Condiciones/reglas -->
                         <div>
-                            <h3 class="font-semibold text-brand-700">📌 Reglas de uso</h3>
-                            <ul class="list-disc list-inside text-sm text-brand-600 space-y-1">
-                                <li>1 clase = 1 crédito</li>
-                                <li>El bono no es acumulable de mes a mes</li>
-                                <li>No se aceptan devoluciones una vez comenzado el periodo</li>
-                                <li>Solo puedes usarlo tú (no es transferible)</li>
+                            <h3 class="font-semibold text-brand-700 text-base md:text-lg">📌 Usage Rules</h3>
+                            <ul class="list-disc list-inside text-sm md:text-base text-brand-600 space-y-1 pl-4">
+                                <li>1 class = 1 credit</li>
+                                <li>This pass is not cumulative from month to month</li>
+                                <li>No refunds once the validity period has started</li>
+                                <li>Personal use only (non-transferable)</li>
                             </ul>
                         </div>
-
+                        <!-- Politica de compra -->
                         <div>
-                            <h3 class="font-semibold text-brand-700">🛡️ Política de compra</h3>
-                            <p class="text-sm text-brand-600">
-                                Al confirmar tu compra, aceptas nuestras condiciones de uso. Podrás ver tu bono activo en tu panel de usuario.
+                            <h3 class="font-semibold text-brand-700 text-base md:text-lg">🛡️ Purchase Policy</h3>
+                            <p class="text-sm md:text-base text-brand-600">
+                                By confirming your purchase, you accept our terms of use. You can view your active pass in your user dashboard.
                             </p>
                         </div>
                     </div>
+
                 </div>
             </div>
 
             <!-- Confirmación / botón pago -->
-            <div class="bg-white p-6 rounded-2xl shadow-lg h-fit">
-                <h2 class="text-xl font-bold text-brand-800 mb-4">Ready to purchase?</h2>
-                <p class="text-sm text-brand-600 mb-6">
-                    Presiona el botón para completar tu compra a través de Stripe de forma segura.
+            <div class="bg-white p-6 rounded-2xl shadow-lg h-fit w-full max-w-sm mx-auto">
+                <h2 class="text-xl md:text-2xl font-bold text-brand-800 mb-4 text-center">Ready to purchase?</h2>
+                <p class="text-sm md:text-base text-brand-600 mb-6 text-center">
+                    Click the button to complete your purchase safely through Stripe.
                 </p>
 
                 <form id="checkout-form" action="<?= BASE_URL ?>app/controllers/create_checkout_session_controller.php" method="POST">
@@ -96,8 +98,8 @@ if (!$bonus) {
                     </button>
                 </form>
 
-                <p class="mt-6 text-xs text-gray-400 text-center">
-                    Transacción segura mediante Stripe. No almacenamos tus datos bancarios.
+                <p class="mt-6 text-xs md:text-sm text-gray-400 text-center">
+                    Secure transaction via Stripe. We do not store your payment information.
                 </p>
             </div>
 
@@ -105,6 +107,7 @@ if (!$bonus) {
     </main>
 
     <script>
+        //funcion para manejar el envío del formulario de checkout
         const form = document.getElementById('checkout-form');
         form.addEventListener('submit', async function(e) {
             e.preventDefault(); // Evita envío clásico
@@ -119,7 +122,7 @@ if (!$bonus) {
             const result = await response.json();
 
             if (result.url) {
-                window.location.href = result.url; // 🔁 Redirige al checkout de Stripe
+                window.location.href = result.url; // Redirige al checkout de Stripe
             } else {
                 alert(result.error || "Something went wrong");
             }

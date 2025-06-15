@@ -1,3 +1,7 @@
+/*
+Archivo que contiene el código para mostrar las reservas del usuario, con paginación y cancelación de reservas.
+*/
+
 // Importo la función loadUserCredits para mostrar los créditos y actualizar después de cancelar una reserva
 import { loadUserCredits } from '/mindStone/public/js/modules/show_user_credits.js';
 
@@ -56,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const statusText = res.is_cancelled ? 'Cancelled' : 'Active';
         const statusClasses = res.is_cancelled ? 'text-red-600 font-bold' : 'text-green-600 font-semibold';
-
+//se crea una fila por cada reserva
         return `
           <tr class="hover:bg-brand-100 transition-colors duration-200">
             <td class="px-4 py-3 font-semibold">${res.pilates_type}</td>
@@ -82,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
       paginationContainer.innerHTML = '';
     }
   }
-
+// Función para actualizar la paginación
   function updatePagination(totalItems, currentPage) {
     const totalPages = Math.ceil(totalItems / limit);
     paginationContainer.innerHTML = '';
@@ -117,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     paginationContainer.appendChild(pageInfo);
     paginationContainer.appendChild(nextBtn);
   }
-
   // Toast y cancelación de reserva
   async function showToast(message, options = {}) {
     const overlay = document.createElement("div");
@@ -184,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 3000);
     }
   }
-
+// Evento para cancelar una reserva
   document.addEventListener('click', async (e) => {
     if (e.target.classList.contains('cancel-reservation-btn')) {
       const reservationId = e.target.dataset.id;
@@ -212,7 +215,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
-
   // Inicial
   loadReservations(currentPage);
 });

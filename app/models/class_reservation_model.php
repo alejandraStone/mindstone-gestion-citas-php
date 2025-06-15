@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que define la clase ClassReservation para manejar reservas de clases en la base de datos.
+
+*/
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 
@@ -67,11 +71,13 @@ class ClassReservation
             $stmtCheckCancelled->execute(['user_id' => $userId, 'class_instance_id' => $classInstanceId]);
             $cancelledReservation = $stmtCheckCancelled->fetch(PDO::FETCH_ASSOC);
 
-            // 5. Buscar crédito activo válido (con lock FOR UPDATE)
+            // 5. Buscar bono activo válido por orden de caducidad
+            //--selecciona el bono mas antiguo por fecha de expiración y por id (más robusto)
             $stmtCredit = $this->conexion->prepare(
                 "SELECT id, total_credits, used_credits FROM credits 
              WHERE user_id = :user_id AND expires_at >= NOW() AND (total_credits - IFNULL(used_credits,0)) > 0
-             ORDER BY expires_at ASC LIMIT 1
+             ORDER BY expires_at ASC, id ASC 
+             LIMIT 1 
              FOR UPDATE"
             );
             $stmtCredit->execute(['user_id' => $userId]);
@@ -180,7 +186,6 @@ class ClassReservation
             }
 
             // 5. NO tocar la capacidad fija en class_instances
-
             $this->conexion->commit();
 
             return [
@@ -256,72 +261,240 @@ class ClassReservation
             ];
         }
     }
+    // Método para calcular el porcentaje de crecimiento entre dos valores
+    public function calculateGrowthPercentage($current, $previous)
+    {
+        if ($previous > 0) {
+            return round((($current - $previous) / $previous) * 100, 2);
+        } elseif ($current > 0) {
+            return 100; // todo es crecimiento si antes era 0
+        } else {
+            return 0; // Nada de crecimiento ni antes ni ahora
+        }
+    }
     //obtener el total de reservas hechas en el mes
-    public function countReservationsInMonth(int $year, int $month): array
+    public function countReservationsInMonthWithGrowth(int $year, int $month): array
     {
         try {
+            // Fechas del mes actual
             $startDate = new DateTime("$year-$month-01");
             $endDate = clone $startDate;
             $endDate->modify('last day of this month');
 
+            // Fechas del mes anterior
+            $prevMonthDate = (clone $startDate)->modify('-1 month');
+            $prevYear = (int)$prevMonthDate->format('Y');
+            $prevMonth = (int)$prevMonthDate->format('m');
+            $prevStartDate = new DateTime("$prevYear-$prevMonth-01");
+            $prevEndDate = clone $prevStartDate;
+            $prevEndDate->modify('last day of this month');
+
+            // Total reservas mes actual
             $sql = "SELECT COUNT(*) FROM class_reservations r
                 JOIN class_instances ci ON r.class_instance_id = ci.id
                 WHERE ci.instance_date BETWEEN :start_date AND :end_date
                   AND r.is_cancelled = FALSE";
-
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute([
                 ':start_date' => $startDate->format('Y-m-d'),
                 ':end_date' => $endDate->format('Y-m-d')
             ]);
-            $count = (int) $stmt->fetchColumn();
+            $currentCount = (int) $stmt->fetchColumn();
 
-            return ['success' => true, 'count' => $count];
+            // Total reservas mes anterior
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->execute([
+                ':start_date' => $prevStartDate->format('Y-m-d'),
+                ':end_date' => $prevEndDate->format('Y-m-d')
+            ]);
+            $previousCount = (int) $stmt->fetchColumn();
+
+            // Calcula el porcentaje de crecimiento/decremento llama a la función
+            $growth = $this->calculateGrowthPercentage($currentCount, $previousCount);
+
+            return [
+                'success' => true,
+                'count' => $currentCount,
+                'growth_percentage' => $growth
+            ];
         } catch (PDOException $e) {
-            return ['success' => false, 'message' => 'Database error: ' . $e->getMessage()];
+            return [
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ];
         }
     }
-    // Método para obtener el crecimiento mensual de reservas
-    function getMonthlyReservationGrowth(PDO $pdo): array {
-    // Obtenemos reservas para este mes y el mes anterior
-    $sql = "SELECT 
-                YEAR(reserved_at) AS year, 
-                MONTH(reserved_at) AS month, 
-                COUNT(*) AS total_reservations
-            FROM class_reservations
-            WHERE is_cancelled = FALSE
-              AND reserved_at >= DATE_SUB(CURDATE(), INTERVAL 2 MONTH)
-            GROUP BY year, month
-            ORDER BY year DESC, month DESC
-            LIMIT 2";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // metodo para obtener la clase más popular del mes actual
+    public function getMostPopularClassThisMonth()
+    {
+        try {
+            $now = new DateTime();
+            $year = (int)$now->format('Y');
+            $month = (int)$now->format('m');
 
-    if (count($results) < 2) {
-        return [
-            'success' => true,
-            'growth_percentage' => 0,
-            'message' => 'Not enough data to calculate growth.'
-        ];
+            $stmt = $this->conexion->prepare("
+            SELECT ps.name, COUNT(*) as total_reservas
+            FROM class_reservations r
+            JOIN class_instances ci ON r.class_instance_id = ci.id
+            JOIN pilates_lessons pl ON ci.lesson_id = pl.id
+            JOIN pilates_specialities ps ON pl.pilates_type = ps.id
+            WHERE r.is_cancelled = FALSE
+              AND YEAR(r.reserved_at) = :year
+              AND MONTH(r.reserved_at) = :month
+            GROUP BY ps.id
+            ORDER BY total_reservas DESC
+            LIMIT 1
+        ");
+            $stmt->execute([
+                'year' => $year,
+                'month' => $month
+            ]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($row) {
+                return [
+                    'success' => true,
+                    'class_name' => $row['name'],
+                    'reservations' => $row['total_reservas']
+                ];
+            } else {
+                return [
+                    'success' => true,
+                    'class_name' => null,
+                    'reservations' => 0
+                ];
+            }
+        } catch (PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Error fetching most popular class: ' . $e->getMessage()
+            ];
+        }
     }
+    // metodo para obtener la clase MENOS popular del mes actual
+    public function getLeastPopularClassThisMonth()
+    {
+        try {
+            $now = new DateTime();
+            $year = (int)$now->format('Y');
+            $month = (int)$now->format('m');
 
-    // Asumimos que la primera fila es mes actual, segunda mes anterior
-    $currentMonth = $results[0]['total_reservations'];
-    $previousMonth = $results[1]['total_reservations'];
+            $stmt = $this->conexion->prepare("
+            SELECT ps.name, COUNT(*) as total_reservas
+            FROM class_reservations r
+            JOIN class_instances ci ON r.class_instance_id = ci.id
+            JOIN pilates_lessons pl ON ci.lesson_id = pl.id
+            JOIN pilates_specialities ps ON pl.pilates_type = ps.id
+            WHERE r.is_cancelled = FALSE
+              AND YEAR(r.reserved_at) = :year
+              AND MONTH(r.reserved_at) = :month
+            GROUP BY ps.id
+            ORDER BY total_reservas ASC
+            LIMIT 1
+        ");
+            $stmt->execute([
+                'year' => $year,
+                'month' => $month
+            ]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($previousMonth == 0) {
-        // Evitamos división por cero
-        $growth = $currentMonth > 0 ? 100 : 0;
-    } else {
-        $growth = (($currentMonth - $previousMonth) / $previousMonth) * 100;
+            if ($row) {
+                return [
+                    'success' => true,
+                    'class_name' => $row['name'],
+                    'reservations' => $row['total_reservas']
+                ];
+            } else {
+                return [
+                    'success' => true,
+                    'class_name' => null,
+                    'reservations' => 0
+                ];
+            }
+        } catch (PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Error fetching least popular class: ' . $e->getMessage()
+            ];
+        }
     }
+    // Método para obtener la hora pico de reservas del mes actual con % crecimiento/decremento
+    public function getPeakHourGrowth(int $year, int $month): array
+    {
+        try {
+            // Fechas del mes actual
+            $startDate = new DateTime("$year-$month-01");
+            $endDate = clone $startDate;
+            $endDate->modify('last day of this month');
 
-    return [
-        'success' => true,
-        'growth_percentage' => round($growth, 2),
-        'message' => 'Monthly growth calculated.'
-    ];
-}
+            // 1. Hora con más reservas este mes
+            $sql = "SELECT ci.hour AS hour, COUNT(*) AS total
+                FROM class_reservations r
+                JOIN class_instances ci ON r.class_instance_id = ci.id
+                WHERE ci.instance_date BETWEEN :start_date AND :end_date
+                  AND r.is_cancelled = FALSE
+                GROUP BY ci.hour
+                ORDER BY total DESC
+                LIMIT 1";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->execute([
+                ':start_date' => $startDate->format('Y-m-d'),
+                ':end_date' => $endDate->format('Y-m-d')
+            ]);
+            $peak = $stmt->fetch(PDO::FETCH_ASSOC);
 
+            if (!$peak) {
+                return [
+                    'success' => true,
+                    'peak_hour' => null,
+                    'reservations_this_month' => 0,
+                    'reservations_last_month' => 0,
+                    'growth_percentage' => null
+                ];
+            }
+
+            $peakHour = (int)$peak['hour'];
+            $reservationsThisMonth = (int)$peak['total'];
+
+            // Fechas del mes anterior
+            $prevMonthDate = (clone $startDate)->modify('-1 month');
+            $prevYear = (int)$prevMonthDate->format('Y');
+            $prevMonth = (int)$prevMonthDate->format('m');
+            $prevStartDate = new DateTime("$prevYear-$prevMonth-01");
+            $prevEndDate = clone $prevStartDate;
+            $prevEndDate->modify('last day of this month');
+
+            // 2. Reservas esa hora el mes anterior
+            $sqlPrev = "SELECT COUNT(*) AS total
+                    FROM class_reservations r
+                    JOIN class_instances ci ON r.class_instance_id = ci.id
+                    WHERE ci.instance_date BETWEEN :start_date AND :end_date
+                      AND r.is_cancelled = FALSE
+                      AND ci.hour = :hour";
+            $stmt2 = $this->conexion->prepare($sqlPrev);
+            $stmt2->execute([
+                ':start_date' => $prevStartDate->format('Y-m-d'),
+                ':end_date' => $prevEndDate->format('Y-m-d'),
+                ':hour' => $peakHour
+            ]);
+            $prev = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $reservationsLastMonth = $prev ? (int)$prev['total'] : 0;
+
+            // 3. Calcular crecimiento
+            $growth = $this->calculateGrowthPercentage($reservationsThisMonth, $reservationsLastMonth);
+
+            return [
+                'success' => true,
+                'peak_hour' => $peakHour,
+                'reservations_this_month' => $reservationsThisMonth,
+                'reservations_last_month' => $reservationsLastMonth,
+                'growth_percentage' => $growth
+            ];
+        } catch (PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ];
+        }
+    }
 }

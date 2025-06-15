@@ -1,3 +1,7 @@
+/*
+Archivo que contiene el código para crear, editar y eliminar usuarios en el panel de administración.
+*/
+// "/mindStone/public/js/modules/validations.js"; // Importa las validaciones
 import {
   isValidName,
   isValidEmail,
@@ -7,9 +11,10 @@ import {
 
 document.addEventListener("DOMContentLoaded", () => {
   // ============================
-  // UTILS
+  // UTILIDADES
   // ============================
 
+  //muestra mensaje de error o éxito en el formulari
   const showMessage = (elementId, message, type = "error") => {
     const el = document.getElementById(elementId);
     el.textContent = message;
@@ -17,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "text-center mt-4 text-sm font-semibold " +
       (type === "success" ? "text-green-700" : "text-red-700");
   };
-
+// Utilidad para hacer peticiones POST con JSON
   const jsonPost = async (url, data) => {
     const res = await fetch(url, {
       method: "POST",
@@ -31,12 +36,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // CREATE USER
   // ============================
 
-  const initCreateUserForm = (
-    formId = "add-user-form",
-    msgId = "form-message"
-  ) => {
+  // Inicializa el formulario de creación de usuario y maneja la validación y envío de datos
+  const initCreateUserForm = (formId = "add-user-form", msgId = "form-message") => {
     const form = document.getElementById(formId);
     if (!form) return;
+
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -45,13 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
 
-      if (
-        !data.name ||
-        !data.lastName ||
-        !data.email ||
-        !data.phone ||
-        !data.password
-      ) {
+      if (!data.name || !data.lastName || !data.email || !data.phone || !data.password) {
         showMessage(msgId, "All fields are required.");
         return;
       }
@@ -92,8 +90,10 @@ document.addEventListener("DOMContentLoaded", () => {
           result.message || "User created.",
           result.success ? "success" : "error"
         );
-        if (result.success) form.reset();
-        location.reload(); // recarga todo y la tabla se ve actualizada
+        if (result.success) {
+          form.reset();
+          location.reload(); // Solo recarga si éxito
+        }
       } catch {
         showMessage(msgId, "Connection error.");
       }
@@ -126,14 +126,43 @@ document.addEventListener("DOMContentLoaded", () => {
     editForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      const name = document.getElementById("edit-user-name").value.trim();
+      const lastName = document.getElementById("edit-user-lastname").value.trim();
+      const email = document.getElementById("edit-user-email").value.trim();
+      const phone = document.getElementById("edit-user-phone").value.trim();
+      const role = document.getElementById("edit-user-role").value;
+
+      // Validación
+      if (!name || !lastName || !email || !phone) {
+        showMessage("edit-user-form-message", "All fields are required.", "error");
+        return;
+      }
+      if (!isValidName(name)) {
+        showMessage("edit-user-form-message", "First name must contain only letters and spaces.", "error");
+        return;
+      }
+      if (!isValidName(lastName)) {
+        showMessage("edit-user-form-message", "Last name must contain only letters and spaces.", "error");
+        return;
+      }
+      if (!isValidEmail(email)) {
+        showMessage("edit-user-form-message", "Invalid email format.", "error");
+        return;
+      }
+      if (!isValidInternationalPhone(phone)) {
+        showMessage("edit-user-form-message", "Phone number must start with '+' followed by 6 to 15 digits.", "error");
+        return;
+      }
+
+      // Si todo está OK, envía los datos
       const data = {
         action: "update",
         id: document.getElementById("edit-user-id").value,
-        name: document.getElementById("edit-user-name").value,
-        lastName: document.getElementById("edit-user-lastname").value,
-        email: document.getElementById("edit-user-email").value,
-        phone: document.getElementById("edit-user-phone").value,
-        role: document.getElementById("edit-user-role").value,
+        name,
+        lastName,
+        email,
+        phone,
+        role,
       };
 
       try {
@@ -156,10 +185,10 @@ document.addEventListener("DOMContentLoaded", () => {
           );
         }
       } catch {
-        showMessage("edit-user-form-message", "Connection error.");
+        showMessage("edit-user-form-message", "Connection error.", "error");
       }
     });
-  }
+}
 
   // ============================
   // DELETE USER
@@ -167,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".btn-delete-user").forEach((btn) =>
     btn.addEventListener("click", async () => {
-      if (!confirm("Are you sure you want to delete this user?")) return;
+      if (!confirm("Are you sure you want to delete this user?")) return;//alert de confirmación
 
       try {
         const result = await jsonPost(
@@ -177,7 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
             id: btn.dataset.id,
           }
         );
-
         if (result.success) {
           alert("User deleted successfully.");
           location.reload();
@@ -191,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   // ============================
-  // TOGGLE CREATE USER FORM
+  // TOGGLE CREATE USER FORM PARA MOSTRAR/OCULTAR EL NOMBRE DEL BOTON
   // ============================
 
   const createUserBtn = document.getElementById("toggle-add-user");

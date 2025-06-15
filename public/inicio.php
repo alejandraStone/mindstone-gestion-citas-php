@@ -4,7 +4,7 @@ require_once ROOT_PATH . '/app/session/session_manager.php';
 
 
 if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
-    $user = $_SESSION['user']['id'];
+  $user = $_SESSION['user']['id'];
 }
 ?>
 
@@ -20,6 +20,17 @@ if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
   <!-- AOS libreria para animaciones con JS -->
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
   <title>Home</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8RRW27ZD70"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-8RRW27ZD70');
+    </script>
+
 </head>
 
 <body class="font-normal pt-20 box-border overflow-x-hidden bg-brand-50">
@@ -35,17 +46,17 @@ if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
         <h1 id="hero-title" class="titulo-grande text-white mb-6 opacity-0 translate-y-12 transition-all duration-1000">
           Transform Your Body <br class="hidden sm:block"> Elevate Your Mind
         </h1>
-          <?php $user = getUser(); ?>
+        <?php $user = getUser(); ?>
         <?php if ($user && $user['role'] === 'user'): ?>
-        <a href="<?= BASE_URL ?>app/views/user/timetable.php" class="hero-btn opacity-0 translate-y-12 transition-all duration-700 inline-block px-6 py-2 border border-white text-white font-titulo sm:text-lg tracking-wide hover:bg-white hover:text-brand-800">
-          BOOK NOW
-        </a>
+          <a href="<?= BASE_URL ?>app/views/user/timetable.php" class="hero-btn opacity-0 translate-y-12 transition-all duration-700 inline-block px-6 py-2 border border-white text-white font-titulo sm:text-lg tracking-wide hover:bg-white hover:text-brand-800">
+            BOOK NOW
+          </a>
         <?php else: ?>
-              <button onclick="document.getElementById('loginModal')?.classList.remove('hidden')"
-                class="hero-btn opacity-0 translate-y-12 transition-all duration-700 inline-block px-6 py-2 border border-white text-white font-titulo sm:text-lg tracking-wide hover:bg-white hover:text-brand-800">
-                BOOK Now
-              </button>
-            <?php endif; ?>
+          <button onclick="document.getElementById('loginModal')?.classList.remove('hidden')"
+            class="hero-btn opacity-0 translate-y-12 transition-all duration-700 inline-block px-6 py-2 border border-white text-white font-titulo sm:text-lg tracking-wide hover:bg-white hover:text-brand-800">
+            BOOK Now
+          </button>
+        <?php endif; ?>
       </div>
     </div>
   </section>
@@ -428,7 +439,6 @@ if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
               type="text"
               id="name"
               name="name"
-              required
               placeholder="Your name"
               class="w-full rounded-full px-4 py-2 bg-white/90 text-brand-950 placeholder-brand-200 focus:outline-brand-500 transition-all" />
             <span class="text-red-600 text-sm mt-1 hidden" id="name-error">Please enter a valid name (letters and spaces only).</span>
@@ -439,9 +449,8 @@ if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
             <label for="email" class="text-brand-50 font-normal text-lg mb-1">Email <span class="text-brand-100">*</span></label>
             <input
               type="email"
-              id="email"
+              id="email_form_contact"
               name="email"
-              required
               placeholder="your@email.com"
               class="w-full rounded-full px-4 py-2 bg-white/90 text-brand-950 placeholder-brand-200 focus:outline-brand-500 transition-all" />
             <span class="text-red-600 text-sm mt-1 hidden" id="email-error">Please enter a valid email address.</span>
@@ -454,10 +463,20 @@ if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
               type="tel"
               id="phone"
               name="phone"
-              required
               placeholder="Your phone"
               class="w-full rounded-full px-4 py-2 bg-white/90 text-brand-950 placeholder-brand-200 focus:outline-brand-500 transition-all" />
             <span class="text-red-600 text-sm mt-1 hidden" id="phone-error">Please enter a valid phone number.</span>
+          </div>
+          <!-- Consulta/Mensaje -->
+          <div class="flex flex-col gap-1 w-full">
+            <label for="message" class="text-brand-50 font-normal text-lg mb-1">Message <span class="text-brand-100">*</span></label>
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Write your query or message here"
+              rows="4"
+              class="w-full rounded-lg px-4 py-2 bg-white/90 text-brand-950 placeholder-brand-200 focus:outline-brand-500 transition-all"></textarea>
+            <span class="text-red-600 text-sm mt-1 hidden" id="message-error">Please enter your message.</span>
           </div>
 
           <!-- Botón -->
@@ -478,7 +497,7 @@ if (isset($_SESSION['user']) &&  $_SESSION['user']['role'] == 'user') {
 
   <!-- Scripts JS, JQuery y AOS -->
   <script src="/mindStone/app/lib/jquery-3.7.1.js"></script>
-  <script src="/mindStone/public/js/inicio.js"></script>
+  <script type="module" src="/mindStone/public/js/inicio.js"></script>
   <script src="/mindStone/public/js/login.js"></script>
   <!-- Scripts JS AOS animaciones -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>

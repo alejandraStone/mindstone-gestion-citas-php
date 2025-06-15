@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que maneja la conexión a la base de datos usando PDO.
+Este archivo define la función getPDO() que retorna una instancia de PDO configurada para conectarse a la base de datos.
+*/
 require_once __DIR__ . '/config.php'; // Carga BASE_URL y ROOT_PATH
 
 function getPDO()

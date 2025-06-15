@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que maneja la reserva de una clase de pilates.
+Este archivo recibe una solicitud POST con el ID de la clase y el usuario logueado
+*/
 
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';

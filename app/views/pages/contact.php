@@ -36,7 +36,6 @@ require_once __DIR__ . '/../../../app/config/config.php';
                         type="text"
                         id="name"
                         name="name"
-                        required
                         placeholder="Your name"
                         class="w-full bg-transparent border-b border-white text-white placeholder-white focus:outline-none focus:border-white transition-all py-2" />
                     <span class="text-red-500 text-sm mt-1 hidden" id="name-error">Please enter a valid name.</span>
@@ -44,9 +43,8 @@ require_once __DIR__ . '/../../../app/config/config.php';
                     <!-- Email -->
                     <input
                         type="email"
-                        id="email"
+                        id="email_form_contact"
                         name="email"
-                        required
                         placeholder="your@email.com"
                         class="w-full bg-transparent border-b border-white text-white placeholder-white focus:outline-none focus:border-white transition-all py-2" />
                     <span class="text-red-500 text-sm mt-1 hidden" id="email-error">Please enter a valid email.</span>
@@ -56,10 +54,17 @@ require_once __DIR__ . '/../../../app/config/config.php';
                         type="tel"
                         id="phone"
                         name="phone"
-                        required
                         placeholder="Your phone"
                         class="w-full bg-transparent border-b border-white text-white placeholder-white focus:outline-none focus:border-white transition-all py-2" />
                     <span class="text-red-500 text-sm mt-1 hidden" id="phone-error">Please enter a valid phone number.</span>
+                    <!-- Consulta/Mensaje -->
+                    <textarea
+                        id="message"
+                        name="message"
+                        placeholder="Write your query or message here"
+                        rows="4"
+                        class="w-full bg-transparent border-b border-white text-white placeholder-white focus:outline-none focus:border-white transition-all py-2"></textarea>
+                    <span class="text-red-500 text-sm mt-1 hidden" id="message-error">Please enter your message.</span>
 
                     <!-- Botón cuadrado -->
                     <button
@@ -113,7 +118,7 @@ require_once __DIR__ . '/../../../app/config/config.php';
                 <div class="w-full md:w-1/2 lg:w-1/4 h-32 rounded-2xl shadow-md bg-white border border-brand-300 hover:bg-verdeOlivaClaro hover:text-white transition-all duration-300 flex items-center gap-4 justify-center p-4" data-aos="zoom-in">
                     <div class="p-2 mb-2 rounded-full border border-brand-300">
                         <a href="mailto:info@example.com" target="_blank" rel="noopener" aria-label="email">
-                            <svg class="w-6 h-6 fill-brand-400 stroke-white xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5">
+                            <svg class="w-6 h-6 fill-brand-400 stroke-white xmlns=" http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                             </svg>
                         </a>
@@ -167,7 +172,7 @@ require_once __DIR__ . '/../../../app/config/config.php';
         });
     </script>
     <script src="/mindStone/app/lib/jquery-3.7.1.js"></script>
-    <script src="/mindStone/public/js/calendario.js"></script>
+    <script type="module" src="/mindStone/public/js/inicio.js"></script>
 </body>
 
 </html>

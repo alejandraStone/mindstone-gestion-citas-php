@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que define la clase PDFModel para manejar operaciones relacionadas con archivos PDF en la base de datos.
+Esta clase incluye métodos para guardar, obtener todos los PDFs y consultar un PDF por ID.
+*/
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 class PDFModel

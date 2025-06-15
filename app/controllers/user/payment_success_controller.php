@@ -1,5 +1,8 @@
 <?php
-
+/*
+Archivo que maneja el éxito del pago de un bono de créditos.
+Este archivo recibe el session_id de Stripe, valida la sesión, crea la compra y asigna los créditos al usuario.
+*/
 require_once __DIR__ . '/../../config/config.php';
 require_once ROOT_PATH . '/app/session/session_manager.php';
 require_once ROOT_PATH . '/app/config/database.php';

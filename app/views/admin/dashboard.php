@@ -78,11 +78,10 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
             </div>
             <div class="flex flex-col justify-center">
                 <span class="titulo-card-dashboard">Most popular class</span>
-                <span class="text-4xl font-bold text-brand-700 leading-none mb-1">20</span>
-                <span class="flex items-center text-green-500 font-medium text-sm">+8% this month</span>
+                <span class="most-popular-class text-lg font-bold"></span> <!-- JS INYECTA DATO -->
             </div>
         </div>
-        <!--CardClasses with low occupancy-->
+        <!--CardClasses with low occupancy MENOS POPULAR-->
         <div class="cards-dashboard">
             <!-- Heroicon: ExclamationTriangle -->
             <div class="icono-dashboard">
@@ -100,9 +99,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
                 </svg>
             </div>
             <div class="flex flex-col justify-center">
-                <span class="titulo-card-dashboard">Classes with low occupancy</span>
-                <span class="text-4xl font-bold text-brand-700 leading-none mb-1">20</span>
-                <span class="flex items-center text-green-500 font-medium text-sm">+8% this month</span>
+                <span class="titulo-card-dashboard">Least popular class</span>
+                <span class="least-popular-class text-lg font-bold"></span> <!-- JS INYECTA DATO -->
             </div>
         </div>
         <!--Card peek hours-->
@@ -125,11 +123,11 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
             </div>
             <div class="flex flex-col justify-center">
                 <span class="titulo-card-dashboard">Peak hours</span>
-                <span class="text-4xl font-bold text-brand-700 leading-none mb-1">20</span>
-                <span class="flex items-center text-green-500 font-medium text-sm">+8% this month</span>
+                <span class="peak-hour-booking text-4xl font-bold text-brand-700 leading-none mb-1"></span>
+                <span class="peak-hour-growth flex items-center font-medium text-sm"></span>
             </div>
         </div>
-        <!--Card users-->
+        <!--Card num de usuarios y crecimiento-->
         <div class="cards-dashboard">
             <!-- Heroicon: Users -->
             <div class="icono-dashboard">
@@ -147,15 +145,15 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
                 </svg>
             </div>
             <div class="flex flex-col justify-center">
-                <span class="titulo-card-dashboard">Users</span>
-                <span class="text-4xl font-bold text-brand-700 leading-none mb-1">20</span>
-                <span class="flex items-center text-green-500 font-medium text-sm">+8% this month</span>
+                <span class="titulo-card-dashboard">Registered users</span>
+                <span class="registered-users text-4xl font-bold text-brand-700 leading-none mb-1"></span>
+                <span class="users-growth flex items-center font-medium text-sm"></span>
             </div>
         </div>
-        <!--Card views-->
+        <!-- Card visitas a la web -->
         <div class="cards-dashboard">
-            <!-- Heroicon: ChartBar -->
             <div class="icono-dashboard">
+                <!-- Heroicon: ChartBar -->
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -171,8 +169,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
             </div>
             <div class="flex flex-col justify-center">
                 <span class="titulo-card-dashboard">Views to the website</span>
-                <span class="text-4xl font-bold text-brand-700 leading-none mb-1">20</span>
-                <span class="flex items-center text-green-500 font-medium text-sm">+8% this month</span>
+                <span class="website-views text-4xl font-bold text-brand-700 leading-none mb-1"></span>
+                <span class="website-views-growth flex items-center font-medium text-sm"></span>
             </div>
         </div>
     </div>

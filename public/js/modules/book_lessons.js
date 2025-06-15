@@ -1,5 +1,10 @@
+/*
+Este archivo contiene el codigo para mostrar los días de la semana y las clases disponibles para reservar.
+El código utiliza JavaScript para interactuar con el DOM y realizar peticiones fetch a un servidor PHP que maneja las reservas de clases.
+*/
 
-// Código JS para mostrar días de la semana
+
+// Muestra días de la semana
 document.addEventListener('DOMContentLoaded', function() {
 
 const daysSchedules = document.getElementById('days-schedules');
@@ -13,7 +18,7 @@ days.forEach(day => {
     button.addEventListener('click', () => loadClassesForDay(day));
     daysSchedules.appendChild(button);
 });
-
+// Cargar clases para el primer día al cargar la página
 function loadClassesForDay(day) {
     fetch('/mindStone/app/controllers/get_lessons_by_day.php?day=' + encodeURIComponent(day))//encodeURIComponent por si el día tiene caracteres raros
     .then(response => response.json())
@@ -63,8 +68,7 @@ function reserveClass(lessonId) {
         showConfirmationMessage('Hubo un error al procesar tu reserva.');
     });
 }
-
-
+// Añadir evento de clic a los botones de reserva
 document.addEventListener('click', function(event) {
     if (event.target.classList.contains('reserve-btn')) {
         const lessonId = event.target.dataset.lessonId;

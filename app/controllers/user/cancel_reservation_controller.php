@@ -1,4 +1,7 @@
 <?php
+/*
+Archivo que maneja la cancelación de reservas de clases de pilates.
+*/
 require_once __DIR__ . '/../../config/config.php';
 require_once ROOT_PATH . '/app/session/session_manager.php';
 require_once ROOT_PATH . '/app/config/database.php';
@@ -10,7 +13,7 @@ error_reporting(0);
 
 
 header('Content-Type: application/json');
-
+// Obtener usuario de sesión
 $user = getUser();
 if (!$user) {
     http_response_code(401);
@@ -21,11 +24,10 @@ if (!$user) {
     ]);
     exit;
 }
-
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!isset($input['reservation_id']) || !is_numeric($input['reservation_id'])) {
-    http_response_code(400);
+    http_response_code(400);// Bad Request
     echo json_encode([
         'success' => false,
         'message' => 'Invalid reservation ID.'
@@ -49,7 +51,7 @@ try {
     echo json_encode($result);
 
 } catch (PDOException $e) {
-    http_response_code(500);
+    http_response_code(500);// Internal Server Error
     echo json_encode([
         'success' => false,
         'message' => 'Unexpected error.',

@@ -42,7 +42,7 @@ class Lesson
         return $stmt->fetchColumn() > 0;
     }
 
-    //Función para añadir una clase a la bbdd + generar instancias
+    //Función para añadir una clase a la bbdd + generar instancias (4 semanas a partir de hoy)
     public function addLessons($pilates_type, $coach, $capacity, $classEntries)
     {
         try {
@@ -103,69 +103,68 @@ class Lesson
     }
 
 
-// Genera 4 instancias semanales a partir de hoy (incluyendo esta semana)
-private function generateWeeklyInstances($lessonId, $day, $hour, $capacity)
-{
-    // Mapa de días (ISO: lunes = 1, domingo = 7)
-    $dayMap = [
-        'Monday' => 1,
-        'Tuesday' => 2,
-        'Wednesday' => 3,
-        'Thursday' => 4,
-        'Friday' => 5,
-        'Saturday' => 6,
-        'Sunday' => 7
-    ];
+    // Genera 4 instancias semanales a partir de hoy (incluyendo esta semana)
+    private function generateWeeklyInstances($lessonId, $day, $hour, $capacity)
+    {
+        // Mapa de días (ISO: lunes = 1, domingo = 7)
+        $dayMap = [
+            'Monday' => 1,
+            'Tuesday' => 2,
+            'Wednesday' => 3,
+            'Thursday' => 4,
+            'Friday' => 5,
+            'Saturday' => 6,
+            'Sunday' => 7
+        ];
 
-    // Validación de día
-    $targetDay = $dayMap[$day] ?? null;
-    if ($targetDay === null) return;
+        // Validación de día
+        $targetDay = $dayMap[$day] ?? null;
+        if ($targetDay === null) return;
 
-    // Fecha actual (sin hora)
-    $today = new DateTime();
-    $today->setTime(0, 0);
+        // Fecha actual (sin hora)
+        $today = new DateTime();
+        $today->setTime(0, 0);
 
-    // Ajuste: PHP da 0 = domingo, ISO usa 7 = domingo
-    $todayDay = (int)$today->format('w'); // 0-6
-    $todayDay = $todayDay === 0 ? 7 : $todayDay;
+        // Ajuste: PHP da 0 = domingo, ISO usa 7 = domingo
+        $todayDay = (int)$today->format('w'); // 0-6
+        $todayDay = $todayDay === 0 ? 7 : $todayDay;
 
-    // Calcular días hasta el próximo targetDay (incluyendo hoy si coincide)
-    $daysUntil = ($targetDay >= $todayDay)
-        ? ($targetDay - $todayDay)
-        : (7 - $todayDay + $targetDay);
+        // Calcular días hasta el próximo targetDay (incluyendo hoy si coincide)
+        $daysUntil = ($targetDay >= $todayDay)
+            ? ($targetDay - $todayDay)
+            : (7 - $todayDay + $targetDay);
 
-    $firstDate = clone $today;
-    $firstDate->modify("+$daysUntil days");
+        $firstDate = clone $today;
+        $firstDate->modify("+$daysUntil days");
 
-    // Obtener el coach asignado a la clase base
-    $stmtCoach = $this->conexion->prepare("SELECT coach FROM pilates_lessons WHERE id = :id");
-    $stmtCoach->execute(['id' => $lessonId]);
-    $coachId = $stmtCoach->fetchColumn();
+        // Obtener el coach asignado a la clase base
+        $stmtCoach = $this->conexion->prepare("SELECT coach FROM pilates_lessons WHERE id = :id");
+        $stmtCoach->execute(['id' => $lessonId]);
+        $coachId = $stmtCoach->fetchColumn();
 
-    if (!$coachId) return;
+        if (!$coachId) return;
 
-    // Preparar inserción de instancias
-    $insertStmt = $this->conexion->prepare("
+        // Preparar inserción de instancias
+        $insertStmt = $this->conexion->prepare("
         INSERT INTO class_instances (lesson_id, instance_date, hour, coach_id, capacity)
         VALUES (:lesson_id, :instance_date, :hour, :coach_id, :capacity)
     ");
 
-    // Generar 4 semanas a partir de la fecha calculada
-    for ($i = 0; $i < 4; $i++) {
-        $date = clone $firstDate;
-        $date->modify("+$i week");
+        // Generar 4 semanas a partir de la fecha calculada
+        for ($i = 0; $i < 4; $i++) {
+            $date = clone $firstDate;
+            $date->modify("+$i week");
 
-        $insertStmt->execute([
-            'lesson_id' => $lessonId,
-            'instance_date' => $date->format('Y-m-d'),
-            'hour' => $hour,
-            'coach_id' => $coachId,
-            'capacity' => $capacity
-        ]);
+            $insertStmt->execute([
+                'lesson_id' => $lessonId,
+                'instance_date' => $date->format('Y-m-d'),
+                'hour' => $hour,
+                'coach_id' => $coachId,
+                'capacity' => $capacity
+            ]);
+        }
     }
-}
-
-
+    // Función para obtener los horarios ocupados de un tipo de pilates y coach específicos
     public function getOccupiedSchedules($pilates_type, $coach)
     {
         $stmt = $this->conexion->prepare(
@@ -174,7 +173,7 @@ private function generateWeeklyInstances($lessonId, $day, $hour, $capacity)
         $stmt->execute(['type' => $pilates_type, 'coach' => $coach]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
+    // Función para obtener todas las lecciones con sus detalles
     public function fetchLessons($selectFields = '*')
     {
         $query = "SELECT $selectFields
@@ -187,14 +186,13 @@ private function generateWeeklyInstances($lessonId, $day, $hour, $capacity)
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
     public function getAllLessons()
     {
         $fields = "l.id, l.pilates_type, l.coach, l.day, l.hour, l.capacity, 
                s.name AS pilates_type_name, c.name AS coach_name";
         return $this->fetchLessons($fields);
     }
-
+    // Esta función elimina una clase y sus instancias, pero solo si no hay reservas futuras
     public function deleteLesson($id)
     {
         $this->conexion->beginTransaction();
@@ -239,6 +237,7 @@ private function generateWeeklyInstances($lessonId, $day, $hour, $capacity)
             ];
         }
     }
+    // Función para actualizar una clase, permitiendo cambios en coach, capacidad, día y hora
     public function updateLesson($id, $pilates_type, $coach, $capacity, $day, $hour)
     {
         try {
@@ -360,21 +359,21 @@ private function generateWeeklyInstances($lessonId, $day, $hour, $capacity)
         }
     }
 
-    //Función para mostrar todas las clases con cierto campos AL USUARIO EN INDEX
+    //Función para mostrar todas las clases con ciertos campos AL USUARIO EN INDEX
     // Mostrar todas las instancias de clases para el usuario con sus datos visibles
     public function getAllInstancesForUser()
-{
-    // Obtener el lunes de esta semana
-    $startOfWeek = new DateTime();
-    $startOfWeek->modify('monday this week');
-    $start = $startOfWeek->format('Y-m-d');
+    {
+        // Obtener el lunes de esta semana
+        $startOfWeek = new DateTime();
+        $startOfWeek->modify('monday this week');
+        $start = $startOfWeek->format('Y-m-d');
 
-    // Obtener el domingo de esta semana
-    $endOfWeek = new DateTime();
-    $endOfWeek->modify('sunday this week');
-    $end = $endOfWeek->format('Y-m-d');
+        // Obtener el domingo de esta semana
+        $endOfWeek = new DateTime();
+        $endOfWeek->modify('sunday this week');
+        $end = $endOfWeek->format('Y-m-d');
 
-    $query = "SELECT 
+        $query = "SELECT 
         i.id, 
         i.lesson_id, 
         i.instance_date AS date, 
@@ -389,13 +388,12 @@ private function generateWeeklyInstances($lessonId, $day, $hour, $capacity)
       WHERE i.instance_date BETWEEN :start AND :end
       ORDER BY i.instance_date ASC, i.hour ASC";
 
-    $stmt = $this->conexion->prepare($query);
-    $stmt->execute([
-        'start' => $start,
-        'end' => $end
-    ]);
+        $stmt = $this->conexion->prepare($query);
+        $stmt->execute([
+            'start' => $start,
+            'end' => $end
+        ]);
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que maneja la creación de sesiones de pago con Stripe para bonos.
+Este archivo recibe una solicitud POST con el ID del bono y crea una sesión de pago
+*/
 
 //Este archivo maneja la creación de sesiones de pago con Stripe para bonos
 require_once __DIR__ . '/../../vendor/autoload.php';
@@ -71,8 +75,5 @@ try {
     http_response_code(500);
     echo json_encode(['error' => 'Stripe error: ' . $e->getMessage()]);
     exit;
-    //error_log("Error al crear sesión de Stripe: " . $e->getMessage());
-    //http_response_code(500);
-    //echo json_encode(['error' => 'Internal Server Error']);
 }
 ?>

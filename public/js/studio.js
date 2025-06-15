@@ -1,3 +1,6 @@
+/*
+SLIDESHOW Archivo de la pagina de estudio que maneja la galería de imágenes con Slick Slider.
+*/
 $(document).ready(function(){
   $('.lazy').slick({
     centerMode: false,

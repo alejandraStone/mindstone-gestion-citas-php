@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que maneja la creación, actualización y eliminación de usuarios en el dashboard.
+Este archivo recibe solicitudes POST con la acción a realizar (create, update, delete) y los datos del usuario.
+*/
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 require_once ROOT_PATH . '/app/models/User.php';
@@ -36,7 +40,8 @@ if ($input && isset($input['action'])) {
             echo json_encode($result);
             exit;
         } else {
-            echo json_encode(['success' => false, 'message' => $result['message'] ?? 'Invalid request.']);
+            echo json_encode(['success' => 
+            false, 'message' => $result['message'] ?? 'Invalid request.']);
             exit;
         }
     } elseif ($input['action'] === 'update') { // Editar usuario

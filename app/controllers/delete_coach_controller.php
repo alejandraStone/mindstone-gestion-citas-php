@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que maneja la eliminación de un entrenador.
+Este archivo recibe una solicitud POST con el ID del entrenador y lo elimina de la base de datos.
+*/
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 require_once ROOT_PATH . '/app/models/add_coach_model.php';

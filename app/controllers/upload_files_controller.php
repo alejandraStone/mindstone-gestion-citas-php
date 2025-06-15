@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que maneja la carga de archivos PDF por parte de un administrador.
+Este archivo recibe un archivo PDF y una descripción, valida el archivo y lo guarda en el servidor
+*/
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/session/session_manager.php';
 require_once ROOT_PATH . '/app/config/database.php';

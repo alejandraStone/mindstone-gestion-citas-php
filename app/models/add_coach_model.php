@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que define la clase Coach para manejar operaciones relacionadas con los entrenadores en la base de datos.
+Esta clase incluye métodos para añadir, obtener, actualizar y eliminar entrenadores, así como para gestionar sus especialidades.
+*/
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 
@@ -81,8 +85,8 @@ class Coach
             if ($this->conexion->inTransaction()) {
                 $this->conexion->rollBack();
             }
-            // Error por duplicado (por índice UNIQUE en email, por ejemplo)
-            if ($e->getCode() === '23000') {
+            if ($e->getCode() === '23000') {// Error por duplicado (por índice UNIQUE en email, por ejemplo)
+
                 return [
                     'success' => false,
                     'message' => 'A coach with this email already exists.'
@@ -151,7 +155,7 @@ class Coach
                 error_log("Coach with ID $id not found.");
                 return null;
             }
-            // Suponiendo que tienes que sacar especialities también
+            // Suponiendo que tengo que sacar especialities también
             $coach['specialities'] = $this->getSpecialitiesByCoach($id);
             return $coach;
         } catch (PDOException $e) {
@@ -168,6 +172,7 @@ class Coach
         $stmt->execute([$coachId]);
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
+    // Actualizar un coach y sus especialidades
     public function update($id, $name, $lastName, $email, $phone, $specialities)
     {
         try {
@@ -205,10 +210,10 @@ class Coach
         try {
             $this->conexion->beginTransaction();
 
-            // Primero eliminar las relaciones con especialidades
+            // Elimina relaciones especiales
             $this->conexion->prepare("DELETE FROM coach_speciality WHERE coach_id = ?")->execute([$id]);
 
-            // Luego eliminar el coach
+            // Intenta eliminar el coach
             $stmt = $this->conexion->prepare("DELETE FROM coaches WHERE id = ?");
             $stmt->execute([$id]);
 
@@ -217,7 +222,17 @@ class Coach
             return ['success' => true, 'message' => 'Coach deleted successfully.'];
         } catch (PDOException $e) {
             $this->conexion->rollBack();
-            return ['success' => false, 'message' => 'Error deleting coach: ' . $e->getMessage()];
+            // Verifica si es error por restricción de clave foránea
+            if ($e->getCode() == '23000') {
+                return [
+                    'success' => false,
+                    'message' => 'Cannot delete this coach because they are assigned to one or more classes.'
+                ];
+            }
+            return [
+                'success' => false,
+                'message' => 'Error deleting coach: ' . $e->getMessage()
+            ];
         }
     }
 }

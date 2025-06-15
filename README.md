@@ -1,4 +1,4 @@
-# MindStone Pilates Center Web App
+# 🧘‍♀️ MindStone Pilates Center Web App
 
 Aplicación web desarrollada para la gestión integral de un centro de Pilates. Permite a los usuarios registrarse, comprar bonos, reservar clases semanales o mensuales y gestionar su perfil, mientras que el administrador puede gestionar coaches, clases, usuarios y reservas desde un panel de control centralizado.
 
@@ -9,12 +9,11 @@ Aplicación web desarrollada para la gestión integral de un centro de Pilates. 
 ### Diagrama Visual
 ![Diagrama](/public/img/diagrama_arquitectura_mindSone.png)
 
-
 ### Modelo de Capas Utilizado
 
 La arquitectura sigue un modelo MVC por capas funcionales, adaptado a una web tradicional con componentes dinámicos. Se ha buscado mantener una separación clara de responsabilidades para mejorar la escalabilidad y el mantenimiento del sistema.
 
-- **Capa de Presentación (Frontend/Vist):**
+- **Capa de Presentación (Frontend/Vista):**
   - Basada en archivos .php renderizados desde el servidor.
   - Estilizado moderno con TailwindCSS.
   - Lógica de interacción manejada mediante JavaScript modular, con uso de fetch para comunicación asincrónica.
@@ -32,7 +31,7 @@ La arquitectura sigue un modelo MVC por capas funcionales, adaptado a una web tr
   - Estructura clara con entidades como `users`, `coaches`, `credits`, `class_instances`, etc.
   - Integridad referencial y relaciones bien definidas mediante claves foráneas.
 
-### Estructura del Proyecto
+### 📁 Estructura del Proyecto
 
 ```
 /mindStone
@@ -54,7 +53,8 @@ La arquitectura sigue un modelo MVC por capas funcionales, adaptado a una web tr
 
 ---
 
-## Configuración de Apache (VirtualHost) en AWS EC2
+## 🔧 Configuración de Apache (VirtualHost) en AWS EC2
+
 A continuación se describen los pasos realizados para instalar Apache, configurar el VirtualHost y desplegar el proyecto en la nube.  
 **Nota:** Para todo esto, primero se debe conectar por SSH a la instancia.
 
@@ -82,20 +82,21 @@ Copiar los archivos a la ruta:
 /var/www/html/
 ```
 Se puede utilizar `scp`, `sftp` o copiar manualmente los archivos a esa carpeta.
+
 ### 5. Configurar el VirtualHost de Apache
-Crear o editar el archivo de configuración. En mi caso he editado el que está por default:
+Crear o editar el archivo de configuración. En este caso se edita el archivo por defecto:
 ```bash
 sudo nano /etc/apache2/sites-available/000-default.conf
 ```
-Insertar la siguiente configuración
+Insertar la siguiente configuración:
 
 ```apache
 <VirtualHost *:80>
     ServerAdmin webmaster@localhost
-        # Cuando tenga un dominio, puedo agregar ServerName aquí
-        # ServerName mi-ip-elastica
-        # ServerName midominio.com
-        DocumentRoot /var/www/html/
+    # Cuando tenga un dominio, puedo agregar ServerName aquí
+    # ServerName mi-ip-elastica
+    # ServerName midominio.com
+    DocumentRoot /var/www/html/
     <Directory /var/www/html/>
         Options Indexes FollowSymLinks
         AllowOverride All
@@ -119,13 +120,13 @@ sudo systemctl reload apache2
 ```
 
 ### 8. (Opcional) Abrir el puerto 80 en el firewall de la instancia AWS EC2
-
 En la consola de AWS, agregar una regla de entrada al grupo de seguridad de la instancia para permitir el tráfico HTTP (puerto 80).
+
 Con estos pasos, Apache quedará funcionando y el sitio será accesible desde Internet usando la IP pública o elástica de la instancia.
 
 ---
 
-## Instancia EC2 utilizada
+## 🖥️ Instancia EC2 utilizada
 
 ### Tipo de instancia y características
 
@@ -134,24 +135,25 @@ Con estos pasos, Apache quedará funcionando y el sitio será accesible desde In
 - **RAM:** 1 GB  
 - **Almacenamiento:** 8 GB (EBS, SSD)  
 - **Sistema operativo:** Ubuntu Server 22.04 LTS  
-- **Zona de disponibilidad:** eu-west-1a
-- **Software instalado:** Apache2, PHP, MySQL Server 
-- **Dirección IP pública/Elastic IP:**
+- **Zona de disponibilidad:** eu-west-1a  
+- **Software instalado:** Apache2, PHP, MySQL Server  
+- **Dirección IP pública/Elastic IP:**  
 ![Captura de la instancia EC2 en la consola de AWS](/public/img/captura_instancia.png)
 
 ### Herramientas y protocolos utilizados
 
-####  SSH
+#### 🔑 SSH
 Desde la terminal, se debe ejecutar el siguiente comando, reemplazando `llave.pem` y la `IP pública` que te da AWS por los valores correspondientes de la instancia:
 ```bash
-ssh -i "tu_clave.pem" ubuntu@EC2_PUBLIC_IP
+ssh -i "llave.pem" ubuntu@[DIRECCION_IP]
 ```
-####  SCP
+
+#### 📦 SCP
 Para subir el código fuente desde la máquina local:
 ```bash
-  scp -i /ruta/a/mi/llave.pem -r /ruta/a/mi/proyecto ubuntu@[DIRECCION_IP]:/var/www/html/
+scp -i /ruta/a/la/llave.pem -r /ruta/al/proyecto ubuntu@[DIRECCION_IP]:/var/www/html/
 ```
-Una vez dentro de la instancia ejecutan los siguientes comandos:
+Una vez dentro de la instancia, ejecutar los siguientes comandos:
 ```bash
 sudo apt update
 sudo apt install unzip
@@ -159,4 +161,4 @@ unzip mindStone.zip -d mindStone
 sudo mv mindStone /var/www/html
 ```
 
-
+---

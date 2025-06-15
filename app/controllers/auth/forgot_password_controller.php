@@ -1,6 +1,10 @@
 <?php
+/*
+Archivo que maneja la recuperación de contraseña para usuarios.
+Este archivo recibe una solicitud POST con el correo electrónico del usuario, valida el correo, genera una nueva contraseña segura y la envía por correo electrónico al usuario.
+*/
 
-require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php'; // Conexión PDO
 require_once ROOT_PATH . '/app/models/User.php';    // Modelo de usuario
 require_once ROOT_PATH . '/app/helpers/Mailer.php'; // PHPMailer

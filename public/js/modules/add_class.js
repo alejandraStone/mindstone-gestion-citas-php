@@ -1,3 +1,8 @@
+/*
+Este módulo maneja la lógica de agregar, editar y eliminar clases de pilates.
+Incluye la carga de tipos de pilates, coaches, horarios ocupados y la renderización del calendario de clases.
+*/
+
 // Espera a que el DOM esté cargado
 document.addEventListener("DOMContentLoaded", () => {
   //Normaliza la hora parsa mostrarla con 4 dígitos hh:mm
@@ -16,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Mat: "bg-emerald-100 border-emerald-200",
     Default: "bg-gray-100 border-gray-300",
   };
+    // Obtiene la clase de color de fondo según el tipo de clase
   function getClassBg(typeName) {
     for (const key in typeColorMap) {
       if (typeName && typeName.toLowerCase().includes(key.toLowerCase())) {
@@ -328,16 +334,18 @@ document.addEventListener("DOMContentLoaded", () => {
         renderWeeklyAgenda();
       });
   }
+  // Esta función añade un horario al set de horarios seleccionados para crear clases.
   function addHour(day, hour) {
     if (!selectedHours[day]) selectedHours[day] = [];
     selectedHours[day].push(hour);
     renderWeeklyAgenda();
   }
+  // Esta función quita un horario del set de horarios seleccionados para crear clases.
   function removeHour(day, hour) {
     selectedHours[day] = selectedHours[day].filter((h) => h !== hour);
     renderWeeklyAgenda();
   }
-  //cuando envia el formulario para crear una clase
+  //cuando se envia el formulario para crear una clase
   document.getElementById("add-class-form").addEventListener("submit", function (e) {
       e.preventDefault();
       const pilates_type = pilatesTypeSelect.value;
@@ -508,7 +516,7 @@ document.addEventListener("DOMContentLoaded", () => {
       dayList.appendChild(btn);
     });
   }
-
+//filtra la lista de clases por tipo y día, y actualiza el calendario.
   function applyClassFilters() {
     let filtered = allClasses.slice();
     if (filterType) {

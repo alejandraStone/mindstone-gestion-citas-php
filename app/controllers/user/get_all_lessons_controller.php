@@ -13,7 +13,7 @@ try {
 
     echo json_encode($lessons);
 } catch (Exception $e) {
-     http_response_code(500);
+     http_response_code(500);// Internal Server Error
     echo json_encode([
         'success' => false,
         'message' => 'Internal Server Error',

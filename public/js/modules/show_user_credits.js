@@ -65,5 +65,5 @@ export async function loadUserCredits() {
     console.error(err);
   }
 }
-
+//Carga los creditos auto asegurando que la info esté disponible para el usuario
 document.addEventListener('DOMContentLoaded', loadUserCredits);

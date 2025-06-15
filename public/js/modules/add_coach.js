@@ -3,14 +3,14 @@ Este archivo contiene todo el proceso para agregar un coach desde el dashboard.
 Consulta por AJAX al servidor los datos y luego los muestra.
 */
 
-// importo validaciones para el registro de usuario
+// importo validaciones de formulario para el registro de usuario
 import {
   isValidName,
   isValidEmail,
   isValidInternationalPhone,
 } from "/mindStone/public/js/modules/validations.js";
 
-// DOM Ready
+// DOM listo
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("add-coach-form");
   const messageElement = document.getElementById("form-message");
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!form || !addCoachBtn || !coachesList || !messageElement) return;
 
   form.classList.add("hidden");
-
+// Inicialmente ocultamos el formulario
   addCoachBtn.addEventListener("click", () => {
     form.classList.toggle("hidden");
     messageElement.textContent = "";
@@ -28,22 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
       ? "Add Coach"
       : "Hide Form";
   });
-
+// Listener para enviar el formulario de agregar coach
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const submitButton = form.querySelector('button[type="submit"]');
     if (submitButton) submitButton.disabled = true;
 
-    const name = document.getElementById("edit-name").value.trim();
-    const lastName = document.getElementById("edit-lastName").value.trim();
-    const email = document.getElementById("edit-email").value.trim();
-    const phone = document.getElementById("edit-phone").value.trim().replace(/\s+/g, "");
-
-    
-    // const name = form.name.value.trim();
-    // const lastName = form.lastName.value.trim();
-    // const email = form.email.value.trim();
-    // const phone = form.phone.value.trim().replace(/\s+/g, "");
+    const name = document.getElementById("name").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim().replace(/\s+/g, "");
 
     const selectedSpecialities = form.querySelectorAll(
       'input[name="speciality[]"]:checked'
@@ -96,14 +90,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (submitButton) submitButton.disabled = false;
       });
   });
-
+// Función para mostrar mensajes en el formulario
   function showMessage(msg, color, btn) {
     messageElement.textContent = msg;
     messageElement.style.color = color;
     if (btn) btn.disabled = false;
     return false;
   }
-
+// Listener para cargar la lista de coaches al inicio
   function loadCoachesList() {
     coachesList.innerHTML = `<div class="text-brand-700 text-center py-4">Loading...</div>`;
     fetch("/mindStone/app/controllers/get_coaches_by_speciality_controller.php")
@@ -123,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         coachesList.innerHTML = `<div class="text-red-500 text-center py-8">Error loading coaches.</div>`;
       });
   }
-
+// Construye la tabla de coaches
   function buildCoachesTable(coaches) {
     return `
 <table class="w-full min-w-[700px] table-auto border-separate border border-brand-200">
@@ -168,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </tbody>
 </table>`;
   }
-
+// Función para obtener las clases de color según la especialidad
   function getSpecialityColorClasses(name, variant = "label") {
     const map = {
       "Full Body": {
@@ -184,7 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return map[name]?.[variant] || "bg-brand-50 border-brand-200";
   }
-
+// Función para renderizar las etiquetas de especialidades
   function renderTags(specialities) {
     if (!specialities || !specialities.length)
       return `<span class="text-brand-400 italic">None</span>`;
@@ -201,6 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .join("");
   }
+  //Función para obtener las clases de color según la especialidad
   function getSpecialityColorClasses(name) {
     const colors = {
       "Full Body":
@@ -214,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "bg-brand-50 border-brand-200 peer-checked:bg-brand-50 peer-checked:border-brand-200"
     );
   }
-
+// Renderiza las especialidades en el modal de edición
   function renderSpecialities(allSpecialities, coachSpecialitiesIds) {
     specialitiesContainer.innerHTML = "";
     if (!allSpecialities.length) {
@@ -249,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const editCoachForm = document.getElementById("edit-coach-form");
   const editCoachMessage = document.getElementById("edit-form-message");
   const specialitiesContainer = document.getElementById("edit-specialities-list");
-
+//
   function renderSpecialities(allSpecialities, coachSpecialitiesIds) {
     specialitiesContainer.innerHTML = "";
 
@@ -294,7 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.classList.add("hidden");
     modal.classList.remove("flex");
   }
-  // Listener para abrir modal y cargar datos del coach
+  // Listener para abrir modal de edición o el icono de eliminar y cargar datos del coach
   coachesList.addEventListener("click", (e) => {
     const editBtn = e.target.closest(".edit-coach-btn");
     const deleteBtn = e.target.closest(".delete-coach-btn");
@@ -346,13 +341,13 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
-            showMessage(data.message, "green");
+            confirm(data.message, "green");
             loadCoachesList(); // Recarga la lista
           } else {
-            showMessage(data.message || "Error deleting coach.", "red");
+            confirm(data.message || "Error deleting coach.", "red");
           }
         })
-        .catch(() => showMessage("Network error deleting coach.", "red"));
+        .catch(() => confirm("Network error deleting coach.", "red"));
     }
   });
 
@@ -371,13 +366,13 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     if (!isValidName(name))
-      return showEditMessage("Invalid first name.", "red", submitButton);
+      return showEditMessage("First name must contain only letters and spaces.", "red", submitButton);
     if (!isValidName(lastName))
-      return showEditMessage("Invalid last name.", "red", submitButton);
+      return showEditMessage("Last name must contain only letters and spaces.", "red", submitButton);
     if (!isValidEmail(email))
-      return showEditMessage("Invalid email address.", "red", submitButton);
+      return showEditMessage("Invalid email format.", "red", submitButton);
     if (!isValidInternationalPhone(phone))
-      return showEditMessage("Invalid phone number.", "red", submitButton);
+      return showEditMessage("Phone number must start with '+' followed by 6 to 15 digits.", "red", submitButton);
     if (!selected.length)
       return showEditMessage(
         "Please select at least one speciality.",
@@ -413,7 +408,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (submitButton) submitButton.disabled = false;
       });
   });
-
+// Función para mostrar mensajes en el formulario de edición
   function showEditMessage(msg, color, btn) {
     editCoachMessage.textContent = msg;
     editCoachMessage.style.color = color;
@@ -432,5 +427,5 @@ document.addEventListener("DOMContentLoaded", () => {
     editCoachMessage.textContent = "";
   });
 
-  loadCoachesList(); // Initial load
+  loadCoachesList(); // se cargan los coaches al inicio
 });

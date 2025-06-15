@@ -6,15 +6,14 @@ import { isValidName, isValidEmail, isValidInternationalPhone, isValidPassword }
 document.addEventListener("DOMContentLoaded", function () {
   const signupForm = document.getElementById("formSignup");
   const signupMsg = document.getElementById("signupMsg");
-
+// Función para mostrar mensajes de error o éxito
   function showSignupMessage(message, type = "error") {
     signupMsg.textContent = message;
     signupMsg.className =
       "mt-6 text-center text-sm font-semibold " +
       (type === "success" ? "text-green-700" : "text-red-700");
   }
-
-  
+//envio de formulario de registro y validación de campos
   if (signupForm) {
     signupForm.addEventListener("submit", function (e) {
       e.preventDefault();

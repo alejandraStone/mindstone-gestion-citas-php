@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que maneja el inicio de sesión de usuarios.
+Este archivo recibe peticiones POST con email y contraseña, valida los datos
+*/
 require_once __DIR__ . '/../../config/config.php'; // Define ROOT_PATH y BASE_URL
 require_once ROOT_PATH . '/app/config/database.php'; // Carga conexión PDO
 require_once ROOT_PATH . '/app/models/User.php'; // Cargar el modelo de usuario

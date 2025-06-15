@@ -42,11 +42,11 @@ $result = $reservationModel->createReservation($user_id, $class_instance_id);
 
 if (!$result['success']) {
     // Código HTTP más adecuado según error
-    $httpCode = 400;
+    $httpCode = 400;// Por defecto, asumimos un error de solicitud incorrecta
     if (stripos($result['message'], 'fully booked') !== false) {
         $httpCode = 409;
     } elseif (stripos($result['message'], 'already reserved') !== false) {
-        $httpCode = 409;
+        $httpCode = 409;// Conflicto, ya reservado
     } elseif (stripos($result['message'], 'past') !== false) {
         $httpCode = 400;
     }
@@ -61,7 +61,7 @@ if (!$result['success']) {
 }
 
 // Reserva exitosa
-http_response_code(200);
+http_response_code(200);// OK
 echo json_encode([
     'success' => true,
     'message' => 'Class reserved successfully! Check your reservations in the dashboard.',

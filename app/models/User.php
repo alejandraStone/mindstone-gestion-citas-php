@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que define la clase User para manejar operaciones relacionadas con usuarios en la base de datos.
+Esta clase incluye métodos para verificar la existencia de un email, iniciar sesión, contar usuarios, crear, leer, actualizar y eliminar usuarios.
+*/
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 
@@ -56,8 +60,7 @@ class User
     //-----METODO CRUD------
 
     // Crear usuario (para registro público o dashboard) Por defecto, el rol es 'user'
-    public function createUser($name, $lastName, $email, $phone, $password, $role = 'user')
-    {
+    public function createUser($name, $lastName, $email, $phone, $password, $role = 'user'){
         // Previene duplicados
         if ($this->emailExist($email)) {
             return [
@@ -167,5 +170,70 @@ class User
         $stmt = $this->conexion->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([strtolower(trim($email))]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    // Método para calcular el porcentaje de crecimiento entre dos valores
+   public function calculateGrowthPercentage($current, $previous)
+{
+    if ($previous > 0) {
+        return round((($current - $previous) / $previous) * 100, 2);
+    } elseif ($current > 0) {
+        return null; // Para que el frontend muestre "New!"
+    } else {
+        return 0; // Nada de crecimiento ni antes ni ahora
+    }
+}
+    //método para obtener el número de usuarios registrados y crecimiento mensualmente
+    public function getMonthlyRegisteredUsersGrowth(int $year, int $month): array
+{
+    try {
+        // Fechas del mes actual
+        $startDate = new DateTime("$year-$month-01");
+        $endDate = clone $startDate;
+        $endDate->modify('last day of this month');
+        
+        // Usuarios registrados este mes
+        $sql = "SELECT COUNT(*) as total
+                FROM users
+                WHERE created_at BETWEEN :start_date AND :end_date";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute([
+            ':start_date' => $startDate->format('Y-m-d 00:00:00'),
+            ':end_date' => $endDate->format('Y-m-d 23:59:59')
+        ]);
+        $current = $stmt->fetch(PDO::FETCH_ASSOC);
+        $registeredThisMonth = $current ? (int)$current['total'] : 0;
+
+        // Fechas del mes anterior
+        $prevMonthDate = (clone $startDate)->modify('-1 month');
+        $prevYear = (int)$prevMonthDate->format('Y');
+        $prevMonth = (int)$prevMonthDate->format('m');
+        $prevStartDate = new DateTime("$prevYear-$prevMonth-01");
+        $prevEndDate = clone $prevStartDate;
+        $prevEndDate->modify('last day of this month');
+
+        // Usuarios registrados el mes anterior
+        $stmt2 = $this->conexion->prepare($sql);
+        $stmt2->execute([
+            ':start_date' => $prevStartDate->format('Y-m-d 00:00:00'),
+            ':end_date' => $prevEndDate->format('Y-m-d 23:59:59')
+        ]);
+        $prev = $stmt2->fetch(PDO::FETCH_ASSOC);
+        $registeredLastMonth = $prev ? (int)$prev['total'] : 0;
+
+        // Calcular crecimiento
+        $growth = $this->calculateGrowthPercentage($registeredThisMonth, $registeredLastMonth);
+
+        return [
+            'success' => true,
+            'registered_this_month' => $registeredThisMonth,
+            'registered_last_month' => $registeredLastMonth,
+            'growth_percentage' => $growth
+        ];
+    } catch (PDOException $e) {
+        return [
+            'success' => false,
+            'message' => 'Database error: ' . $e->getMessage()
+        ];
+    }
     }
 }

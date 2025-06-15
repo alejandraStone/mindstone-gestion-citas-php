@@ -1,4 +1,7 @@
 <?php
+/*
+Archivo que maneja la obtención de los créditos del usuario.
+ */
 require_once __DIR__ . '/../../config/config.php';
 require_once ROOT_PATH . '/app/session/session_manager.php';
 require_once ROOT_PATH . '/app/config/database.php';

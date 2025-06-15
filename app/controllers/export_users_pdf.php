@@ -1,4 +1,7 @@
-<?php 
+<?php
+/*
+Archivo que maneja la exportación de la lista de usuarios registrados a PDF por filtros o sin el.
+*/ 
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 require_once ROOT_PATH . '/app/models/User.php';

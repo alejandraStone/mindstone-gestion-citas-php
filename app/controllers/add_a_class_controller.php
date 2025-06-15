@@ -43,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         echo json_encode(["success" => false, "message" => "You must select at least one valid schedule."]);
         exit;
     }
-
     // Guardar en base de datos
     try {
         $conexion = getPDO();
@@ -57,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         exit;
     }
 }
-
 // Cargar vista
 require ROOT_PATH . '/app/views/admin/add_a_class.php';
 ?>

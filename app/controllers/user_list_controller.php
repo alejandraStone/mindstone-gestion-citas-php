@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que maneja la lista de usuarios en el panel de administración.
+Este archivo recibe parámetros de paginación y filtro, obtiene los usuarios de la base de datos y los muestra en una vista.
+*/
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 require_once ROOT_PATH . '/app/models/User.php';

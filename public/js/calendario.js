@@ -1,3 +1,9 @@
+/*
+Archivo que carga el calendario de clases de pilates y permite reservar clases desde la página de clases si el usuario está logueado y si no, muestra un modal de login.
+Este archivo se carga en la página de clases y en la página de timetable del usuario logueado
+*/
+
+//map de colores para cada tipo de clase para el calendario
 const typeColorMap = {
   Yoga: "bg-emerald-100 border-emerald-300",
   Pilates: "bg-sky-100 border-sky-300",
@@ -10,12 +16,13 @@ const typeColorMap = {
   Default: "bg-gray-100 border-gray-300",
 };
 
+// Función para cargar el calendario de clases
 async function loadCalendar() {
+  //se obtienen todas las clases creadas por el admin
   const res = await fetch("/mindStone/app/controllers/user/get_all_lessons_controller.php");
   const classes = await res.json();
-  console.log(classes.filter(c => c.day === 'Sunday'));
 
-
+  //se llama al elemento del calendario
   const calendar = document.getElementById("calendar");
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -23,7 +30,7 @@ async function loadCalendar() {
   const hoursSet = new Set();
 
   classes.forEach((cl) => {
-    const hourKey = cl.hour.substring(0, 5);
+    const hourKey = cl.hour.substring(0, 5);// Extracción HH:MM de la hora
     hoursSet.add(hourKey);
 
     if (!timetable[cl.day]) timetable[cl.day] = {};
@@ -31,9 +38,9 @@ async function loadCalendar() {
     timetable[cl.day][hourKey].push(cl);
   });
 
-  const hours = Array.from(hoursSet).sort();
+  const hours = Array.from(hoursSet).sort();//ordeno las horas
 
-  const table = document.createElement("table");
+  const table = document.createElement("table");//creo la tabla
   table.className = "min-w-full border-collapse text-sm font-normal";
 
   const thead = document.createElement("thead");
@@ -80,7 +87,7 @@ async function loadCalendar() {
               Reserve
             </div>
           `;
-
+//obtiene los datos del usuario logueado para saber si está logueado y poder reservar la clase
           const currentUserId = document.querySelector("main")?.dataset.userId || null;
 
           lessonDiv.addEventListener("click", async () => {
@@ -135,7 +142,8 @@ async function loadCalendar() {
   if (typeof AOS !== "undefined") {
     AOS.init({ once: true });
   }
-//Muestro el número de semana y el año actual
+
+//Muestro el número de semana y el año actual antes de mostrar el calendario
 const monthDisplay = document.getElementById("monthDisplay");
 if (monthDisplay) {
   const today = new Date();
@@ -172,10 +180,8 @@ if (monthDisplay) {
 
   monthDisplay.textContent = displayText;
 }
-
-
 }
-
+//función para mostrar un toast con un mensaje y opciones de confirmación
 function showToast(message, options = {}) {
   const overlay = document.createElement("div");
   overlay.className = "fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-40";
@@ -200,13 +206,14 @@ function showToast(message, options = {}) {
     document.body.appendChild(toast);
     requestAnimationFrame(() => toast.classList.replace("opacity-0", "opacity-100"));
     toast.classList.replace("scale-95", "scale-100");
-
+//devuelve una promesa que se resuelve cuando se confirma o cancela la reserva de la clase
     return new Promise((resolve) => {
       document.getElementById("toast-cancel").onclick = () => {
         toast.remove();
         overlay.remove();
         resolve(false);
       };
+      //devuelve true si se confirma la reserva de la clase
       document.getElementById("toast-confirm").onclick = () => {
         toast.remove();
         overlay.remove();
@@ -219,7 +226,7 @@ function showToast(message, options = {}) {
 
     requestAnimationFrame(() => toast.classList.replace("opacity-0", "opacity-100"));
     toast.classList.replace("scale-95", "scale-100");
-
+//desactiva el toast después de 3 segundos
     setTimeout(() => {
       toast.classList.replace("opacity-100", "opacity-0");
       toast.classList.replace("scale-100", "scale-95");

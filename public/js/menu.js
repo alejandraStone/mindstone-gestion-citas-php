@@ -1,3 +1,6 @@
+/*
+Archivo que maneja el menú hamburguesa móvil, incluyendo la apertura y cierre del menú usando jQuery.
+*/
 document.addEventListener("DOMContentLoaded", function () {
 
       // --- Menú hamburguesa móvil ---

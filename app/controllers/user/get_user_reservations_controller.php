@@ -1,4 +1,7 @@
 <?php
+/*
+Archivo que maneja la obtención de reservas de clases de pilates del usuario autenticado.
+*/
 require_once __DIR__ . '/../../config/config.php';
 require_once ROOT_PATH . '/app/session/session_manager.php';
 require_once ROOT_PATH . '/app/config/database.php';
@@ -9,7 +12,7 @@ header('Content-Type: application/json');
 // Validar sesión
 $user = getUser();
 if (!$user) {
-    http_response_code(401);
+    http_response_code(401);// Unauthorized
     echo json_encode([
         'success' => false,
         'message' => 'You must be logged in.',

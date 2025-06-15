@@ -1,4 +1,8 @@
 <?php
+/*
+Archivo que maneja la descarga de archivos PDF subidos por el administrador.
+Este archivo recibe un ID de PDF por GET, verifica permisos y devuelve el archivo para descarga.
+*/
 require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/session/session_manager.php';
 require_once ROOT_PATH . '/app/config/database.php';

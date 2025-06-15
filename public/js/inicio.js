@@ -1,15 +1,22 @@
+/*
+Archivo que maneja la lógica de la página de inicio, incluyendo animaciones y validación del formulario de contacto.
+*/
+
+// Importa las funciones de validación desde el archivo validaciones.js
+import { isValidName, isValidEmail, isValidInternationalPhone } from "/mindStone/public/js/modules/validations.js";
+
 // Todas las funciones jQuery agrupadas en un solo bloque
 $(document).ready(function () {
 
   // --- Animaciones de la sección Hero ---
   setTimeout(function () {
     $("#hero-title")
-      .removeClass("opacity-0 translate-y-12")
-      .addClass("opacity-100 translate-y-0");
+      .removeClass("opacity-0 translate-y-12")//se elimina la clase de opacidad y desplazamiento
+      .addClass("opacity-100 translate-y-0");//se hace visible y se coloca en su posición original
   }, 300);
   setTimeout(function () {
     $(".hero-btn")
-      .removeClass("opacity-0 translate-y-12")
+      .removeClass("opacity-0 translate-y-12")//mismo proceso para los botones
       .addClass("opacity-100 translate-y-0");
   }, 700);
 
@@ -20,145 +27,127 @@ $(document).ready(function () {
   if (trigger && target) {
     trigger.addEventListener("click", function (e) {
       e.preventDefault();
-      target.scrollIntoView({ behavior: "smooth" });
+      target.scrollIntoView({ behavior: "smooth" });// Realiza el desplazamiento animado
     });
   }
-  // --- Validación del formulario de contacto con expresiones regulares ---
-  (function () {
-    const form = document.getElementById("cta-contact-form");
-    if (!form) return;
-    const nameInput = document.getElementById("name");
-    const emailInput = document.getElementById("email");
-    const phoneInput = document.getElementById("phone");
-    const nameError = document.getElementById("name-error");
-    const emailError = document.getElementById("email-error");
-    const phoneError = document.getElementById("phone-error");
-    const successMessage = document.getElementById("success-message");
+ // --- Validación y envío AJAX del formulario de contacto ---
+(function () {
+  const form = document.getElementById("cta-contact-form");
+  if (!form) return;
 
-    // Expresiones regulares para validación
-    const nameRegex = /^[A-Za-zÀ-ÿ\s]{2,50}$/;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[\d\s\-\+\(\)]{7,20}$/;
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email_form_contact");
+  const phoneInput = document.getElementById("phone");
+  const messageInput = document.getElementById("message");
+  const nameError = document.getElementById("name-error");
+  const emailError = document.getElementById("email-error");
+  const phoneError = document.getElementById("phone-error");
+  const messageError = document.getElementById("message-error");
+  const successMessage = document.getElementById("success-message");
 
-    form.addEventListener("submit", function (e) {
-      let valid = true;
+  form.addEventListener("submit", function (e) {
+    let valid = true;
 
-      // Validar nombre (solo letras y espacios, mínimo 2 caracteres)
-      if (!nameRegex.test(nameInput.value.trim())) {
-        nameError.classList.remove("hidden");
-        valid = false;
-      } else {
+    // Validar nombre
+    if (!isValidName(nameInput.value.trim())) {
+      nameError.classList.remove("hidden");
+      valid = false;
+    } else {
+      nameError.classList.add("hidden");
+    }
+
+    // Validar email
+    if (!isValidEmail(emailInput.value.trim())) {
+      emailError.classList.remove("hidden");
+      valid = false;
+    } else {
+      emailError.classList.add("hidden");
+    }
+
+    // Validar teléfono
+    if (!isValidInternationalPhone(phoneInput.value.trim())) {
+      phoneError.classList.remove("hidden");
+      valid = false;
+    } else {
+      phoneError.classList.add("hidden");
+    }
+
+    // Validar mensaje
+    if (!messageInput.value.trim()) {
+      messageError.classList.remove("hidden");
+      valid = false;
+    } else {
+      messageError.classList.add("hidden");
+    }
+
+    if (!valid) {
+      e.preventDefault();
+      if (successMessage) successMessage.classList.add("hidden");
+      return false;
+    } else {
+      e.preventDefault(); // Previene el envío tradicional
+
+      const formData = new FormData(form);
+    //llamada AJAX para enviar el formulario
+      fetch("/mindStone/app/controllers/user/send_contact_email_controller.php", {
+        method: "POST",
+        body: formData
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            if (successMessage) {
+              successMessage.textContent = "Thank you! We will contact you soon.";
+              successMessage.classList.remove("hidden");
+              form.reset();
+              setTimeout(() => {
+                successMessage.classList.add("hidden");
+              }, 4000);
+            }
+          } else {
+            alert(data.message || "There was an error sending your message.");//alerta de error
+          }
+        })
+        .catch(() => {
+          alert("Unexpected error. Please try again.");
+        });
+
+      return false;
+    }
+  });
+
+  // Validación en tiempo real para nombre
+  if (nameInput) {
+    nameInput.addEventListener("input", () => {
+      if (isValidName(nameInput.value.trim())) {
         nameError.classList.add("hidden");
       }
-
-      // Validar email
-      if (!emailRegex.test(emailInput.value.trim())) {
-        emailError.classList.remove("hidden");
-        valid = false;
-      } else {
+    });
+  }
+  // Validación en tiempo real para email
+  if (emailInput) {
+    emailInput.addEventListener("input", () => {
+      if (isValidEmail(emailInput.value.trim())) {
         emailError.classList.add("hidden");
       }
-
-      // Validar teléfono (dígitos, espacios, guiones, paréntesis, +, mínimo 7 caracteres)
-      if (!phoneRegex.test(phoneInput.value.trim())) {
-        phoneError.classList.remove("hidden");
-        valid = false;
-      } else {
+    });
+  }
+  // Validación en tiempo real para teléfono
+  if (phoneInput) {
+    phoneInput.addEventListener("input", () => {
+      if (isValidInternationalPhone(phoneInput.value.trim())) {
         phoneError.classList.add("hidden");
       }
-
-      if (!valid) {
-        e.preventDefault();
-        if (successMessage) successMessage.classList.add("hidden");
-        return false;
-      } else {
-        e.preventDefault(); //evita el envío real
-        if (successMessage) {
-          successMessage.classList.remove("hidden");
-          form.reset();
-          //ocultar mensaje después de unos segundos
-          setTimeout(() => {
-            successMessage.classList.add("hidden");
-          }, 4000);
-        }
-        return false;
+    });
+  }
+  // Validación en tiempo real para mensaje
+  if (messageInput) {
+    messageInput.addEventListener("input", () => {
+      if (messageInput.value.trim()) {
+        messageError.classList.add("hidden");
       }
     });
-
-    // Validación en tiempo real
-    if (nameInput) {
-      nameInput.addEventListener("input", () => {
-        if (nameRegex.test(nameInput.value.trim())) {
-          nameError.classList.add("hidden");
-        }
-      });
-    }
-    if (emailInput) {
-      emailInput.addEventListener("input", () => {
-        if (emailRegex.test(emailInput.value.trim())) {
-          emailError.classList.add("hidden");
-        }
-      });
-    }
-    if (phoneInput) {
-      phoneInput.addEventListener("input", () => {
-        if (phoneRegex.test(phoneInput.value.trim())) {
-          phoneError.classList.add("hidden");
-        }
-      });
-    }
-  })();
-  // --- Animación de las cards de servicios al hacer scroll ---
-  /*
-    function initCardAnimations() {
-    // Usa Intersection Observer si está disponible, si no, fallback con scroll
-    if ('IntersectionObserver' in window) {
-      const observer = new window.IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            $(entry.target).removeClass('opacity-0 translate-y-10')
-                            .addClass('opacity-100 translate-y-0');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      $('.card-services').each(function () {
-        // Asegura que las clases iniciales de animación estén puestas si no existen
-        $(this).addClass('opacity-0 translate-y-10 transition-all duration-700');
-        observer.observe(this);
-      });
-    } else {
-      // Fallback para navegadores antiguos
-      $('.card-services').each(function () {
-        $(this).removeClass('opacity-0 translate-y-10')
-               .addClass('opacity-100 translate-y-0');
-      });
-    }
   }
-  
-  // --- Animación de la sección Misión al hacer scroll ---
-  function animateMission() {
-    var windowBottom = $(window).scrollTop() + $(window).height() - 60;
-    // Animar texto
-    var $text = $('#mission-text');
-    if ($text.length && $text.offset().top < windowBottom) {
-      $text.removeClass('opacity-0 -translate-x-10').addClass('opacity-100 translate-x-0');
-    }
-    // Animar imagen
-    var $img = $('#mission-img');
-    if ($img.length && $img.offset().top < windowBottom) {
-      $img.removeClass('opacity-0 translate-x-10').addClass('opacity-100 translate-x-0');
-    }
-  }
-  // Asegura que las clases iniciales de animación estén puestas si no existen
-  $('#mission-text').addClass('opacity-0 -translate-x-10 transition-all duration-1000');
-  $('#mission-img').addClass('opacity-0 translate-x-10 transition-all duration-1000');
-  // Ejecutar la animación al cargar y al hacer scroll
-  animateMission();
-  $(window).on('scroll', animateMission);
-*/
-
-  // --- Inicializaciones de funciones globales ---
-  //initCardAnimations();
-  //animateMission();
+})();
 });
+
