@@ -103,7 +103,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
                 <span class="least-popular-class text-lg font-bold"></span> <!-- JS INYECTA DATO -->
             </div>
         </div>
-        <!--Card peek hours-->
+        <!--Card de dinero ganado por los bonos comprados-->
         <div class="cards-dashboard">
             <!-- Heroicon: Clock -->
             <div class="icono-dashboard">
@@ -122,9 +122,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
                 </svg>
             </div>
             <div class="flex flex-col justify-center">
-                <span class="titulo-card-dashboard">Peak hours</span>
-                <span class="peak-hour-booking text-4xl font-bold text-brand-700 leading-none mb-1"></span>
-                <span class="peak-hour-growth flex items-center font-medium text-sm"></span>
+                <span class="titulo-card-dashboard">Earnings from bonuses</span>
+                <span class="monthly-earnings text-4xl font-bold text-brand-700 leading-none mb-1"></span>
+                <span class="monthly-earnings-growth flex items-center font-medium text-sm"></span>
             </div>
         </div>
         <!--Card num de usuarios y crecimiento-->

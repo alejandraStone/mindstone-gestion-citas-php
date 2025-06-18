@@ -86,7 +86,7 @@ async function fetchBookingsCount() {
       console.warn("Classes with low occupancy card not found");
     }
 
-    // --- Card de Peak hours---
+    /* --- Card de Peak hours---
     const peakCard = [...document.querySelectorAll(".cards-dashboard")].find(
       (card) =>
         card
@@ -117,6 +117,49 @@ async function fetchBookingsCount() {
         }
       }
     }
+    */
+
+   // --- Card de dinero generado de la compra de bonos ---
+   const earningsCard = [...document.querySelectorAll(".cards-dashboard")].find(
+  (card) =>
+    card
+      .querySelector(".titulo-card-dashboard")
+      ?.textContent.trim()
+      .toLowerCase() === "earnings from bonuses"
+);
+
+if (earningsCard) {
+  const earningsSpan = earningsCard.querySelector(".monthly-earnings");
+  const growthSpan = earningsCard.querySelector(".monthly-earnings-growth");
+  const monthlyEarnings = data.monthly_earnings;
+  const monthlyEarningsGrowth = data.monthly_earnings_growth;
+
+  // Mostrar las ganancias de este mes
+  if (earningsSpan) {
+  earningsSpan.textContent =
+    typeof monthlyEarnings === "number"
+      ? monthlyEarnings.toFixed(2) + "\u00A0€"
+      : "—";
+}
+
+  // Mostrar crecimiento respecto al mes pasado
+  if (growthSpan) {
+    if (typeof monthlyEarningsGrowth === "number") {
+      const percent = Math.abs(monthlyEarningsGrowth).toFixed(0);
+      const isPositive = monthlyEarningsGrowth >= 0;
+      growthSpan.innerHTML = `
+        <span class="${isPositive ? "text-green-500" : "text-red-500"} mr-1">
+          ${isPositive ? "+" : "-"}${percent}%
+        </span>
+        <span class="text-gray-500 ml-1">vs last month</span>
+      `;
+    } else {
+      growthSpan.textContent = "No data last month";
+      growthSpan.classList.remove("text-green-500", "text-red-500");
+    }
+  }
+}
+
     // --- Card de Users ---
     const usersCard = [...document.querySelectorAll(".cards-dashboard")].find(
       (card) =>

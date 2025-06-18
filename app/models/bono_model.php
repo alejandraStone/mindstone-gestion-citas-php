@@ -235,4 +235,41 @@ class Bonus
             ];
         }
     }
+    //retorna el total de ganancias mensuales por bonos
+    public function getMonthlyEarningsFromBonuses($year, $month)
+    {
+        $startDate = sprintf('%04d-%02d-01', $year, $month);
+        $endDate = date('Y-m-t', strtotime($startDate));
+
+        $sql = "SELECT SUM(price) as total_earnings
+            FROM purchases
+            WHERE purchased_at BETWEEN :startDate AND :endDate";
+
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindValue(':startDate', $startDate . ' 00:00:00');
+        $stmt->bindValue(':endDate', $endDate . ' 23:59:59');
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return isset($row['total_earnings']) ? (float)$row['total_earnings'] : 0.0;
+    }
+    // Calcula el crecimiento porcentual de las ganancias mensuales por bonos
+    public function getMonthlyEarningsGrowth($year, $month)
+    {
+        $current = $this->getMonthlyEarningsFromBonuses($year, $month);
+
+        // Calcula el mes anterior
+        $prevMonth = $month - 1;
+        $prevYear = $year;
+        if ($prevMonth === 0) {
+            $prevMonth = 12;
+            $prevYear--;
+        }
+        $previous = $this->getMonthlyEarningsFromBonuses($prevYear, $prevMonth);
+
+        if ($previous == 0) {
+            return $current > 0 ? 100 : 0; // 100% si antes era 0 y ahora hay ingresos
+        }
+        return (($current - $previous) / $previous) * 100;
+    }
 }

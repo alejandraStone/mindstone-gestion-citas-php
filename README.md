@@ -90,23 +90,9 @@ sudo nano /etc/apache2/sites-available/000-default.conf
 ```
 Insertar la siguiente configuración:
 
-```apache
-<VirtualHost *:80>
-    ServerAdmin webmaster@localhost
-    # Cuando tenga un dominio, puedo agregar ServerName aquí
-    # ServerName mi-ip-elastica
-    # ServerName midominio.com
-    DocumentRoot /var/www/html/
-    <Directory /var/www/html/>
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-</VirtualHost>
-```
-**Nota:** Actualmente se accede mediante la IP pública o elástica, pero en el futuro se puede añadir un dominio fácilmente.
+![Captura de la instancia EC2 en la consola de AWS](/public/img/config_apache.png)
+
+**Nota:** Actualmente se accede mediante la IP elástica, pero en el futuro se puede añadir un dominio fácilmente.
 Guardar y cerrar el archivo.
 
 ### 6. Activar el sitio por defecto
@@ -138,7 +124,7 @@ Con estos pasos, Apache quedará funcionando y el sitio será accesible desde In
 - **Zona de disponibilidad:** eu-west-1a  
 - **Software instalado:** Apache2, PHP, MySQL Server  
 - **Dirección IP pública/Elastic IP:**  
-![Captura de la instancia EC2 en la consola de AWS](/public/img/captura_instancia.png)
+![Captura de la instancia EC2 en la consola de AWS](/public/img/instancia_EC2.png)
 
 ### Herramientas y protocolos utilizados
 

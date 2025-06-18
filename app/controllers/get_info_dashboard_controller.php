@@ -7,6 +7,7 @@ require_once __DIR__ . '/../config/config.php';
 require_once ROOT_PATH . '/app/config/database.php';
 require_once ROOT_PATH . '/app/models/class_reservation_model.php';
 require_once ROOT_PATH . '/app/models/User.php'; // modelo de usuarios para obtener el crecimiento de usuarios
+require_once ROOT_PATH . '/app/models/bono_model.php'; // modelo de bono para obtener las ganancias de bonos
 require_once ROOT_PATH . '/app/models/google_analytics_model.php'; // modelo de Google Analytics para obtener las visitas al sitio web
 
 
@@ -16,6 +17,7 @@ try {
     $conexion = getPDO();
     $reservationModel = new ClassReservation($conexion);
     $userModel = new User($conexion);
+    $bonoModel = new Bonus($conexion);
 
     // --- DATOS DE GOOGLE ANALYTICS ---
     $propertyId = '493417605'; // numero de propiedad de Google Analytics 4
@@ -56,8 +58,10 @@ try {
     $leastPopularClass = $reservationModel->getLeastPopularClassThisMonth();
     $leastPopularClassName = $leastPopularClass['class_name'] ?? null;
 
-    // Crecimiento de horas pico
-    $peakHourData = $reservationModel->getPeakHourGrowth($currentYear, $currentMonth);
+    // Ganancias de bonos este mes
+    $monthlyEarnings = $bonoModel->getMonthlyEarningsFromBonuses($currentYear, $currentMonth);
+    // Crecimiento de ganancias respecto al mes pasado
+    $monthlyEarningsGrowth = $bonoModel->getMonthlyEarningsGrowth($currentYear, $currentMonth);
 
     // Crecimiento de usuarios registrados
     $userStats = $userModel->getMonthlyRegisteredUsersGrowth($currentYear, $currentMonth);
@@ -68,15 +72,16 @@ try {
         'growth_percentage' => $countResult['growth_percentage'],
         'most_popular_class' => $mostPopularClassName,
         'least_popular_class' => $leastPopularClassName,
-        'peak_hour' => $peakHourData['peak_hour'],
-        'peak_hour_bookings' => $peakHourData['reservations_this_month'],
-        'peak_hour_growth' => $peakHourData['growth_percentage'],
+        // --- Usuarios registrados ---
         'registered_users_this_month' => $userStats['registered_this_month'],
         'registered_users_last_month' => $userStats['registered_last_month'],
         'registered_users_growth_percentage' => $userStats['growth_percentage'],
         // --- Google Analytics: visitas y crecimiento ---
         'website_views_this_month' => $websiteViewsThisMonth,
-        'website_views_growth_percentage' => $websiteViewsGrowthPercentage
+        'website_views_growth_percentage' => $websiteViewsGrowthPercentage,
+        // --- Ganancias de bonos ---
+        'monthly_earnings' => $monthlyEarnings,
+        'monthly_earnings_growth' => $monthlyEarningsGrowth,
     ]);
 } catch (Exception $e) {
     http_response_code(500);
